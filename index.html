@@ -371,6 +371,41 @@
       .principles { grid-template-columns: 1fr; }
     }
 
+    /* ── FOUNDER ── */
+    #founder {
+      background: var(--bg); padding: 80px 0;
+      position: relative; z-index: 2;
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+    .founder-card {
+      display: grid; grid-template-columns: 1fr 1.4fr; gap: 64px;
+      align-items: center;
+      background: rgba(255,255,255,0.015); border: 1px solid var(--line);
+      border-radius: 20px; padding: 52px 56px;
+      position: relative; overflow: hidden;
+    }
+    .founder-card::before {
+      content: ''; position: absolute; top: -60px; right: -60px;
+      width: 300px; height: 300px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,106,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .founder-quote {
+      font-size: clamp(1.1rem, 2.2vw, 1.45rem); font-weight: 400;
+      font-style: italic; line-height: 1.6; color: var(--text);
+      padding-left: 1.5rem; border-left: 2px solid var(--accent);
+    }
+    .founder-meta { margin-top: 0; }
+    .founder-meta h3 { font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: 0.3rem; }
+    .founder-meta p { font-size: 0.875rem; color: var(--dim); line-height: 1.7; margin-bottom: 1.25rem; }
+    .founder-link {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.82rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--accent); transition: gap 0.2s;
+    }
+    .founder-link:hover { gap: 0.75rem; color: #e0bf82; }
+    @media (max-width: 900px) { .founder-card { grid-template-columns: 1fr; gap: 32px; padding: 36px 28px; } }
+
     /* ── CTA BANNER ── */
     #cta {
       background: linear-gradient(135deg, #0a0f16 0%, #0d1830 100%);
@@ -592,6 +627,25 @@
     </div>
   </section>
 
+  <!-- ── FOUNDER ── -->
+  <section id="founder">
+    <div class="section-inner">
+      <div class="founder-card wow">
+        <blockquote class="founder-quote">
+          "I built LayOvr because I kept showing up to important meetings jet-lagged, with no tool that actually accounted for my specific trip."
+        </blockquote>
+        <div class="founder-meta">
+          <span class="eyebrow">Behind the studio</span>
+          <h3>Carlos Ebrahim Vendrell</h3>
+          <p>Senior AI Project Manager based in Aarhus, Denmark. Ceven Labs is a side project born out of personal frustration — and a deep belief that focused software beats bloated software every time.</p>
+          <a href="https://cevendrell.com" target="_blank" rel="noopener" class="founder-link">
+            Visit cevendrell.com &nbsp;→
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ── CTA ── -->
   <section id="cta">
     <div class="section-inner">
@@ -636,6 +690,7 @@
         <ul>
           <li><a href="pages/about/index.html">About</a></li>
           <li><a href="pages/support/index.html">Support</a></li>
+          <li><a href="https://cevendrell.com" target="_blank" rel="noopener">cevendrell.com</a></li>
         </ul>
       </div>
       <div class="footer-col">

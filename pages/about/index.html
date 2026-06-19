@@ -72,6 +72,23 @@
     .hero-inner .hero-lead { font-size: 1.1rem; color: var(--dim); max-width: 540px; line-height: 1.85; opacity: 0; animation: fadeUp 0.8s 0.4s forwards; }
     @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
+    /* EYEBROW LINE */
+    .eyebrow::before { content: ''; display: inline-block; width: 20px; height: 1px; background: var(--accent); vertical-align: middle; margin-right: 0.65rem; }
+    #mission .eyebrow::before { background: #999; }
+
+    /* FOUNDER */
+    #founder { background: var(--bg); padding: 100px 0; position: relative; z-index: 2; border-top: 1px solid rgba(255,255,255,0.04); }
+    .founder-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 80px; align-items: center; }
+    .founder-quote-block { padding-left: 1.75rem; border-left: 2px solid var(--accent); }
+    .founder-quote-block blockquote { font-size: clamp(1.1rem, 2.2vw, 1.45rem); font-style: italic; font-weight: 400; line-height: 1.65; color: var(--text); margin-bottom: 1.5rem; }
+    .founder-quote-block cite { font-size: 0.85rem; color: var(--dim); font-style: normal; display: flex; flex-direction: column; gap: 0.2rem; }
+    .founder-quote-block cite strong { color: var(--text); font-weight: 600; }
+    .founder-details h2 { font-size: clamp(1.6rem, 3.5vw, 2.4rem); font-weight: 800; letter-spacing: -0.04em; color: #fff; margin-bottom: 1rem; line-height: 1.1; }
+    .founder-details p { font-size: 0.95rem; color: var(--dim); line-height: 1.9; margin-bottom: 1.1rem; }
+    .founder-link { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); transition: gap 0.2s; margin-top: 0.5rem; }
+    .founder-link:hover { gap: 0.75rem; color: #e0bf82; }
+    @media (max-width: 900px) { .founder-grid { grid-template-columns: 1fr; gap: 48px; } }
+
     /* MISSION */
     #mission { background: var(--cream); padding: 100px 0; position: relative; z-index: 2; }
     .mission-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
@@ -260,6 +277,30 @@
     </div>
   </section>
 
+  <!-- FOUNDER -->
+  <section id="founder">
+    <div class="section-inner">
+      <div class="founder-grid">
+        <div class="founder-quote-block wow">
+          <blockquote>"I travel constantly for work. I got tired of showing up jet-lagged to meetings that mattered — and having no tool that actually accounted for my specific trip, my meetings, or the direction I was flying."</blockquote>
+          <cite>
+            <strong>Carlos Ebrahim Vendrell</strong>
+            Senior AI Project Manager · Aarhus, Denmark
+          </cite>
+        </div>
+        <div class="founder-details wow d2">
+          <span class="eyebrow">The founder</span>
+          <h2>One person.<br>One problem.<br>One obsession.</h2>
+          <p>Ceven Labs is a solo venture by Carlos — a Barcelona-born engineer who has spent the last decade in Denmark at the intersection of XR, AI, and travel. By day he leads AI projects at Grundfos. By night he builds the tools he wishes existed.</p>
+          <p>LayOvr started as a personal spreadsheet. Then a Swift prototype. Then something that actually worked well enough to share.</p>
+          <a href="https://cevendrell.com" target="_blank" rel="noopener" class="founder-link">
+            Read more at cevendrell.com &nbsp;→
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ROADMAP -->
   <section id="roadmap">
     <div class="section-inner">
@@ -317,7 +358,7 @@
 
 <footer>
   <div class="footer-slim">
-    <span class="footer-copy">© <span class="js-year">2025</span> Ceven Labs ApS · CVR: PLACEHOLDER-CVR · Aarhus, Denmark</span>
+    <span class="footer-copy">© <span class="js-year">2025</span> Ceven Labs ApS · CVR: PLACEHOLDER-CVR · Built by <a href="https://cevendrell.com" target="_blank" rel="noopener" style="color:rgba(255,255,255,0.35); transition:color 0.2s;" onmouseover="this.style.color='#c9a86a'" onmouseout="this.style.color='rgba(255,255,255,0.35)'">Carlos Ebrahim Vendrell</a></span>
     <div class="footer-links">
       <a href="../legal/privacy-policy.html">Privacy Policy</a>
       <a href="../legal/terms.html">Terms of Use</a>
