@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Ceven Labs Solutions — tools built at the edge of AI and fast-moving technology.">
+  <title>Solutions | Ceven Labs</title>
+  <link rel="icon" href="../../media/shared/cl-mark.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:     #04070e; --bg-2:  #060b15;
+      --blue:   #3b82f6; --blue-d:#1d4ed8; --blue-l:#93c5fd;
+      --text:   #f0f4ff; --dim:   #8899bb; --mute:  #3d4f6e;
+      --line:   rgba(255,255,255,0.07);
+      --light:  #f8faff; --light-text: #0a0f1e; --light-dim: #4a5675;
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: inherit; }
+    ::selection { background: var(--blue); color: #fff; }
+
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1.4rem 2.5rem; display: flex; align-items: center; justify-content: space-between; background: rgba(4,7,14,0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid var(--line); transition: padding 0.3s; }
+    nav.scrolled { padding: 1rem 2.5rem; }
+    .nav-logo { display: flex; align-items: center; gap: 0.6rem; font-size: 0.95rem; font-weight: 700; }
+    .nav-mark { width: 26px; height: 26px; border-radius: 6px; background: var(--blue); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; color: #fff; letter-spacing: -0.03em; flex-shrink: 0; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { font-size: 0.85rem; font-weight: 500; color: var(--dim); transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--text); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; padding: 6px; background: none; border: none; cursor: pointer; }
+    .hamburger span { width: 20px; height: 1.5px; background: var(--text); display: block; transition: all 0.3s; }
+    @media (max-width: 680px) { nav { padding: 1rem 1.5rem; } .nav-links { display: none; } .hamburger { display: flex; } }
+    body.nav-open { overflow: hidden; }
+    body.nav-open nav { background: var(--bg); backdrop-filter: none; -webkit-backdrop-filter: none; }
+    body.nav-open .nav-links { display: flex; flex-direction: column; position: fixed; inset: 0; z-index: 99; background: var(--bg); padding: 5rem 1.5rem 2rem; gap: 0; }
+    body.nav-open .nav-links li { border-bottom: 1px solid var(--line); }
+    body.nav-open .nav-links a { display: block; padding: 1.1rem 0; font-size: 1.3rem; font-weight: 600; color: var(--text); }
+    body.nav-open .hamburger { position: relative; z-index: 100; }
+    body.nav-open .hamburger span:nth-child(1) { transform: rotate(45deg) translate(4.5px, 4.5px); }
+    body.nav-open .hamburger span:nth-child(2) { opacity: 0; }
+    body.nav-open .hamburger span:nth-child(3) { transform: rotate(-45deg) translate(4.5px, -4.5px); }
+
+    main { padding: 8rem 0 5rem; }
+    .inner { max-width: 1100px; margin: 0 auto; padding: 0 40px; }
+
+    /* PAGE HEADER */
+    .page-header { margin-bottom: 5rem; }
+    .page-header h1 { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 800; letter-spacing: -0.05em; color: var(--text); line-height: 1; margin-bottom: 1.25rem; }
+    .page-header p { font-size: 1rem; color: var(--dim); max-width: 500px; line-height: 1.8; }
+
+    /* SOLUTION CARDS */
+    .solutions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+    .sol-card {
+      background: var(--bg-2); padding: 48px 44px;
+      display: flex; flex-direction: column;
+      min-height: 480px; position: relative;
+      overflow: hidden; transition: background 0.25s;
+    }
+    .sol-card:hover { background: #080e1e; }
+    .sol-card-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem; color: var(--mute); letter-spacing: 0.14em;
+      margin-bottom: 2.5rem;
+    }
+    .sol-card-type {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.18em;
+      color: var(--blue-l); margin-bottom: 0.75rem;
+    }
+    .sol-card-name { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; letter-spacing: -0.05em; color: #fff; margin-bottom: 1rem; line-height: 1; }
+    .sol-card-desc { font-size: 0.92rem; color: var(--dim); line-height: 1.8; flex: 1; }
+    .sol-card-footer { margin-top: 2.5rem; display: flex; align-items: center; justify-content: space-between; padding-top: 1.5rem; border-top: 1px solid var(--line); }
+    .sol-card-status { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: var(--mute); }
+    .sol-card-status.wip::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); box-shadow: 0 0 8px var(--blue); flex-shrink: 0; }
+    .sol-card-status.proto::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--blue-l); flex-shrink: 0; }
+    .sol-card-cta {
+      font-size: 0.82rem; font-weight: 700; color: var(--blue-l);
+      display: flex; align-items: center; gap: 0.4rem; transition: gap 0.2s;
+    }
+    .sol-card:hover .sol-card-cta { gap: 0.65rem; }
+
+    /* Features list */
+    .sol-features { list-style: none; margin: 1.5rem 0; display: flex; flex-direction: column; gap: 0.5rem; }
+    .sol-features li { font-size: 0.87rem; color: var(--dim); padding-left: 1.1rem; position: relative; line-height: 1.6; }
+    .sol-features li::before { content: '—'; position: absolute; left: 0; color: var(--blue); font-size: 0.8rem; }
+
+    /* Glow accent */
+    .sol-card::after {
+      content: ''; position: absolute; width: 300px; height: 300px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(59,130,246,0.07) 0%, transparent 70%);
+      bottom: -80px; right: -80px; pointer-events: none;
+    }
+
+    @media (max-width: 780px) { .solutions-grid { grid-template-columns: 1fr; } .sol-card { min-height: auto; padding: 36px 28px; } }
+
+    /* COMING SOON */
+    .coming-section { margin-top: 3rem; padding: 2.5rem 2.75rem; border: 1px solid var(--line); border-radius: 8px; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+    .coming-section p { font-size: 0.9rem; color: var(--dim); line-height: 1.7; max-width: 500px; }
+    .coming-section p strong { color: var(--text); }
+    .coming-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.18em; color: var(--mute); white-space: nowrap; }
+    @media (max-width: 520px) { .coming-section { flex-direction: column; align-items: flex-start; } }
+
+    footer { background: var(--bg-2); border-top: 1px solid var(--line); padding: 36px 0; }
+    .footer-inner { max-width: 1100px; margin: 0 auto; padding: 0 40px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .footer-left { font-size: 0.82rem; color: var(--mute); }
+    .footer-left a { color: var(--mute); transition: color 0.2s; }
+    .footer-left a:hover { color: var(--dim); }
+    .footer-right { display: flex; gap: 1.5rem; }
+    .footer-right a { font-size: 0.82rem; color: var(--mute); transition: color 0.2s; }
+    .footer-right a:hover { color: var(--dim); }
+    @media (max-width: 520px) { .footer-inner { flex-direction: column; text-align: center; } .footer-right { flex-wrap: wrap; justify-content: center; } }
+
+    .fade { opacity: 0; transform: translateY(20px); transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+    .fade.in { opacity: 1; transform: none; }
+    .d1 { transition-delay: 0.12s; } .d2 { transition-delay: 0.24s; }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0.01ms !important; } }
+  </style>
+</head>
+<body>
+
+<nav id="navbar">
+  <a href="../../index.html" class="nav-logo">
+    <div class="nav-mark">CL</div>
+    Ceven Labs
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Solutions</a></li>
+    <li><a href="../about/index.html">About</a></li>
+    <li><a href="../support/index.html">Support</a></li>
+  </ul>
+  <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<main>
+  <div class="inner">
+
+    <div class="page-header fade">
+      <h1>Solutions</h1>
+      <p>Tools built at the edge of what's possible. Each one targets a specific unsolved problem.</p>
+    </div>
+
+    <div class="solutions-grid">
+
+      <a href="../layovr/index.html" class="sol-card fade">
+        <span class="sol-card-num">01</span>
+        <span class="sol-card-type">iOS App</span>
+        <h2 class="sol-card-name">LayOvr</h2>
+        <p class="sol-card-desc">Jet lag planning built around your exact flights and meetings. Science-backed circadian engine. Runs offline. Tells you when to sleep, nap, get light, and cut caffeine — so you peak exactly when it matters.</p>
+        <ul class="sol-features">
+          <li>Meeting-anchored optimization</li>
+          <li>Live flight lookup & delay re-planning</li>
+          <li>Multi-leg trips & layover intelligence</li>
+          <li>HealthKit personalization</li>
+        </ul>
+        <div class="sol-card-footer">
+          <span class="sol-card-status wip">In development</span>
+          <span class="sol-card-cta">View LayOvr →</span>
+        </div>
+      </a>
+
+      <a href="bike-fit/index.html" class="sol-card fade d1">
+        <span class="sol-card-num">02</span>
+        <span class="sol-card-type">Web Tool</span>
+        <h2 class="sol-card-name">Bike Fit</h2>
+        <p class="sol-card-desc">Precise bike geometry recommendations from your body measurements. No account. No app. Enter your height and inseam and get saddle height, frame size, and reach — instantly, in your browser.</p>
+        <ul class="sol-features">
+          <li>Road, MTB, and gravel geometry</li>
+          <li>Lemond & Hamley saddle height methods</li>
+          <li>Frame size across all major sizing standards</li>
+          <li>Works offline, no data sent anywhere</li>
+        </ul>
+        <div class="sol-card-footer">
+          <span class="sol-card-status proto">Prototype</span>
+          <span class="sol-card-cta">Try it →</span>
+        </div>
+      </a>
+
+    </div>
+
+    <div class="coming-section fade d2">
+      <p><strong>More solutions in the pipeline.</strong> Ceven Labs is a lab — we're constantly prototyping the next thing. If you have a problem worth solving, <a href="mailto:hello@cevenlabs.com" style="color: var(--blue-l);">reach out</a>.</p>
+      <span class="coming-tag">More coming</span>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <span class="footer-left">© <span class="js-year">2025</span> Ceven Labs ApS · <a href="mailto:hello@cevenlabs.com">hello@cevenlabs.com</a></span>
+    <div class="footer-right">
+      <a href="../legal/privacy-policy.html">Privacy</a>
+      <a href="../legal/terms.html">Terms</a>
+      <a href="../support/index.html">Support</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40), { passive: true });
+  const hb = document.querySelector('.hamburger');
+  if (hb) {
+    hb.addEventListener('click', () => document.body.classList.toggle('nav-open'));
+    document.querySelectorAll('.nav-links a').forEach(l => l.addEventListener('click', () => document.body.classList.remove('nav-open')));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') document.body.classList.remove('nav-open'); });
+  }
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fade').forEach(el => obs.observe(el));
+</script>
+<script>document.querySelectorAll('.js-year').forEach(e => e.textContent = new Date().getFullYear());</script>
+</body>
+</html>

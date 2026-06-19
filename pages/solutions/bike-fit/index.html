@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Bike Fit — precision bike geometry from your body measurements. Free, in-browser, no account required.">
+  <title>Bike Fit | Ceven Labs</title>
+  <link rel="icon" href="../../../media/shared/cl-mark.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:     #04070e; --bg-2: #060b15; --surface: #090e1d;
+      --blue:   #3b82f6; --blue-d:#1d4ed8; --blue-l:#93c5fd; --blue-faint: rgba(59,130,246,0.08);
+      --text:   #f0f4ff; --dim:  #8899bb; --mute: #3d4f6e;
+      --line:   rgba(255,255,255,0.07);
+      --green:  #4ade80;
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: inherit; }
+    ::selection { background: var(--blue); color: #fff; }
+
+    /* NAV */
+    nav { padding: 1.2rem 2.5rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); background: var(--bg); }
+    .nav-logo { display: flex; align-items: center; gap: 0.6rem; font-size: 0.9rem; font-weight: 700; }
+    .nav-mark { width: 24px; height: 24px; border-radius: 5px; background: var(--blue); display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 800; color: #fff; flex-shrink: 0; }
+    .nav-back { font-size: 0.82rem; color: var(--dim); transition: color 0.2s; display: flex; align-items: center; gap: 0.35rem; }
+    .nav-back:hover { color: var(--text); }
+    .nav-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--blue-l); background: var(--blue-faint); padding: 3px 8px; border-radius: 3px; }
+    @media (max-width: 520px) { nav { padding: 1rem 1.25rem; } .nav-tag { display: none; } }
+
+    /* LAYOUT */
+    .tool-wrap {
+      max-width: 1000px; margin: 0 auto; padding: 4rem 2.5rem 6rem;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start;
+    }
+    @media (max-width: 780px) { .tool-wrap { grid-template-columns: 1fr; gap: 3rem; padding: 2.5rem 1.5rem 4rem; } }
+
+    /* HEADER */
+    .tool-header { margin-bottom: 2.5rem; }
+    .tool-header h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1.05; margin-bottom: 0.75rem; }
+    .tool-header p { font-size: 0.92rem; color: var(--dim); line-height: 1.75; }
+
+    /* FORM */
+    .form-section { margin-bottom: 2rem; }
+    .form-section-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; color: var(--mute); margin-bottom: 1rem; font-family: 'JetBrains Mono', monospace; }
+    .field { margin-bottom: 1.25rem; }
+    .field label { display: block; font-size: 0.85rem; font-weight: 500; color: var(--dim); margin-bottom: 0.5rem; }
+    .field-row { display: flex; gap: 0.5rem; align-items: center; }
+    .field input[type="number"] {
+      width: 100%; background: var(--surface); border: 1px solid var(--line);
+      border-radius: 6px; padding: 0.7rem 1rem;
+      font-family: 'JetBrains Mono', monospace; font-size: 1rem; font-weight: 500;
+      color: var(--text); outline: none; transition: border-color 0.2s;
+      -moz-appearance: textfield;
+    }
+    .field input[type="number"]::-webkit-inner-spin-button,
+    .field input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
+    .field input[type="number"]:focus { border-color: var(--blue); }
+    .field-unit { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--mute); white-space: nowrap; min-width: 28px; }
+
+    .bike-type-btns { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .type-btn {
+      padding: 8px 16px; border: 1px solid var(--line); border-radius: 5px;
+      background: none; color: var(--dim); font-size: 0.82rem; font-weight: 600;
+      cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif;
+    }
+    .type-btn.active { border-color: var(--blue); background: var(--blue-faint); color: var(--blue-l); }
+    .type-btn:hover:not(.active) { border-color: var(--mute); color: var(--text); }
+
+    /* RESULTS */
+    .results-panel { position: sticky; top: 2rem; }
+    .results-header { padding-bottom: 1rem; border-bottom: 1px solid var(--line); margin-bottom: 0; }
+    .results-header h2 { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; color: var(--mute); font-family: 'JetBrains Mono', monospace; }
+
+    .results-empty {
+      padding: 3rem 0;
+      font-size: 0.88rem; color: var(--mute); line-height: 1.7;
+    }
+
+    .result-group { padding: 1.5rem 0; border-bottom: 1px solid var(--line); }
+    .result-group:last-child { border-bottom: none; }
+    .result-group-name { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.16em; color: var(--mute); font-family: 'JetBrains Mono', monospace; margin-bottom: 1rem; }
+    .result-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.85rem; gap: 1rem; }
+    .result-row:last-child { margin-bottom: 0; }
+    .result-label { font-size: 0.88rem; color: var(--dim); }
+    .result-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.1rem; font-weight: 500; color: var(--text); white-space: nowrap;
+    }
+    .result-val.primary { font-size: 1.5rem; font-weight: 700; color: var(--blue-l); }
+    .result-note { font-size: 0.78rem; color: var(--mute); line-height: 1.6; margin-top: 0.5rem; }
+
+    .size-chip {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 52px; height: 52px; border-radius: 8px;
+      background: var(--blue-faint); border: 1px solid rgba(59,130,246,0.2);
+      font-size: 1.1rem; font-weight: 800; color: var(--blue-l);
+      letter-spacing: -0.02em;
+    }
+    .size-row { display: flex; gap: 0.5rem; align-items: center; margin-top: 0.75rem; }
+    .size-row .size-chip.recommend { background: rgba(59,130,246,0.15); border-color: var(--blue); color: #fff; }
+
+    .disclaimer { margin-top: 2.5rem; font-size: 0.78rem; color: var(--mute); line-height: 1.7; padding: 1rem 1.25rem; background: rgba(255,255,255,0.02); border: 1px solid var(--line); border-radius: 6px; }
+    .disclaimer strong { color: var(--dim); }
+
+    footer { border-top: 1px solid var(--line); padding: 24px 2.5rem; font-size: 0.8rem; color: var(--mute); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+    footer a { color: var(--mute); transition: color 0.2s; }
+    footer a:hover { color: var(--dim); }
+    @media (max-width: 520px) { footer { flex-direction: column; text-align: center; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="../../../index.html" class="nav-logo">
+    <div class="nav-mark">CL</div>
+    Ceven Labs
+  </a>
+  <div style="display:flex;align-items:center;gap:1rem;">
+    <span class="nav-tag">Web Tool</span>
+    <a href="../index.html" class="nav-back">← Solutions</a>
+  </div>
+</nav>
+
+<div class="tool-wrap">
+
+  <!-- LEFT: INPUTS -->
+  <div class="tool-left">
+    <div class="tool-header">
+      <h1>Bike Fit</h1>
+      <p>Enter your body measurements to get precise geometry recommendations. Everything runs in your browser — nothing is sent anywhere.</p>
+    </div>
+
+    <div class="form-section">
+      <p class="form-section-label">Bike type</p>
+      <div class="bike-type-btns">
+        <button class="type-btn active" data-type="road">Road</button>
+        <button class="type-btn" data-type="gravel">Gravel</button>
+        <button class="type-btn" data-type="mtb">MTB</button>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <p class="form-section-label">Body measurements</p>
+      <div class="field">
+        <label for="height">Height</label>
+        <div class="field-row">
+          <input type="number" id="height" placeholder="175" min="140" max="220">
+          <span class="field-unit">cm</span>
+        </div>
+      </div>
+      <div class="field">
+        <label for="inseam">Inseam (floor to crotch, bare feet)</label>
+        <div class="field-row">
+          <input type="number" id="inseam" placeholder="82" min="60" max="110">
+          <span class="field-unit">cm</span>
+        </div>
+      </div>
+      <div class="field">
+        <label for="torso">Torso length <span style="color:var(--mute);font-weight:400;">(optional — C7 vertebra to hip)</span></label>
+        <div class="field-row">
+          <input type="number" id="torso" placeholder="57" min="40" max="80">
+          <span class="field-unit">cm</span>
+        </div>
+      </div>
+      <div class="field">
+        <label for="arm">Arm length <span style="color:var(--mute);font-weight:400;">(optional — shoulder to wrist)</span></label>
+        <div class="field-row">
+          <input type="number" id="arm" placeholder="60" min="40" max="90">
+          <span class="field-unit">cm</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <p class="form-section-label">Flexibility</p>
+      <div class="bike-type-btns">
+        <button class="flex-btn active" data-flex="flexible">Flexible</button>
+        <button class="flex-btn" data-flex="average">Average</button>
+        <button class="flex-btn" data-flex="stiff">Limited</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: RESULTS -->
+  <div class="results-panel">
+    <div class="results-header">
+      <h2>Your geometry</h2>
+    </div>
+
+    <div id="results-empty" class="results-empty">
+      Enter your height and inseam above to see your recommendations.
+    </div>
+
+    <div id="results-content" style="display:none;">
+
+      <div class="result-group" id="rg-size">
+        <p class="result-group-name">Frame size</p>
+        <div class="result-row">
+          <span class="result-label">Recommended</span>
+          <span class="result-val primary" id="r-frame-cm">—</span>
+        </div>
+        <div class="size-row" id="size-chips"></div>
+        <p class="result-note" id="r-frame-note"></p>
+      </div>
+
+      <div class="result-group">
+        <p class="result-group-name">Saddle</p>
+        <div class="result-row">
+          <span class="result-label">Saddle height (BB to top)</span>
+          <span class="result-val" id="r-saddle">—</span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">Saddle setback from BB</span>
+          <span class="result-val" id="r-setback">—</span>
+        </div>
+      </div>
+
+      <div class="result-group">
+        <p class="result-group-name">Cockpit</p>
+        <div class="result-row">
+          <span class="result-label">Handlebar reach</span>
+          <span class="result-val" id="r-reach">—</span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">Handlebar drop</span>
+          <span class="result-val" id="r-drop">—</span>
+        </div>
+        <div class="result-row" id="r-stemrow">
+          <span class="result-label">Suggested stem length</span>
+          <span class="result-val" id="r-stem">—</span>
+        </div>
+      </div>
+
+      <div class="result-group">
+        <p class="result-group-name">Stack & reach</p>
+        <div class="result-row">
+          <span class="result-label">Stack (approx.)</span>
+          <span class="result-val" id="r-stack">—</span>
+        </div>
+        <div class="result-row">
+          <span class="result-label">Reach (approx.)</span>
+          <span class="result-val" id="r-reachfr">—</span>
+        </div>
+      </div>
+
+      <div class="disclaimer">
+        <strong>These are starting points, not a professional fit.</strong> Body proportions, flexibility, and riding style all affect ideal fit. Use these numbers to narrow your search, then refine with a qualified fitter or through test rides.
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <span>Ceven Labs · <a href="mailto:hello@cevenlabs.com">hello@cevenlabs.com</a></span>
+  <span><a href="../../legal/privacy-policy.html">Privacy</a></span>
+</footer>
+
+<script>
+  let bikeType = 'road';
+  let flexibility = 'flexible';
+
+  // Bike type toggle
+  document.querySelectorAll('.type-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      bikeType = btn.dataset.type;
+      calculate();
+    });
+  });
+
+  // Flexibility toggle
+  document.querySelectorAll('.flex-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.flex-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      flexibility = btn.dataset.flex;
+      calculate();
+    });
+  });
+
+  ['height','inseam','torso','arm'].forEach(id => {
+    document.getElementById(id).addEventListener('input', calculate);
+  });
+
+  function r(n, dec = 1) { return n.toFixed(dec); }
+  function cm(n) { return r(n) + ' cm'; }
+
+  // Road frame sizes by inseam
+  const roadSizes = [
+    { label: '44', min: 66, max: 72 },
+    { label: '47', min: 72, max: 76 },
+    { label: '50', min: 75, max: 79 },
+    { label: '52', min: 78, max: 82 },
+    { label: '54', min: 81, max: 85 },
+    { label: '56', min: 84, max: 88 },
+    { label: '58', min: 87, max: 91 },
+    { label: '60', min: 90, max: 94 },
+    { label: '62', min: 93, max: 99 },
+  ];
+
+  const mtbSizes = [
+    { label: 'XS', min: 64, max: 71 },
+    { label: 'S',  min: 70, max: 77 },
+    { label: 'M',  min: 76, max: 83 },
+    { label: 'L',  min: 82, max: 89 },
+    { label: 'XL', min: 88, max: 95 },
+    { label: 'XXL',min: 94, max: 110 },
+  ];
+
+  function getFrameSize(inseam) {
+    if (bikeType === 'mtb' || bikeType === 'gravel') {
+      const sizes = bikeType === 'gravel' ? roadSizes : mtbSizes;
+      const match = sizes.find(s => inseam >= s.min && inseam <= s.max);
+      if (match) return match.label;
+      return inseam < 70 ? sizes[0].label : sizes[sizes.length - 1].label;
+    } else {
+      const match = roadSizes.find(s => inseam >= s.min && inseam <= s.max);
+      if (match) return match.label;
+      return inseam < 72 ? roadSizes[0].label : roadSizes[roadSizes.length - 1].label;
+    }
+  }
+
+  function getAdjacentSizes(inseam) {
+    const sizes = (bikeType === 'mtb') ? mtbSizes : roadSizes;
+    const idx = sizes.findIndex(s => inseam >= s.min && inseam <= s.max);
+    if (idx === -1) return [];
+    const out = [];
+    if (idx > 0) out.push({ label: sizes[idx - 1].label, type: 'adj' });
+    out.push({ label: sizes[idx].label, type: 'rec' });
+    if (idx < sizes.length - 1) out.push({ label: sizes[idx + 1].label, type: 'adj' });
+    return out;
+  }
+
+  function calculate() {
+    const h = parseFloat(document.getElementById('height').value);
+    const ins = parseFloat(document.getElementById('inseam').value);
+    const torso = parseFloat(document.getElementById('torso').value);
+    const arm = parseFloat(document.getElementById('arm').value);
+
+    const hasBasic = !isNaN(h) && !isNaN(ins) && h > 100 && ins > 40;
+
+    document.getElementById('results-empty').style.display = hasBasic ? 'none' : 'block';
+    document.getElementById('results-content').style.display = hasBasic ? 'block' : 'none';
+
+    if (!hasBasic) return;
+
+    // Saddle height — LeMond method
+    const saddleFactor = bikeType === 'mtb' ? 0.872 : 0.883;
+    const saddleH = ins * saddleFactor;
+
+    // Saddle setback (roughly 10% of inseam for most riders)
+    const setback = ins * 0.1;
+
+    // Frame size
+    const frameLabel = getFrameSize(ins);
+    const frameCm = bikeType !== 'mtb' ? (ins * 0.65).toFixed(0) + ' cm' : null;
+    const adjacent = getAdjacentSizes(ins);
+
+    // Reach & drop based on torso + arm or height estimate
+    const effectiveTorso = !isNaN(torso) ? torso : h * 0.325;
+    const effectiveArm = !isNaN(arm) ? arm : h * 0.34;
+
+    // Rough reach = torso + arm projection towards bars
+    const reachBase = (effectiveTorso + effectiveArm * 0.72) * (bikeType === 'road' ? 0.92 : bikeType === 'gravel' ? 0.88 : 0.80);
+
+    // Handlebar drop: flexible riders can go lower
+    const dropMultiplier = { flexible: 1.0, average: 0.65, stiff: 0.3 }[flexibility];
+    const dropBase = bikeType === 'road' ? 8 : bikeType === 'gravel' ? 4 : 0;
+    const drop = bikeType === 'mtb' ? 0 : dropBase * dropMultiplier;
+
+    // Stack & reach of frame (rough)
+    const stackFr = h * 0.62;
+    const reachFr = h * 0.38;
+
+    // Stem length estimate
+    const stemLength = Math.round((reachBase - reachFr) / 5) * 5;
+    const stemDisplay = stemLength < 60 ? '60–70 mm' : stemLength > 130 ? '120–130 mm' : (stemLength - 5) + '–' + (stemLength + 5) + ' mm';
+
+    // Set values
+    document.getElementById('r-frame-cm').textContent = bikeType !== 'mtb' ? frameCm + ' (' + frameLabel + ')' : frameLabel;
+    document.getElementById('r-saddle').textContent = cm(saddleH);
+    document.getElementById('r-setback').textContent = cm(setback);
+    document.getElementById('r-reach').textContent = cm(reachBase);
+    document.getElementById('r-drop').textContent = bikeType === 'mtb' ? 'N/A' : cm(drop);
+    document.getElementById('r-stem').textContent = stemDisplay;
+    document.getElementById('r-stack').textContent = cm(stackFr);
+    document.getElementById('r-reachfr').textContent = cm(reachFr);
+
+    // Frame note
+    const notes = {
+      road: 'Based on LeMond method (inseam × 0.65). Overlap with adjacent size is common — test ride both.',
+      gravel: 'Gravel frames typically run similar to road sizing. Many riders size down one for technical riding.',
+      mtb: 'Mountain bike sizing by rider height. Reach-focused modern geometry — verify with brand sizing chart.'
+    };
+    document.getElementById('r-frame-note').textContent = notes[bikeType];
+
+    // Size chips
+    const chips = document.getElementById('size-chips');
+    chips.innerHTML = '';
+    adjacent.forEach(s => {
+      const el = document.createElement('div');
+      el.className = 'size-chip' + (s.type === 'rec' ? ' recommend' : '');
+      el.textContent = s.label;
+      chips.appendChild(el);
+    });
+    if (adjacent.length === 0) {
+      const el = document.createElement('div');
+      el.className = 'size-chip recommend';
+      el.textContent = frameLabel;
+      chips.appendChild(el);
+    }
+  }
+</script>
+</body>
+</html>
