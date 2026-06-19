@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="About Ceven Labs — an independent iOS studio based in Aarhus, Denmark, building focused tools for modern travelers.">
+  <title>About | Ceven Labs</title>
+  <link rel="icon" href="../../media/shared/layovr-icon.png" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #06080f; --bg-alt: #080d1a; --navy: #040609;
+      --cream: #ffffff; --cream-dark: #0a0f16; --cream-dim: #55566a;
+      --text: #ededea; --dim: #a8a9b0; --mute: #6b6d78;
+      --accent: #c9a86a; --brand: #4a90e8; --line: rgba(255,255,255,0.07);
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    a { text-decoration: none; color: inherit; transition: color 0.3s; }
+    ::selection { background: var(--accent); color: #111; }
+
+    .ambient { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .orb { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.04; animation: drift 22s ease-in-out infinite; }
+    .orb-1 { width: 600px; height: 600px; background: var(--brand); top: -20%; left: -15%; animation-duration: 25s; }
+    .orb-2 { width: 400px; height: 400px; background: var(--accent); bottom: 10%; right: -10%; animation-duration: 30s; animation-delay: -8s; }
+    @keyframes drift { 0%, 100% { transform: translate(0,0) scale(1); } 33% { transform: translate(40px,-30px) scale(1.05); } 66% { transform: translate(-25px,20px) scale(0.95); } }
+    .grain { position: fixed; inset: -50%; width: 200%; height: 200%; z-index: 1; pointer-events: none; opacity: 0.018; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); animation: grainMove 0.5s steps(1) infinite; }
+    @keyframes grainMove { 0%,100% { transform: translate(0,0); } 25% { transform: translate(-2%,-3%); } 50% { transform: translate(2%,1%); } 75% { transform: translate(-1%,2%); } }
+
+    nav#navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 1.25rem 2.5rem; display: flex; align-items: center; justify-content: space-between; background: rgba(6,8,15,0.60); backdrop-filter: blur(20px) saturate(140%); -webkit-backdrop-filter: blur(20px) saturate(140%); border-bottom: 1px solid transparent; transition: all 0.3s; }
+    nav#navbar.scrolled { padding: 0.85rem 2.5rem; background: rgba(6,8,15,0.92); border-bottom-color: var(--line); }
+    .nav-logo { font-size: 1rem; font-weight: 700; letter-spacing: 0.02em; display: flex; align-items: center; gap: 0.6rem; }
+    .nav-logo-mark { width: 28px; height: 28px; border-radius: 7px; overflow: hidden; flex-shrink: 0; }
+    .nav-logo-mark img { width: 100%; height: 100%; object-fit: cover; }
+    .nav-links { display: flex; gap: 2.25rem; list-style: none; align-items: center; }
+    .nav-links > li > a { font-size: 0.85rem; font-weight: 500; color: var(--dim); padding: 0.5rem 0; position: relative; }
+    .nav-links > li > a::after { content: ''; position: absolute; left: 0; bottom: 0; height: 1px; width: 0; background: var(--accent); transition: width 0.25s; }
+    .nav-links > li > a:hover { color: var(--text); }
+    .nav-links > li > a:hover::after { width: 100%; }
+    .nav-links > li > a.active { color: var(--accent); }
+    .nav-links > li > a.active::after { width: 100%; }
+    .nav-right { display: flex; align-items: center; }
+    .nav-cta { font-size: 0.8rem; font-weight: 600; padding: 0.65rem 1.2rem; border: 1px solid rgba(201,168,106,0.25); border-radius: 999px; color: var(--accent); transition: all 0.25s; }
+    .nav-cta:hover { background: var(--accent); color: #111; border-color: var(--accent); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; padding: 6px; background: none; border: none; cursor: pointer; }
+    .hamburger span { width: 22px; height: 1.5px; background: var(--text); display: block; transition: all 0.3s; }
+    @media (max-width: 768px) { nav#navbar { padding: 1rem 1.5rem; } .nav-links, .nav-cta { display: none; } .hamburger { display: flex; } }
+    body.nav-open { overflow: hidden; }
+    body.nav-open nav#navbar { background: var(--bg); border-bottom-color: var(--line); backdrop-filter: none; -webkit-backdrop-filter: none; transition: none; }
+    body.nav-open .nav-links { display: flex !important; flex-direction: column; position: fixed; inset: 0; z-index: 999; background: var(--bg); padding: 5.5rem 2rem 2rem; gap: 0; align-items: flex-start; }
+    body.nav-open .nav-links > li { width: 100%; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    body.nav-open .nav-links > li:last-child { border-bottom: none; }
+    body.nav-open .nav-links > li > a { font-size: 1.4rem; font-weight: 600; color: var(--text); padding: 1rem 0; display: block; }
+    body.nav-open .hamburger { position: relative; z-index: 1001; }
+    body.nav-open .hamburger span:nth-child(1) { transform: rotate(45deg) translate(4.5px, 4.5px); }
+    body.nav-open .hamburger span:nth-child(2) { opacity: 0; }
+    body.nav-open .hamburger span:nth-child(3) { transform: rotate(-45deg) translate(4.5px, -4.5px); }
+
+    main { position: relative; z-index: 2; }
+    .section-inner { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+    .eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 1rem; }
+
+    /* HERO */
+    #hero { min-height: 60vh; background: var(--bg-alt); display: flex; align-items: center; padding: 9rem 0 5rem; position: relative; overflow: hidden; }
+    #hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 70% 60% at 20% 50%, rgba(74,144,232,0.05) 0%, transparent 70%); pointer-events: none; }
+    .hero-inner { position: relative; z-index: 2; max-width: 1100px; margin: 0 auto; padding: 0 32px; width: 100%; }
+    .hero-inner h1 { font-size: clamp(2.8rem, 6vw, 4.8rem); font-weight: 800; letter-spacing: -0.04em; color: #fff; line-height: 1.05; margin-bottom: 1.25rem; opacity: 0; animation: fadeUp 0.8s 0.2s forwards; }
+    .hero-inner h1 span { color: var(--accent); }
+    .hero-inner .hero-lead { font-size: 1.1rem; color: var(--dim); max-width: 540px; line-height: 1.85; opacity: 0; animation: fadeUp 0.8s 0.4s forwards; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* MISSION */
+    #mission { background: var(--cream); padding: 100px 0; position: relative; z-index: 2; }
+    .mission-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+    .mission-left h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; letter-spacing: -0.04em; color: var(--cream-dark); margin-bottom: 1.5rem; line-height: 1.1; }
+    .mission-left p { font-size: 0.95rem; color: var(--cream-dim); line-height: 1.9; margin-bottom: 1.1rem; }
+    .mission-left p:last-child { margin-bottom: 0; }
+    .mission-right { display: flex; flex-direction: column; gap: 24px; }
+    .value-card { padding: 1.75rem; background: #f9f8f6; border: 1px solid #e8e4de; border-radius: 14px; }
+    .value-card .v-icon { font-size: 1.5rem; margin-bottom: 0.75rem; }
+    .value-card h3 { font-size: 0.97rem; font-weight: 700; color: var(--cream-dark); margin-bottom: 0.4rem; }
+    .value-card p { font-size: 0.875rem; color: var(--cream-dim); line-height: 1.7; }
+    @media (max-width: 900px) { .mission-grid { grid-template-columns: 1fr; gap: 48px; } }
+
+    /* COMPANY INFO */
+    #company { background: var(--bg-alt); padding: 100px 0; position: relative; z-index: 2; border-top: 1px solid rgba(255,255,255,0.04); }
+    .company-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+    .company-left h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; letter-spacing: -0.04em; color: #fff; margin-bottom: 1.5rem; line-height: 1.1; }
+    .company-left p { font-size: 0.95rem; color: var(--dim); line-height: 1.9; margin-bottom: 1.1rem; }
+    .company-detail-list { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+    .company-detail { display: grid; grid-template-columns: 120px 1fr; gap: 0.75rem; padding: 1rem 0; border-bottom: 1px solid var(--line); }
+    .company-detail:first-child { border-top: 1px solid var(--line); }
+    .detail-label { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mute); padding-top: 0.1rem; }
+    .detail-value { font-size: 0.92rem; color: var(--text); line-height: 1.6; }
+    .detail-value a { color: var(--accent); }
+    .detail-value a:hover { color: #e0bf82; }
+    @media (max-width: 900px) { .company-grid { grid-template-columns: 1fr; gap: 48px; } }
+
+    /* ROADMAP */
+    #roadmap { background: var(--bg); padding: 100px 0; position: relative; z-index: 2; border-top: 1px solid rgba(255,255,255,0.04); }
+    #roadmap h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; letter-spacing: -0.04em; color: #fff; margin-bottom: 0.75rem; }
+    #roadmap .sub { font-size: 0.97rem; color: var(--dim); line-height: 1.8; max-width: 520px; margin-bottom: 3rem; }
+    .roadmap-items { display: flex; flex-direction: column; }
+    .roadmap-item { display: grid; grid-template-columns: 160px 1fr; gap: 24px; padding: 1.75rem 0; border-bottom: 1px solid var(--line); }
+    .roadmap-item:first-child { border-top: 1px solid var(--line); }
+    .roadmap-phase {
+      display: flex; flex-direction: column; gap: 0.35rem; padding-top: 0.15rem;
+    }
+    .roadmap-phase .phase-label { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--mute); }
+    .phase-chip {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 4px 10px; border-radius: 999px; width: fit-content;
+    }
+    .phase-chip.active { background: rgba(74,222,128,0.12); color: #4ade80; border: 1px solid rgba(74,222,128,0.25); }
+    .phase-chip.next { background: rgba(201,168,106,0.1); color: var(--accent); border: 1px solid rgba(201,168,106,0.2); }
+    .phase-chip.future { background: rgba(255,255,255,0.04); color: var(--mute); border: 1px solid var(--line); }
+    .roadmap-item h3 { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 0.4rem; }
+    .roadmap-item p { font-size: 0.875rem; color: var(--dim); line-height: 1.75; }
+    @media (max-width: 640px) { .roadmap-item { grid-template-columns: 1fr; gap: 12px; } }
+
+    /* FOOTER */
+    footer { background: var(--navy); position: relative; z-index: 2; }
+    .footer-slim { max-width: 1100px; margin: 0 auto; padding: 24px 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; border-top: 1px solid rgba(255,255,255,0.06); }
+    .footer-copy { font-size: 0.82rem; color: rgba(255,255,255,0.25); }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { font-size: 0.82rem; color: rgba(255,255,255,0.25); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--dim); }
+    @media (max-width: 520px) { .footer-slim { flex-direction: column; text-align: center; } .footer-links { flex-wrap: wrap; justify-content: center; } }
+
+    .wow { opacity: 0; transform: translateY(26px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+    .wow.visible { opacity: 1; transform: translateY(0); }
+    .d1 { transition-delay: 0.1s; } .d2 { transition-delay: 0.2s; } .d3 { transition-delay: 0.3s; }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } .orb { animation: none; } }
+  </style>
+</head>
+<body>
+
+<div class="ambient" aria-hidden="true">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+</div>
+<div class="grain" aria-hidden="true"></div>
+
+<nav id="navbar">
+  <a href="../../index.html" class="nav-logo">
+    <div class="nav-logo-mark">
+      <img src="../../media/shared/layovr-icon.png" alt="Ceven Labs">
+    </div>
+    Ceven Labs
+  </a>
+  <ul class="nav-links">
+    <li><a href="../layovr/index.html">LayOvr</a></li>
+    <li><a href="index.html" class="active">About</a></li>
+    <li><a href="../support/index.html">Support</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="../layovr/index.html" class="nav-cta">Get LayOvr</a>
+  </div>
+  <button class="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<main>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-inner">
+      <span class="eyebrow" style="opacity:0; animation: fadeUp 0.8s 0.1s forwards;">About Ceven Labs</span>
+      <h1>Small team.<br><span>Long attention span.</span></h1>
+      <p class="hero-lead">We're an independent iOS studio from Aarhus, Denmark. We build focused, premium tools — one problem at a time, with obsessive care for detail.</p>
+    </div>
+  </section>
+
+  <!-- MISSION -->
+  <section id="mission">
+    <div class="section-inner">
+      <div class="mission-grid">
+        <div class="mission-left wow">
+          <span class="eyebrow" style="color: #999;">Our mission</span>
+          <h2>Why Ceven Labs exists</h2>
+          <p>Most software is built to be broad. We built Ceven Labs to go deep — to find one specific, real problem, and solve it better than anyone else.</p>
+          <p>Our first target: jet lag. Not generic sleep tips, but a proper, personalized circadian plan that accounts for your exact flights, your key meetings, and how your body actually works across timezones.</p>
+          <p>We believe the best tools are built by people who are personally frustrated by the problem they're solving. We travel. We've shown up jet-lagged to meetings that mattered. LayOvr is what we needed.</p>
+        </div>
+        <div class="wow d2">
+          <div class="mission-right">
+            <div class="value-card">
+              <div class="v-icon">🎯</div>
+              <h3>Specific over generic</h3>
+              <p>We don't build apps that try to serve everyone. We pick one problem, one user, and go deep until the solution is genuinely better than anything else available.</p>
+            </div>
+            <div class="value-card">
+              <div class="v-icon">🔒</div>
+              <h3>Privacy by design</h3>
+              <p>Your health data and travel plans stay on your device. We built the app without a backend on purpose — it's not a cost decision, it's a principle.</p>
+            </div>
+            <div class="value-card">
+              <div class="v-icon">⚡</div>
+              <h3>Offline-first</h3>
+              <p>The core features work in airplane mode. That's not a nice-to-have when you're 35,000 feet above the Atlantic — it's the whole point.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPANY INFO -->
+  <section id="company">
+    <div class="section-inner">
+      <div class="company-grid">
+        <div class="company-left wow">
+          <span class="eyebrow">The company</span>
+          <h2>Ceven Labs ApS</h2>
+          <p>Ceven Labs is a Danish private limited company (ApS), registered and operating in Aarhus, Denmark. We are enrolled in Apple's Developer Program and comply with Danish and EU regulations including GDPR.</p>
+          <p>We are a participant in Apple's Developer Program. Our apps are distributed exclusively through the Apple App Store.</p>
+        </div>
+        <div class="wow d2">
+          <ul class="company-detail-list">
+            <li class="company-detail">
+              <span class="detail-label">Company</span>
+              <span class="detail-value">Ceven Labs ApS</span>
+            </li>
+            <li class="company-detail">
+              <span class="detail-label">Type</span>
+              <span class="detail-value">Private limited company (ApS)</span>
+            </li>
+            <li class="company-detail">
+              <span class="detail-label">CVR</span>
+              <span class="detail-value">PLACEHOLDER-CVR</span>
+            </li>
+            <li class="company-detail">
+              <span class="detail-label">Location</span>
+              <span class="detail-value">Aarhus, Denmark</span>
+            </li>
+            <li class="company-detail">
+              <span class="detail-label">Founded</span>
+              <span class="detail-value">2025</span>
+            </li>
+            <li class="company-detail">
+              <span class="detail-label">Focus</span>
+              <span class="detail-value">iOS applications</span>
+            </li>
+            <li class="company-detail">
+              <span class="detail-label">Contact</span>
+              <span class="detail-value"><a href="mailto:PLACEHOLDER-SUPPORT-EMAIL">PLACEHOLDER-SUPPORT-EMAIL</a></span>
+            </li>
+            <li class="company-detail">
+              <span class="detail-label">Apple</span>
+              <span class="detail-value">Apple Developer Program member</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROADMAP -->
+  <section id="roadmap">
+    <div class="section-inner">
+      <div class="wow">
+        <span class="eyebrow">What's coming</span>
+        <h2>The roadmap</h2>
+        <p class="sub">We're focused on doing one thing well before moving to the next. Here's where LayOvr is heading.</p>
+      </div>
+      <div class="roadmap-items">
+        <div class="roadmap-item wow">
+          <div class="roadmap-phase">
+            <span class="phase-label">v0.1</span>
+            <span class="phase-chip active">● In progress</span>
+          </div>
+          <div>
+            <h3>LayOvr — core iOS app</h3>
+            <p>Multi-leg trip planner, circadian engine, meeting-anchored optimization, lounge intelligence, live flight lookup, HealthKit integration, in-app subscriptions.</p>
+          </div>
+        </div>
+        <div class="roadmap-item wow d1">
+          <div class="roadmap-phase">
+            <span class="phase-label">v0.2</span>
+            <span class="phase-chip next">↑ Next</span>
+          </div>
+          <div>
+            <h3>Apple Watch companion</h3>
+            <p>Wrist-based nudges, real-time alertness score, in-flight sleep detection, and ambient light coaching.</p>
+          </div>
+        </div>
+        <div class="roadmap-item wow d2">
+          <div class="roadmap-phase">
+            <span class="phase-label">v0.3</span>
+            <span class="phase-chip future">Planned</span>
+          </div>
+          <div>
+            <h3>Calendar integration &amp; team sync</h3>
+            <p>Auto-pull meetings from Calendar, shared plans for executive + EA pairs, corporate team accounts.</p>
+          </div>
+        </div>
+        <div class="roadmap-item wow d3">
+          <div class="roadmap-phase">
+            <span class="phase-label">Future</span>
+            <span class="phase-chip future">Exploring</span>
+          </div>
+          <div>
+            <h3>New apps</h3>
+            <p>Ceven Labs' second product — currently being defined. Same principle: one specific problem, solved deeply.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-slim">
+    <span class="footer-copy">© <span class="js-year">2025</span> Ceven Labs ApS · CVR: PLACEHOLDER-CVR · Aarhus, Denmark</span>
+    <div class="footer-links">
+      <a href="../legal/privacy-policy.html">Privacy Policy</a>
+      <a href="../legal/terms.html">Terms of Use</a>
+      <a href="../support/index.html">Support</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => { navbar.classList.toggle('scrolled', window.scrollY > 40); }, { passive: true });
+  const hamburger = document.querySelector('.hamburger');
+  if (hamburger) {
+    hamburger.addEventListener('click', () => document.body.classList.toggle('nav-open'));
+    document.querySelectorAll('.nav-links a').forEach(link => { link.addEventListener('click', () => document.body.classList.remove('nav-open')); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') document.body.classList.remove('nav-open'); });
+  }
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObserver.unobserve(e.target); } });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.wow').forEach(el => revealObserver.observe(el));
+</script>
+<script>document.querySelectorAll(".js-year").forEach(function(e){e.textContent=new Date().getFullYear();});</script>
+</body>
+</html>
