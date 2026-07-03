@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Ceven Labs: science-backed health tools grounded in science. For sleep, travel, cycling, and what comes next.">
+  <meta name="description" content="Ceven Labs: science-backed health tools for real moments — jet lag planning, contraction timing during labor, and bike fitting. Built in Aarhus, Denmark.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://cevenlabs.com/">
   <meta property="og:title" content="Ceven Labs">
@@ -145,15 +145,15 @@
     @media (max-width: 720px) { .thread-inner { grid-template-columns: 1fr; gap: 2.5rem; } }
 
     /* FOOTER */
-    footer { background: var(--bg-2); border-top: 1px solid var(--line); padding: 36px 0; }
-    .footer-inner { max-width: 1100px; margin: 0 auto; padding: 0 40px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
-    .footer-left { font-size: 0.82rem; color: var(--mute); }
-    .footer-left a { color: var(--mute); transition: color 0.2s; }
-    .footer-left a:hover { color: var(--dim); }
-    .footer-right { display: flex; gap: 1.5rem; }
-    .footer-right a { font-size: 0.82rem; color: var(--mute); transition: color 0.2s; }
-    .footer-right a:hover { color: var(--dim); }
-    @media (max-width: 520px) { .footer-inner { flex-direction: column; text-align: center; } .footer-right { flex-wrap: wrap; justify-content: center; } }
+    footer { background: var(--bg-2); }
+    .footer-slim { max-width: 1100px; margin: 0 auto; padding: 24px 40px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; border-top: 1px solid rgba(255,255,255,0.06); }
+    .footer-copy { font-size: 0.82rem; color: rgba(255,255,255,0.25); }
+    .footer-copy a { color: rgba(255,255,255,0.35); transition: color 0.2s; }
+    .footer-copy a:hover { color: var(--blue-l); }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { font-size: 0.82rem; color: rgba(255,255,255,0.25); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--dim); }
+    @media (max-width: 520px) { .footer-slim { flex-direction: column; text-align: center; } .footer-links { flex-wrap: wrap; justify-content: center; } }
 
     .fade { opacity: 0; transform: translateY(18px); transition: opacity 0.65s cubic-bezier(0.16,1,0.3,1), transform 0.65s cubic-bezier(0.16,1,0.3,1); }
     .fade.in { opacity: 1; transform: none; }
@@ -191,7 +191,7 @@
         the way<br>
         you <span class="accent-green">move.</span>
       </h1>
-      <p class="hero-sub fade d2">Science-backed tools that help you show up at your best. Whether you're crossing time zones or fine-tuning your ride. Real research. Clear output. No account required.</p>
+      <p class="hero-sub fade d2">Science-backed tools that help you show up at your best — crossing time zones, timing contractions on the way to the hospital, or dialing in your ride. Real research. Clear output. No account required.</p>
       <div class="hero-cta fade d3">
         <a href="pages/solutions/index.html" class="btn-primary">See our tools</a>
         <a href="pages/about/index.html" class="btn-ghost">About the lab</a>
@@ -225,10 +225,28 @@
         </li>
 
         <li class="tool-item fade d1">
-          <a href="pages/solutions/bike-fit/index.html">
+          <a href="pages/flowen/index.html">
             <div class="tool-left">
               <div class="tool-top">
                 <span class="tool-num">02</span>
+                <span class="tool-domain body">Labor &amp; Birth</span>
+              </div>
+              <p class="tool-name">Flowen</p>
+              <p class="tool-desc">A calm contraction timer for labor. One-tap timing, simple intensity ratings, and plain-language pattern insight — plus a clean summary to share with your midwife. Everything stays on your phone.</p>
+            </div>
+            <div class="tool-right">
+              <span class="tool-type">iOS App</span>
+              <span class="tool-status wip">In development</span>
+              <span class="tool-arrow">View →</span>
+            </div>
+          </a>
+        </li>
+
+        <li class="tool-item fade d2">
+          <a href="pages/solutions/bike-fit/index.html">
+            <div class="tool-left">
+              <div class="tool-top">
+                <span class="tool-num">03</span>
                 <span class="tool-domain body">Biomechanics</span>
               </div>
               <p class="tool-name">Bike Fit</p>
@@ -261,6 +279,13 @@
           </div>
         </div>
         <div class="thread-row fade d2">
+          <div class="thread-icon green">🤍</div>
+          <div class="thread-text">
+            <h4>Labor pattern research</h4>
+            <p>Flowen reads contraction timing, spacing, and intensity against published labor-progression research and describes the rhythm in plain words — so the 3 a.m. call to the midwife starts with facts, not guesses.</p>
+          </div>
+        </div>
+        <div class="thread-row fade d3">
           <div class="thread-icon green">🚴</div>
           <div class="thread-text">
             <h4>Biomechanical fitting</h4>
@@ -281,11 +306,11 @@
 </main>
 
 <footer>
-  <div class="footer-inner">
-    <span class="footer-left">© <span class="js-year">2025</span> Ceven Labs · Aarhus, Denmark · <a href="mailto:hello@cevenlabs.com">hello@cevenlabs.com</a> · Built by <a href="https://cevendrell.com" target="_blank" rel="noopener">Carlos Ebrahim Vendrell</a></span>
-    <div class="footer-right">
-      <a href="pages/legal/privacy-policy.html">Privacy</a>
-      <a href="pages/legal/terms.html">Terms</a>
+  <div class="footer-slim">
+    <span class="footer-copy">© <span class="js-year">2025</span> Ceven Labs · CVR: 46571975 · Built by <a href="https://cevendrell.com" target="_blank" rel="noopener">Carlos Ebrahim Vendrell</a></span>
+    <div class="footer-links">
+      <a href="pages/legal/privacy-policy.html">Privacy Policy</a>
+      <a href="pages/legal/terms.html">Terms of Use</a>
       <a href="pages/support/index.html">Support</a>
     </div>
   </div>

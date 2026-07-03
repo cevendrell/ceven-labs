@@ -49,10 +49,15 @@
     .support-meta a { color: var(--mute); transition: color 0.2s; }
     .support-meta a:hover { color: var(--dim); }
 
-    footer { position: fixed; bottom: 0; left: 0; right: 0; border-top: 1px solid var(--line); padding: 18px 2.5rem; font-size: 0.8rem; color: var(--mute); display: flex; justify-content: space-between; background: var(--bg-2); flex-wrap: wrap; gap: 0.5rem; }
-    footer a { color: var(--mute); transition: color 0.2s; }
-    footer a:hover { color: var(--dim); }
-    @media (max-width: 520px) { footer { position: static; } }
+    footer { background: var(--bg-2); }
+    .footer-slim { max-width: 1100px; margin: 0 auto; padding: 24px 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; border-top: 1px solid rgba(255,255,255,0.06); }
+    .footer-copy { font-size: 0.82rem; color: rgba(255,255,255,0.25); }
+    .footer-copy a { color: rgba(255,255,255,0.35); transition: color 0.2s; }
+    .footer-copy a:hover { color: var(--blue-l); }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { font-size: 0.82rem; color: rgba(255,255,255,0.25); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--dim); }
+    @media (max-width: 520px) { .footer-slim { flex-direction: column; text-align: center; } .footer-links { flex-wrap: wrap; justify-content: center; } }
   </style>
 </head>
 <body>
@@ -68,7 +73,7 @@
 <main>
   <div class="support-inner">
     <h1>Get in touch.</h1>
-    <p>We're a small team and we read every message. Whether it's a bug, a question about LayOvr, or just an idea, reach out directly.</p>
+    <p>We're a small team and we read every message. Whether it's a bug, a question about LayOvr, Flowen, or Bike Fit, or just an idea, reach out directly.</p>
 
     <a href="mailto:hello@cevenlabs.com" class="email-link">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 7L2 7"/></svg>
@@ -76,7 +81,7 @@
     </a>
 
     <div class="support-meta">
-      Ceven Labs · Risskov, Denmark<br>
+      Ceven Labs · Aarhus, Denmark<br>
       For subscription and billing questions, manage via <strong>iOS Settings → Subscriptions</strong> or visit <a href="https://reportaproblem.apple.com" target="_blank" rel="noopener">reportaproblem.apple.com</a>.<br><br>
       <a href="../legal/privacy-policy.html">Privacy Policy</a> · <a href="../legal/terms.html">Terms of Use</a>
     </div>
@@ -84,8 +89,13 @@
 </main>
 
 <footer>
-  <span>© <span class="js-year">2025</span> Ceven Labs</span>
-  <span><a href="../legal/privacy-policy.html">Privacy</a> · <a href="../legal/terms.html">Terms</a></span>
+  <div class="footer-slim">
+    <span class="footer-copy">© <span class="js-year">2025</span> Ceven Labs · CVR: 46571975 · Built by <a href="https://cevendrell.com" target="_blank" rel="noopener">Carlos Ebrahim Vendrell</a></span>
+    <div class="footer-links">
+      <a href="../legal/privacy-policy.html">Privacy Policy</a>
+      <a href="../legal/terms.html">Terms of Use</a>
+    </div>
+  </div>
 </footer>
 
 <script>document.querySelectorAll('.js-year').forEach(e => e.textContent = new Date().getFullYear());</script>

@@ -106,10 +106,15 @@
     .disclaimer { margin-top: 2.5rem; font-size: 0.78rem; color: var(--mute); line-height: 1.7; padding: 1rem 1.25rem; background: rgba(255,255,255,0.02); border: 1px solid var(--line); border-radius: 6px; }
     .disclaimer strong { color: var(--dim); }
 
-    footer { border-top: 1px solid var(--line); padding: 24px 2.5rem; font-size: 0.8rem; color: var(--mute); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
-    footer a { color: var(--mute); transition: color 0.2s; }
-    footer a:hover { color: var(--dim); }
-    @media (max-width: 520px) { footer { flex-direction: column; text-align: center; } }
+    footer { background: transparent; }
+    .footer-slim { max-width: 1100px; margin: 0 auto; padding: 24px 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; border-top: 1px solid rgba(255,255,255,0.06); }
+    .footer-copy { font-size: 0.82rem; color: rgba(255,255,255,0.25); }
+    .footer-copy a { color: rgba(255,255,255,0.35); transition: color 0.2s; }
+    .footer-copy a:hover { color: var(--dim); }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { font-size: 0.82rem; color: rgba(255,255,255,0.25); transition: color 0.2s; }
+    .footer-links a:hover { color: var(--dim); }
+    @media (max-width: 520px) { .footer-slim { flex-direction: column; text-align: center; } .footer-links { flex-wrap: wrap; justify-content: center; } }
   </style>
 </head>
 <body>
@@ -248,7 +253,7 @@
       </div>
 
       <div class="disclaimer">
-        <strong>These are starting points, not a professional fit.</strong> Body proportions, flexibility, and riding style all affect ideal fit. Use these numbers to narrow your search, then refine with a qualified fitter or through test rides.
+        <strong>These are starting points, not a professional fit.</strong> Body proportions, flexibility, and riding style all affect ideal fit. Use these numbers to narrow your search, then refine with a qualified fitter or through test rides. Make position changes gradually, and stop if you experience pain or numbness — use of these estimates is at your own risk. See our <a href="../../legal/terms.html" style="color:var(--dim);">Terms of Use</a>.
       </div>
 
     </div>
@@ -257,9 +262,16 @@
 </div>
 
 <footer>
-  <span>Ceven Labs · <a href="mailto:hello@cevenlabs.com">hello@cevenlabs.com</a></span>
-  <span><a href="../../legal/privacy-policy.html">Privacy</a></span>
+  <div class="footer-slim">
+    <span class="footer-copy">© <span class="js-year">2025</span> Ceven Labs · CVR: 46571975 · Built by <a href="https://cevendrell.com" target="_blank" rel="noopener">Carlos Ebrahim Vendrell</a></span>
+    <div class="footer-links">
+      <a href="../../legal/privacy-policy.html">Privacy Policy</a>
+      <a href="../../legal/terms.html">Terms of Use</a>
+      <a href="../../support/index.html">Support</a>
+    </div>
+  </div>
 </footer>
+<script>document.querySelectorAll('.js-year').forEach(e => e.textContent = new Date().getFullYear());</script>
 
 <script>
   let bikeType = 'road';
