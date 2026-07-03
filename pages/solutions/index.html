@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Ceven Labs solutions: LayOvr jet lag planning, Flowen contraction timing, and the Bike Fit geometry tool.">
+  <meta name="description" content="Ceven Labs solutions: LayOvr jet lag planning and the interactive Bike Fit geometry tool.">
   <title>Solutions | Ceven Labs</title>
   <link rel="icon" href="../../media/shared/cl-mark.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -75,12 +75,12 @@
     .sol-card-footer { margin-top: 2.5rem; display: flex; align-items: center; justify-content: space-between; padding-top: 1.5rem; border-top: 1px solid var(--line); }
     .sol-card-status { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: var(--mute); }
     .sol-card-status.wip::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); box-shadow: 0 0 8px var(--blue); flex-shrink: 0; }
-    .sol-card-status.proto::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); flex-shrink: 0; }
+    .sol-card-status.proto::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #fc4c02; box-shadow: 0 0 8px #fc4c02; flex-shrink: 0; }
 
     /* Domain tag */
     .sol-domain { display: inline-block; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; margin-bottom: 1rem; }
     .sol-domain.sleep { color: var(--blue-l); background: rgba(59,130,246,0.1); }
-    .sol-domain.body { color: var(--green-l); background: rgba(16,185,129,0.1); }
+    .sol-domain.body { color: #ff7d45; background: rgba(252,76,2,0.12); }
     .sol-card-cta {
       font-size: 0.82rem; font-weight: 700; color: var(--blue-l);
       display: flex; align-items: center; gap: 0.4rem; transition: gap 0.2s;
@@ -167,26 +167,8 @@
         </div>
       </a>
 
-      <a href="../flowen/index.html" class="sol-card fade d1">
+      <a href="bike-fit/index.html" class="sol-card fade d1">
         <span class="sol-card-num">02</span>
-        <span class="sol-domain body">Labor &amp; Birth</span>
-        <span class="sol-card-type">iOS App</span>
-        <h2 class="sol-card-name">Flowen</h2>
-        <p class="sol-card-desc">A calm contraction timer for labor. One-tap timing and simple intensity ratings, with plain-language insight into how the pattern is evolving — so the call to the midwife starts with facts.</p>
-        <ul class="sol-features">
-          <li>One-tap timing that survives a locked phone</li>
-          <li>1–5 intensity ratings with haptic feedback</li>
-          <li>Pattern insight from labor-progression research</li>
-          <li>Text &amp; CSV export for your midwife or hospital</li>
-        </ul>
-        <div class="sol-card-footer">
-          <span class="sol-card-status wip">In development</span>
-          <span class="sol-card-cta">View Flowen →</span>
-        </div>
-      </a>
-
-      <a href="bike-fit/index.html" class="sol-card fade d2">
-        <span class="sol-card-num">03</span>
         <span class="sol-domain body">Biomechanics</span>
         <span class="sol-card-type">Web Tool</span>
         <h2 class="sol-card-name">Bike Fit</h2>
@@ -215,7 +197,7 @@
 
 <footer>
   <div class="footer-slim">
-    <span class="footer-copy">© <span class="js-year">2025</span> Ceven Labs · CVR: 46571975 · Built by <a href="https://cevendrell.com" target="_blank" rel="noopener">Carlos Ebrahim Vendrell</a></span>
+    <span class="footer-copy">© <span class="js-year">2025</span> Ceven Labs · CVR: 46571975 · Aarhus, Denmark</span>
     <div class="footer-links">
       <a href="../legal/privacy-policy.html">Privacy Policy</a>
       <a href="../legal/terms.html">Terms of Use</a>

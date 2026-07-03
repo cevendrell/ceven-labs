@@ -106,23 +106,6 @@
     .detail-value a:hover { color: var(--blue-d); }
     @media (max-width: 900px) { .company-grid { grid-template-columns: 1fr; gap: 48px; } }
 
-    /* ROADMAP */
-    #roadmap { background: var(--bg); padding: 100px 0; position: relative; z-index: 2; border-top: 1px solid rgba(255,255,255,0.04); }
-    #roadmap h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; letter-spacing: -0.04em; color: #fff; margin-bottom: 0.75rem; }
-    #roadmap .sub { font-size: 0.97rem; color: var(--dim); line-height: 1.8; max-width: 520px; margin-bottom: 3rem; }
-    .roadmap-items { display: flex; flex-direction: column; }
-    .roadmap-item { display: grid; grid-template-columns: 160px 1fr; gap: 24px; padding: 1.75rem 0; border-bottom: 1px solid var(--line); }
-    .roadmap-item:first-child { border-top: 1px solid var(--line); }
-    .roadmap-phase { display: flex; flex-direction: column; gap: 0.35rem; padding-top: 0.15rem; }
-    .roadmap-phase .phase-label { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--mute); }
-    .phase-chip { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; width: fit-content; }
-    .phase-chip.active { background: rgba(16,185,129,0.12); color: var(--green-l); border: 1px solid rgba(16,185,129,0.25); }
-    .phase-chip.next { background: rgba(59,130,246,0.1); color: var(--accent); border: 1px solid rgba(59,130,246,0.2); }
-    .phase-chip.future { background: rgba(255,255,255,0.04); color: var(--mute); border: 1px solid var(--line); }
-    .roadmap-item h3 { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 0.4rem; }
-    .roadmap-item p { font-size: 0.875rem; color: var(--dim); line-height: 1.75; }
-    @media (max-width: 640px) { .roadmap-item { grid-template-columns: 1fr; gap: 12px; } }
-
     /* FOOTER */
     footer { background: var(--navy); position: relative; z-index: 2; }
     .footer-slim { max-width: 1100px; margin: 0 auto; padding: 24px 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; border-top: 1px solid rgba(255,255,255,0.06); }
@@ -180,7 +163,7 @@
         <h2>Built on science.<br>Designed to use.</h2>
         <p>There is no shortage of health apps. What is missing are tools that take the science seriously, skip the noise, and deliver something you can act on without reading a research paper first.</p>
         <p>Ceven Labs starts from that gap. We take peer-reviewed work on how the human body actually functions, strip out everything that does not matter in practice, and build it into a product that fits into your day. No accounts, no subscriptions to things you will never use, no data sent to servers you cannot see.</p>
-        <p>The first area is circadian health. Jet lag is genuinely understood by science; nobody had made that science usable for people with real travel schedules. LayOvr is the answer to that. Flowen applies the same logic to labor: contraction patterns are well documented in clinical research, yet the timing apps parents actually use reduce them to a stopwatch. And bike fitting: validated biomechanical methods that have existed for decades, finally available without booking a studio appointment.</p>
+        <p>The first area is circadian health. Jet lag is genuinely understood by science; nobody had made that science usable for people with real travel schedules. LayOvr is the answer to that. Bike fitting follows the same logic: validated biomechanical methods that have existed for decades, finally available without booking a studio appointment.</p>
         <p>Each tool we build is a version of the same question: what do we know about this problem, and why has no one made it easy yet?</p>
       </div>
     </div>
@@ -247,64 +230,11 @@
     </div>
   </section>
 
-  <!-- ROADMAP -->
-  <section id="roadmap">
-    <div class="section-inner">
-      <div class="wow">
-        <span class="eyebrow">What's coming</span>
-        <h2>The roadmap</h2>
-        <p class="sub">We build one thing well before moving to the next.</p>
-      </div>
-      <div class="roadmap-items">
-        <div class="roadmap-item wow">
-          <div class="roadmap-phase">
-            <span class="phase-label">v0.1</span>
-            <span class="phase-chip active">● In progress</span>
-          </div>
-          <div>
-            <h3>LayOvr: core iOS app</h3>
-            <p>Multi-leg trip planner, circadian engine, meeting-anchored optimization, lounge intelligence, live flight lookup, HealthKit integration, in-app subscriptions.</p>
-          </div>
-        </div>
-        <div class="roadmap-item wow d1">
-          <div class="roadmap-phase">
-            <span class="phase-label">v0.2</span>
-            <span class="phase-chip next">Next</span>
-          </div>
-          <div>
-            <h3>Apple Watch companion</h3>
-            <p>Wrist-based nudges, real-time alertness score, in-flight sleep tracking, and ambient light coaching.</p>
-          </div>
-        </div>
-        <div class="roadmap-item wow d2">
-          <div class="roadmap-phase">
-            <span class="phase-label">v0.3</span>
-            <span class="phase-chip future">Planned</span>
-          </div>
-          <div>
-            <h3>Calendar integration and team sync</h3>
-            <p>Auto-pull meetings from Calendar, shared plans for executive and assistant pairs, corporate team accounts.</p>
-          </div>
-        </div>
-        <div class="roadmap-item wow d3">
-          <div class="roadmap-phase">
-            <span class="phase-label">Flowen</span>
-            <span class="phase-chip active">● In progress</span>
-          </div>
-          <div>
-            <h3>Flowen: contraction timer for labor</h3>
-            <p>One-tap timing, intensity ratings, pattern insight grounded in labor-progression research, and midwife-ready exports. Fully on-device.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
 </main>
 
 <footer>
   <div class="footer-slim">
-    <span class="footer-copy">© <span class="js-year">2025</span> Ceven Labs · CVR: 46571975 · Built by <a href="https://cevendrell.com" target="_blank" rel="noopener" style="color:rgba(255,255,255,0.35); transition:color 0.2s;" onmouseover="this.style.color='#93c5fd'" onmouseout="this.style.color='rgba(255,255,255,0.35)'">Carlos Ebrahim Vendrell</a></span>
+    <span class="footer-copy">© <span class="js-year">2025</span> Ceven Labs · CVR: 46571975 · Aarhus, Denmark</span>
     <div class="footer-links">
       <a href="../legal/privacy-policy.html">Privacy Policy</a>
       <a href="../legal/terms.html">Terms of Use</a>

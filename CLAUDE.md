@@ -8,17 +8,16 @@ The repo root is the working directory for all edits.
 Static HTML site. No build step — edits to `.html` files are the final output.
 - `index.html` — homepage (Ceven Labs company landing page)
 - `pages/layovr/` — LayOvr app marketing page
-- `pages/flowen/` — Flowen app marketing page (contraction timer for labor)
 - `pages/solutions/` — solutions overview; `pages/solutions/bike-fit/` — Bike Fit web tool
 - `pages/about/` — About Ceven Labs (company info, CVR, founder)
 - `pages/support/` — Support & FAQ (Apple App Store support URL)
 - `pages/legal/` — privacy-policy.html, terms.html (required for Apple App Store; cover ALL apps and web tools, not just one)
 
 ## Footer convention
-All pages use the same slim footer (`.footer-slim`): "© year Ceven Labs · CVR: 46571975 · Built by Carlos Ebrahim Vendrell" plus Privacy Policy / Terms of Use / Support links. Keep this consistent when adding pages.
+All pages use the same slim footer (`.footer-slim`): "© year Ceven Labs · CVR: 46571975 · Aarhus, Denmark" plus Privacy Policy / Terms of Use / Support links. No personal names in footers — the site should read as an organization. Keep this consistent when adding pages.
 
 ## Company facts
-Ceven Labs is a Danish sole proprietorship (CVR 46571975) based in Aarhus, Denmark — never call it a "private limited company" or ApS. Mention only "Aarhus" as location (not Risskov). Owner has unlimited personal liability, so legal pages must keep strong disclaimers, limitation of liability, and indemnification covering every app and tool.
+Ceven Labs is a Danish sole proprietorship (CVR 46571975) based in Aarhus, Denmark — never call it a "private limited company" or ApS. Mention only "Aarhus" as location (not Risskov). Owner has unlimited personal liability, so legal pages must keep strong disclaimers, limitation of liability, and indemnification covering every app and tool. Flowen (contraction timer) is deliberately NOT on this site — liability in the labor/birth space was judged too high; do not re-add it without being asked.
 
 ## Navigation
 All pages share the same `<nav id="navbar">` structure.

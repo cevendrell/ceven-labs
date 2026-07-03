@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Ceven Labs: science-backed health tools for real moments — jet lag planning, contraction timing during labor, and bike fitting. Built in Aarhus, Denmark.">
+  <meta name="description" content="Ceven Labs: science-backed health tools for real moments — jet lag planning and interactive bike fitting. Built in Aarhus, Denmark.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://cevenlabs.com/">
   <meta property="og:title" content="Ceven Labs">
@@ -118,7 +118,7 @@
     .tool-num { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--mute); letter-spacing: 0.12em; }
     .tool-domain { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; }
     .tool-domain.sleep { color: var(--blue-l); background: rgba(59,130,246,0.1); }
-    .tool-domain.body { color: var(--green-l); background: rgba(16,185,129,0.1); }
+    .tool-domain.body { color: #ff7d45; background: rgba(252,76,2,0.12); }
     .tool-name { font-size: clamp(1.5rem, 3.5vw, 2.2rem); font-weight: 700; color: var(--text); letter-spacing: -0.035em; margin-bottom: 0.45rem; }
     .tool-desc { font-size: 0.9rem; color: var(--dim); line-height: 1.75; max-width: 520px; }
     .tool-right { text-align: right; padding-top: 0.4rem; display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-end; }
@@ -126,7 +126,7 @@
     .tool-status { display: flex; align-items: center; gap: 0.45rem; font-size: 0.78rem; color: var(--mute); }
     .tool-status::before { content: ''; width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
     .tool-status.wip::before { background: var(--blue); box-shadow: 0 0 8px var(--blue); }
-    .tool-status.proto::before { background: var(--green); box-shadow: 0 0 8px var(--green); }
+    .tool-status.proto::before { background: #fc4c02; box-shadow: 0 0 8px #fc4c02; }
     .tool-arrow { font-size: 0.8rem; color: var(--blue); }
     @media (max-width: 580px) { .tool-item { grid-template-columns: 1fr; } .tool-right { text-align: left; align-items: flex-start; } }
 
@@ -191,7 +191,7 @@
         the way<br>
         you <span class="accent-green">move.</span>
       </h1>
-      <p class="hero-sub fade d2">Science-backed tools that help you show up at your best — crossing time zones, timing contractions on the way to the hospital, or dialing in your ride. Real research. Clear output. No account required.</p>
+      <p class="hero-sub fade d2">Science-backed tools that help you show up at your best — whether you're crossing time zones or dialing in your ride. Real research. Clear output. No account required.</p>
       <div class="hero-cta fade d3">
         <a href="pages/solutions/index.html" class="btn-primary">See our tools</a>
         <a href="pages/about/index.html" class="btn-ghost">About the lab</a>
@@ -225,28 +225,10 @@
         </li>
 
         <li class="tool-item fade d1">
-          <a href="pages/flowen/index.html">
-            <div class="tool-left">
-              <div class="tool-top">
-                <span class="tool-num">02</span>
-                <span class="tool-domain body">Labor &amp; Birth</span>
-              </div>
-              <p class="tool-name">Flowen</p>
-              <p class="tool-desc">A calm contraction timer for labor. One-tap timing, simple intensity ratings, and plain-language pattern insight — plus a clean summary to share with your midwife. Everything stays on your phone.</p>
-            </div>
-            <div class="tool-right">
-              <span class="tool-type">iOS App</span>
-              <span class="tool-status wip">In development</span>
-              <span class="tool-arrow">View →</span>
-            </div>
-          </a>
-        </li>
-
-        <li class="tool-item fade d2">
           <a href="pages/solutions/bike-fit/index.html">
             <div class="tool-left">
               <div class="tool-top">
-                <span class="tool-num">03</span>
+                <span class="tool-num">02</span>
                 <span class="tool-domain body">Biomechanics</span>
               </div>
               <p class="tool-name">Bike Fit</p>
@@ -279,13 +261,6 @@
           </div>
         </div>
         <div class="thread-row fade d2">
-          <div class="thread-icon green">🤍</div>
-          <div class="thread-text">
-            <h4>Labor pattern research</h4>
-            <p>Flowen reads contraction timing, spacing, and intensity against published labor-progression research and describes the rhythm in plain words — so the 3 a.m. call to the midwife starts with facts, not guesses.</p>
-          </div>
-        </div>
-        <div class="thread-row fade d3">
           <div class="thread-icon green">🚴</div>
           <div class="thread-text">
             <h4>Biomechanical fitting</h4>
@@ -307,7 +282,7 @@
 
 <footer>
   <div class="footer-slim">
-    <span class="footer-copy">© <span class="js-year">2025</span> Ceven Labs · CVR: 46571975 · Built by <a href="https://cevendrell.com" target="_blank" rel="noopener">Carlos Ebrahim Vendrell</a></span>
+    <span class="footer-copy">© <span class="js-year">2025</span> Ceven Labs · CVR: 46571975 · Aarhus, Denmark</span>
     <div class="footer-links">
       <a href="pages/legal/privacy-policy.html">Privacy Policy</a>
       <a href="pages/legal/terms.html">Terms of Use</a>
