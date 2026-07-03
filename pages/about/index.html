@@ -15,7 +15,7 @@
       --cream: #ffffff; --cream-dark: #0a0f16; --cream-dim: #55566a;
       --text: #ededea; --dim: #a8a9b0; --mute: #6b6d78;
       --accent: #3b82f6; --blue-d: #1d4ed8; --blue-l: #93c5fd; --brand: #3b82f6;
-      --green: #10b981; --green-l: #6ee7b7; --line: rgba(255,255,255,0.07);
+      --orange: #fc4c02; --orange-l: #ff8a5c; --line: rgba(255,255,255,0.07);
     }
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -26,7 +26,7 @@
     .ambient { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
     .orb { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.04; animation: drift 22s ease-in-out infinite; }
     .orb-1 { width: 600px; height: 600px; background: var(--brand); top: -20%; left: -15%; animation-duration: 25s; }
-    .orb-2 { width: 400px; height: 400px; background: var(--green); bottom: 10%; right: -10%; animation-duration: 30s; animation-delay: -8s; }
+    .orb-2 { width: 400px; height: 400px; background: var(--orange); bottom: 10%; right: -10%; animation-duration: 30s; animation-delay: -8s; }
     @keyframes drift { 0%, 100% { transform: translate(0,0) scale(1); } 33% { transform: translate(40px,-30px) scale(1.05); } 66% { transform: translate(-25px,20px) scale(0.95); } }
     .grain { position: fixed; inset: -50%; width: 200%; height: 200%; z-index: 1; pointer-events: none; opacity: 0.018; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); animation: grainMove 0.5s steps(1) infinite; }
     @keyframes grainMove { 0%,100% { transform: translate(0,0); } 25% { transform: translate(-2%,-3%); } 50% { transform: translate(2%,1%); } 75% { transform: translate(-1%,2%); } }
@@ -66,7 +66,7 @@
     #hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 70% 60% at 20% 50%, rgba(59,130,246,0.05) 0%, transparent 70%); pointer-events: none; }
     .hero-inner { position: relative; z-index: 2; max-width: 1100px; margin: 0 auto; padding: 0 32px; width: 100%; }
     .hero-inner h1 { font-size: clamp(2.8rem, 6vw, 4.8rem); font-weight: 800; letter-spacing: -0.04em; color: #fff; line-height: 1.05; margin-bottom: 1.25rem; opacity: 0; animation: fadeUp 0.8s 0.2s forwards; }
-    .hero-inner h1 span { color: var(--green); }
+    .hero-inner h1 span { color: var(--orange); }
     .hero-inner .hero-lead { font-size: 1.1rem; color: var(--dim); max-width: 560px; line-height: 1.85; opacity: 0; animation: fadeUp 0.8s 0.4s forwards; }
     @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -82,7 +82,7 @@
     /* FOUNDER */
     #founder { background: var(--bg); padding: 100px 0; position: relative; z-index: 2; border-top: 1px solid rgba(255,255,255,0.04); }
     .founder-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 80px; align-items: center; }
-    .founder-quote-block { padding-left: 1.75rem; border-left: 2px solid var(--green); }
+    .founder-quote-block { padding-left: 1.75rem; border-left: 2px solid var(--orange); }
     .founder-quote-block blockquote { font-size: clamp(1.05rem, 2.2vw, 1.35rem); font-style: italic; font-weight: 400; line-height: 1.7; color: var(--text); margin-bottom: 1.5rem; }
     .founder-quote-block cite { font-size: 0.85rem; color: var(--dim); font-style: normal; display: flex; flex-direction: column; gap: 0.2rem; }
     .founder-quote-block cite strong { color: var(--text); font-weight: 600; }
@@ -234,7 +234,7 @@
 
 <footer>
   <div class="footer-slim">
-    <span class="footer-copy">© <span class="js-year">2025</span> Ceven Labs · CVR: 46571975 · Aarhus, Denmark</span>
+    <span class="footer-copy">© <span class="js-year">2025</span> Ceven Labs · CVR: 46571975 · Aarhus, Denmark · Built by <a href="https://cevendrell.com" target="_blank" rel="noopener">Carlos Ebrahim Vendrell</a></span>
     <div class="footer-links">
       <a href="../legal/privacy-policy.html">Privacy Policy</a>
       <a href="../legal/terms.html">Terms of Use</a>
