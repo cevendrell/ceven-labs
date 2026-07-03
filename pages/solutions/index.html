@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Ceven Labs Solutions — tools built at the edge of AI and fast-moving technology.">
+  <meta name="description" content="Ceven Labs Solutions: tools built at the edge of AI and fast-moving technology.">
   <title>Solutions | Ceven Labs</title>
   <link rel="icon" href="../../media/shared/cl-mark.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,11 +11,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg:     #04070e; --bg-2:  #060b15;
-      --blue:   #3b82f6; --blue-d:#1d4ed8; --blue-l:#93c5fd;
-      --text:   #f0f4ff; --dim:   #8899bb; --mute:  #3d4f6e;
-      --line:   rgba(255,255,255,0.07);
-      --light:  #f8faff; --light-text: #0a0f1e; --light-dim: #4a5675;
+      --bg:      #04070e; --bg-2:   #060b15; --surface: #080d1a;
+      --blue:    #3b82f6; --blue-d: #1d4ed8; --blue-l: #93c5fd;
+      --green:   #10b981; --green-l:#6ee7b7;
+      --text:    #f0f4ff; --dim:    #8899bb; --mute:   #3d4f6e;
+      --line:    rgba(255,255,255,0.07);
     }
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -75,7 +75,12 @@
     .sol-card-footer { margin-top: 2.5rem; display: flex; align-items: center; justify-content: space-between; padding-top: 1.5rem; border-top: 1px solid var(--line); }
     .sol-card-status { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: var(--mute); }
     .sol-card-status.wip::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); box-shadow: 0 0 8px var(--blue); flex-shrink: 0; }
-    .sol-card-status.proto::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--blue-l); flex-shrink: 0; }
+    .sol-card-status.proto::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); flex-shrink: 0; }
+
+    /* Domain tag */
+    .sol-domain { display: inline-block; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; margin-bottom: 1rem; }
+    .sol-domain.sleep { color: var(--blue-l); background: rgba(59,130,246,0.1); }
+    .sol-domain.body { color: var(--green-l); background: rgba(16,185,129,0.1); }
     .sol-card-cta {
       font-size: 0.82rem; font-weight: 700; color: var(--blue-l);
       display: flex; align-items: center; gap: 0.4rem; transition: gap 0.2s;
@@ -146,9 +151,10 @@
 
       <a href="../layovr/index.html" class="sol-card fade">
         <span class="sol-card-num">01</span>
+        <span class="sol-domain sleep">Sleep &amp; Travel</span>
         <span class="sol-card-type">iOS App</span>
         <h2 class="sol-card-name">LayOvr</h2>
-        <p class="sol-card-desc">Jet lag planning built around your exact flights and meetings. Science-backed circadian engine. Runs offline. Tells you when to sleep, nap, get light, and cut caffeine — so you peak exactly when it matters.</p>
+        <p class="sol-card-desc">Jet lag planning built around your exact flights and meetings. Science-backed circadian engine. Runs offline. Tells you when to sleep, nap, get light, and cut caffeine, so you peak when it matters.</p>
         <ul class="sol-features">
           <li>Meeting-anchored optimization</li>
           <li>Live flight lookup & delay re-planning</li>
@@ -163,9 +169,10 @@
 
       <a href="bike-fit/index.html" class="sol-card fade d1">
         <span class="sol-card-num">02</span>
+        <span class="sol-domain body">Biomechanics</span>
         <span class="sol-card-type">Web Tool</span>
         <h2 class="sol-card-name">Bike Fit</h2>
-        <p class="sol-card-desc">Precise bike geometry recommendations from your body measurements. No account. No app. Enter your height and inseam and get saddle height, frame size, and reach — instantly, in your browser.</p>
+        <p class="sol-card-desc">Precise bike geometry recommendations from your body measurements. No account. No app. Enter your height and inseam and get saddle height, frame size, and reach, instantly, in your browser.</p>
         <ul class="sol-features">
           <li>Road, MTB, and gravel geometry</li>
           <li>Lemond & Hamley saddle height methods</li>
@@ -181,7 +188,7 @@
     </div>
 
     <div class="coming-section fade d2">
-      <p><strong>More solutions in the pipeline.</strong> Ceven Labs is a lab — we're constantly prototyping the next thing. If you have a problem worth solving, <a href="mailto:hello@cevenlabs.com" style="color: var(--blue-l);">reach out</a>.</p>
+      <p><strong>More solutions in the pipeline.</strong> Ceven Labs is a lab. We're constantly prototyping the next thing. If you have a problem worth solving, <a href="mailto:hello@cevenlabs.com" style="color: var(--blue-l);">reach out</a>.</p>
       <span class="coming-tag">More coming</span>
     </div>
 
@@ -190,7 +197,7 @@
 
 <footer>
   <div class="footer-inner">
-    <span class="footer-left">© <span class="js-year">2025</span> Ceven Labs ApS · <a href="mailto:hello@cevenlabs.com">hello@cevenlabs.com</a></span>
+    <span class="footer-left">© <span class="js-year">2025</span> Ceven Labs · <a href="mailto:hello@cevenlabs.com">hello@cevenlabs.com</a></span>
     <div class="footer-right">
       <a href="../legal/privacy-policy.html">Privacy</a>
       <a href="../legal/terms.html">Terms</a>

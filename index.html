@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Ceven Labs — a one-person studio building focused tools at the edge of AI and fast-moving technology.">
+  <meta name="description" content="Ceven Labs: science-backed health tools grounded in science. For sleep, travel, cycling, and what comes next.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://cevenlabs.com/">
   <meta property="og:title" content="Ceven Labs">
-  <meta property="og:description" content="Focused tools for problems worth solving properly.">
+  <meta property="og:description" content="Science-backed tools built for the way you move through the world.">
   <title>Ceven Labs</title>
   <link rel="icon" href="media/shared/cl-mark.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,28 +15,27 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg:     #04070e;
-      --bg-2:   #060b15;
-      --blue:   #3b82f6;
-      --blue-d: #1d4ed8;
-      --blue-l: #93c5fd;
-      --text:   #f0f4ff;
-      --dim:    #8899bb;
-      --mute:   #3d4f6e;
-      --line:   rgba(255,255,255,0.07);
-      --light:  #f8faff;
-      --light-text: #0a0f1e;
-      --light-dim:  #4a5675;
+      --bg:      #04070e;
+      --bg-2:    #060b15;
+      --surface: #080d1a;
+      --blue:    #3b82f6;
+      --blue-d:  #1d4ed8;
+      --blue-l:  #93c5fd;
+      --green:   #10b981;
+      --green-l: #6ee7b7;
+      --text:    #f0f4ff;
+      --dim:     #8899bb;
+      --mute:    #3d4f6e;
+      --line:    rgba(255,255,255,0.07);
     }
 
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
     a { text-decoration: none; color: inherit; }
-    img { display: block; max-width: 100%; }
     ::selection { background: var(--blue); color: #fff; }
 
-    /* ── NAV ── */
+    /* NAV */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
       padding: 1.4rem 2.5rem;
@@ -49,29 +48,16 @@
     }
     nav.scrolled { padding: 1rem 2.5rem; background: rgba(4,7,14,0.95); border-bottom-color: var(--line); }
     .nav-logo { display: flex; align-items: center; gap: 0.6rem; font-size: 0.95rem; font-weight: 700; letter-spacing: -0.01em; }
-    .nav-mark {
-      width: 26px; height: 26px; border-radius: 6px; background: var(--blue);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 10px; font-weight: 800; color: #fff; letter-spacing: -0.03em;
-      flex-shrink: 0;
-    }
+    .nav-mark { width: 26px; height: 26px; border-radius: 6px; background: var(--blue); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; color: #fff; letter-spacing: -0.03em; flex-shrink: 0; }
     .nav-links { display: flex; gap: 2rem; list-style: none; }
     .nav-links a { font-size: 0.85rem; font-weight: 500; color: var(--dim); transition: color 0.2s; }
     .nav-links a:hover { color: var(--text); }
     .hamburger { display: none; flex-direction: column; gap: 5px; padding: 6px; background: none; border: none; cursor: pointer; }
     .hamburger span { width: 20px; height: 1.5px; background: var(--text); display: block; transition: all 0.3s; }
-    @media (max-width: 680px) {
-      nav { padding: 1rem 1.5rem; }
-      .nav-links { display: none; }
-      .hamburger { display: flex; }
-    }
+    @media (max-width: 680px) { nav { padding: 1rem 1.5rem; } .nav-links { display: none; } .hamburger { display: flex; } }
     body.nav-open { overflow: hidden; }
     body.nav-open nav { background: var(--bg); border-bottom-color: var(--line); backdrop-filter: none; -webkit-backdrop-filter: none; }
-    body.nav-open .nav-links {
-      display: flex; flex-direction: column;
-      position: fixed; inset: 0; z-index: 99;
-      background: var(--bg); padding: 5rem 1.5rem 2rem; gap: 0;
-    }
+    body.nav-open .nav-links { display: flex; flex-direction: column; position: fixed; inset: 0; z-index: 99; background: var(--bg); padding: 5rem 1.5rem 2rem; gap: 0; }
     body.nav-open .nav-links li { border-bottom: 1px solid var(--line); }
     body.nav-open .nav-links a { display: block; padding: 1.1rem 0; font-size: 1.3rem; font-weight: 600; color: var(--text); }
     body.nav-open .hamburger { position: relative; z-index: 100; }
@@ -79,108 +65,88 @@
     body.nav-open .hamburger span:nth-child(2) { opacity: 0; }
     body.nav-open .hamburger span:nth-child(3) { transform: rotate(-45deg) translate(4.5px, -4.5px); }
 
-    /* ── HERO ── */
+    /* HERO */
     #hero {
-      min-height: 100vh;
-      display: flex; align-items: center;
-      padding: 8rem 0 5rem;
-      position: relative; overflow: hidden;
+      min-height: 100vh; display: flex; align-items: center;
+      padding: 8rem 0 5rem; position: relative; overflow: hidden;
     }
+    #hero::before, #hero::after { content: ''; position: absolute; border-radius: 50%; pointer-events: none; }
     #hero::before {
-      content: ''; position: absolute;
-      width: 900px; height: 900px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(59,130,246,0.09) 0%, transparent 70%);
-      top: -20%; left: -10%; pointer-events: none;
+      width: 800px; height: 800px;
+      background: radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 70%);
+      top: -25%; left: -8%;
     }
-    .hero-inner { max-width: 1100px; margin: 0 auto; padding: 0 40px; width: 100%; }
-    .hero-location { font-size: 0.78rem; color: var(--mute); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 2.5rem; }
+    #hero::after {
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(16,185,129,0.07) 0%, transparent 70%);
+      bottom: -10%; right: -5%;
+    }
+    .hero-inner { max-width: 1100px; margin: 0 auto; padding: 0 40px; width: 100%; position: relative; z-index: 1; }
+    .hero-kicker {
+      display: flex; align-items: center; gap: 0.6rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem; color: var(--mute); letter-spacing: 0.14em;
+      text-transform: uppercase; margin-bottom: 2.5rem;
+    }
+    .hero-kicker-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); flex-shrink: 0; }
     .hero-h1 {
-      font-size: clamp(3.2rem, 7.5vw, 6.5rem);
-      font-weight: 800; letter-spacing: -0.05em; line-height: 0.96;
-      color: var(--text); margin-bottom: 2.5rem;
+      font-size: clamp(3.4rem, 8vw, 7rem); font-weight: 800;
+      letter-spacing: -0.055em; line-height: 0.94; color: var(--text); margin-bottom: 2rem;
     }
-    .hero-h1 .blue { color: var(--blue); }
+    .hero-h1 .accent-green { color: var(--green); }
     .hero-sub {
-      font-size: 1.05rem; color: var(--dim); max-width: 480px;
-      line-height: 1.85; font-weight: 400;
+      font-size: 1.05rem; color: var(--dim); max-width: 500px;
+      line-height: 1.85; font-weight: 400; margin-bottom: 2.5rem;
     }
-    .hero-cta { display: flex; gap: 1rem; margin-top: 2.5rem; flex-wrap: wrap; }
-    .btn-primary {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      background: var(--blue); color: #fff;
-      font-size: 0.82rem; font-weight: 700; letter-spacing: 0.04em;
-      padding: 12px 24px; border-radius: 6px; transition: background 0.2s;
-    }
+    .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn-primary { display: inline-flex; align-items: center; gap: 0.4rem; background: var(--blue); color: #fff; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.04em; padding: 12px 24px; border-radius: 6px; transition: background 0.2s; }
     .btn-primary:hover { background: var(--blue-d); }
-    .btn-secondary {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      border: 1px solid var(--line); color: var(--dim);
-      font-size: 0.82rem; font-weight: 600;
-      padding: 12px 24px; border-radius: 6px; transition: all 0.2s;
-    }
-    .btn-secondary:hover { border-color: var(--blue); color: var(--blue-l); }
+    .btn-ghost { display: inline-flex; align-items: center; gap: 0.4rem; border: 1px solid var(--line); color: var(--dim); font-size: 0.82rem; font-weight: 600; padding: 12px 24px; border-radius: 6px; transition: all 0.2s; }
+    .btn-ghost:hover { border-color: var(--green); color: var(--green-l); }
 
-    /* ── SOLUTIONS ── */
-    #solutions { padding: 80px 0 100px; }
+    /* TOOLS LIST */
+    #tools { padding: 80px 0 100px; }
     .inner { max-width: 1100px; margin: 0 auto; padding: 0 40px; }
-    .section-label {
-      font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.2em;
-      color: var(--mute); margin-bottom: 0; padding-bottom: 1.25rem;
-      border-bottom: 1px solid var(--line);
-      font-family: 'JetBrains Mono', monospace;
-    }
-    .sol-list { list-style: none; }
-    .sol-item {
-      display: grid; grid-template-columns: 1fr auto;
-      align-items: start; gap: 2rem;
-      padding: 2.25rem 0; border-bottom: 1px solid var(--line);
-      transition: opacity 0.2s;
-    }
-    .sol-item:hover { opacity: 0.75; }
-    .sol-item a { display: contents; color: inherit; }
-    .sol-left {}
-    .sol-num {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.68rem; color: var(--mute); margin-bottom: 0.6rem;
-      letter-spacing: 0.12em;
-    }
-    .sol-name { font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 700; color: var(--text); margin-bottom: 0.4rem; letter-spacing: -0.03em; }
-    .sol-desc { font-size: 0.9rem; color: var(--dim); line-height: 1.7; max-width: 480px; }
-    .sol-right { text-align: right; padding-top: 0.25rem; }
-    .sol-type {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.16em;
-      color: var(--blue-l); display: block; margin-bottom: 0.5rem;
-    }
-    .sol-status {
-      font-size: 0.8rem; color: var(--mute);
-      display: inline-flex; align-items: center; gap: 0.4rem;
-    }
-    .sol-status.active::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 8px #4ade80; }
-    .sol-status.wip::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); box-shadow: 0 0 8px var(--blue); }
-    .sol-arrow { font-size: 0.82rem; color: var(--blue); margin-top: 0.75rem; display: block; }
-    @media (max-width: 600px) { .sol-item { grid-template-columns: 1fr; } .sol-right { text-align: left; } }
+    .section-rule { padding-bottom: 1.25rem; border-bottom: 1px solid var(--line); }
+    .section-rule-label { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--mute); }
 
-    /* ── MANIFESTO ── */
-    #manifesto { background: var(--light); padding: 100px 0; }
-    .manifesto-inner { max-width: 700px; margin: 0 auto; padding: 0 40px; }
-    .manifesto-inner p {
-      font-size: clamp(1.2rem, 2.5vw, 1.7rem); font-weight: 400;
-      color: var(--light-text); line-height: 1.6; margin-bottom: 1.5rem;
-    }
-    .manifesto-inner p:last-child { margin-bottom: 0; color: var(--light-dim); font-size: clamp(0.95rem, 1.8vw, 1.15rem); }
-    .manifesto-inner strong { font-weight: 700; }
+    .tool-list { list-style: none; }
+    .tool-item { display: grid; grid-template-columns: 1fr auto; gap: 2rem; padding: 2.5rem 0; border-bottom: 1px solid var(--line); transition: opacity 0.2s; }
+    .tool-item:hover { opacity: 0.72; }
+    .tool-item a { display: contents; color: inherit; }
+    .tool-top { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.6rem; }
+    .tool-num { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--mute); letter-spacing: 0.12em; }
+    .tool-domain { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; }
+    .tool-domain.sleep { color: var(--blue-l); background: rgba(59,130,246,0.1); }
+    .tool-domain.body { color: var(--green-l); background: rgba(16,185,129,0.1); }
+    .tool-name { font-size: clamp(1.5rem, 3.5vw, 2.2rem); font-weight: 700; color: var(--text); letter-spacing: -0.035em; margin-bottom: 0.45rem; }
+    .tool-desc { font-size: 0.9rem; color: var(--dim); line-height: 1.75; max-width: 520px; }
+    .tool-right { text-align: right; padding-top: 0.4rem; display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-end; }
+    .tool-type { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.16em; color: var(--mute); }
+    .tool-status { display: flex; align-items: center; gap: 0.45rem; font-size: 0.78rem; color: var(--mute); }
+    .tool-status::before { content: ''; width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .tool-status.wip::before { background: var(--blue); box-shadow: 0 0 8px var(--blue); }
+    .tool-status.proto::before { background: var(--green); box-shadow: 0 0 8px var(--green); }
+    .tool-arrow { font-size: 0.8rem; color: var(--blue); }
+    @media (max-width: 580px) { .tool-item { grid-template-columns: 1fr; } .tool-right { text-align: left; align-items: flex-start; } }
 
-    /* ── FOOTER ── */
-    footer {
-      background: var(--bg-2); border-top: 1px solid var(--line);
-      padding: 36px 0;
-    }
-    .footer-inner {
-      max-width: 1100px; margin: 0 auto; padding: 0 40px;
-      display: flex; justify-content: space-between; align-items: center;
-      flex-wrap: wrap; gap: 1rem;
-    }
+    /* THE THREAD */
+    #thread { background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 80px 0; }
+    .thread-inner { max-width: 1100px; margin: 0 auto; padding: 0 40px; display: grid; grid-template-columns: 1fr 1.1fr; gap: 5rem; align-items: start; }
+    .thread-left h2 { font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 700; letter-spacing: -0.04em; line-height: 1.2; color: var(--text); margin-bottom: 1.25rem; }
+    .thread-left p { font-size: 0.95rem; color: var(--dim); line-height: 1.85; }
+    .thread-right { display: flex; flex-direction: column; gap: 1.75rem; }
+    .thread-row { display: flex; gap: 1.25rem; align-items: flex-start; }
+    .thread-icon { width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
+    .thread-icon.blue { background: rgba(59,130,246,0.1); }
+    .thread-icon.green { background: rgba(16,185,129,0.1); }
+    .thread-text h4 { font-size: 0.9rem; font-weight: 700; color: var(--text); margin-bottom: 0.35rem; }
+    .thread-text p { font-size: 0.84rem; color: var(--dim); line-height: 1.75; }
+    @media (max-width: 720px) { .thread-inner { grid-template-columns: 1fr; gap: 2.5rem; } }
+
+    /* FOOTER */
+    footer { background: var(--bg-2); border-top: 1px solid var(--line); padding: 36px 0; }
+    .footer-inner { max-width: 1100px; margin: 0 auto; padding: 0 40px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
     .footer-left { font-size: 0.82rem; color: var(--mute); }
     .footer-left a { color: var(--mute); transition: color 0.2s; }
     .footer-left a:hover { color: var(--dim); }
@@ -189,12 +155,10 @@
     .footer-right a:hover { color: var(--dim); }
     @media (max-width: 520px) { .footer-inner { flex-direction: column; text-align: center; } .footer-right { flex-wrap: wrap; justify-content: center; } }
 
-    /* ── REVEAL ── */
-    .fade { opacity: 0; transform: translateY(20px); transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1); }
+    .fade { opacity: 0; transform: translateY(18px); transition: opacity 0.65s cubic-bezier(0.16,1,0.3,1), transform 0.65s cubic-bezier(0.16,1,0.3,1); }
     .fade.in { opacity: 1; transform: none; }
-    .d1 { transition-delay: 0.1s; } .d2 { transition-delay: 0.2s; }
-
-    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; } }
+    .d1 { transition-delay: 0.1s; } .d2 { transition-delay: 0.2s; } .d3 { transition-delay: 0.3s; }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0.01ms !important; } }
   </style>
 </head>
 <body>
@@ -218,51 +182,62 @@
 
   <section id="hero">
     <div class="hero-inner">
-      <p class="hero-location">Ceven Labs · Aarhus, Denmark</p>
-      <h1 class="hero-h1">
-        Focused tools<br>
-        for problems<br>
-        worth <span class="blue">solving.</span>
+      <p class="hero-kicker fade">
+        <span class="hero-kicker-dot"></span>
+        Ceven Labs · Aarhus, Denmark
+      </p>
+      <h1 class="hero-h1 fade d1">
+        Built for<br>
+        the way<br>
+        you <span class="accent-green">move.</span>
       </h1>
-      <p class="hero-sub">A one-person studio experimenting with AI and fast-moving technology to build things that actually work — one unsolved problem at a time.</p>
-      <div class="hero-cta">
-        <a href="pages/solutions/index.html" class="btn-primary">See our solutions</a>
-        <a href="pages/about/index.html" class="btn-secondary">About the studio</a>
+      <p class="hero-sub fade d2">Science-backed tools that help you show up at your best. Whether you're crossing time zones or fine-tuning your ride. Real research. Clear output. No account required.</p>
+      <div class="hero-cta fade d3">
+        <a href="pages/solutions/index.html" class="btn-primary">See our tools</a>
+        <a href="pages/about/index.html" class="btn-ghost">About the lab</a>
       </div>
     </div>
   </section>
 
-  <section id="solutions">
+  <section id="tools">
     <div class="inner">
-      <p class="section-label fade">Solutions</p>
-      <ul class="sol-list">
+      <div class="section-rule fade">
+        <span class="section-rule-label">Tools</span>
+      </div>
+      <ul class="tool-list">
 
-        <li class="sol-item fade d1">
+        <li class="tool-item fade">
           <a href="pages/layovr/index.html">
-            <div class="sol-left">
-              <p class="sol-num">01</p>
-              <p class="sol-name">LayOvr</p>
-              <p class="sol-desc">Science-backed jet lag planning for business travelers. Builds your circadian schedule around your exact flights and meetings — offline, on device.</p>
+            <div class="tool-left">
+              <div class="tool-top">
+                <span class="tool-num">01</span>
+                <span class="tool-domain sleep">Sleep &amp; Travel</span>
+              </div>
+              <p class="tool-name">LayOvr</p>
+              <p class="tool-desc">Jet lag planning built around your exact flights and meetings. Science-backed circadian engine that runs offline on device. It tells you when to sleep, nap, get light, and cut caffeine so you peak when it matters.</p>
             </div>
-            <div class="sol-right">
-              <span class="sol-type">iOS App</span>
-              <span class="sol-status wip">In development</span>
-              <span class="sol-arrow">View →</span>
+            <div class="tool-right">
+              <span class="tool-type">iOS App</span>
+              <span class="tool-status wip">In development</span>
+              <span class="tool-arrow">View →</span>
             </div>
           </a>
         </li>
 
-        <li class="sol-item fade d2">
+        <li class="tool-item fade d1">
           <a href="pages/solutions/bike-fit/index.html">
-            <div class="sol-left">
-              <p class="sol-num">02</p>
-              <p class="sol-name">Bike Fit</p>
-              <p class="sol-desc">Precision bike fitting from your body measurements — in your browser, no account, no app. Enter your dimensions, get your geometry.</p>
+            <div class="tool-left">
+              <div class="tool-top">
+                <span class="tool-num">02</span>
+                <span class="tool-domain body">Biomechanics</span>
+              </div>
+              <p class="tool-name">Bike Fit</p>
+              <p class="tool-desc">Precision geometry from your body measurements. Enter your height, inseam, and flexibility to get your saddle height, frame size, reach, and stem length. No app, no account, works offline.</p>
             </div>
-            <div class="sol-right">
-              <span class="sol-type">Web Tool</span>
-              <span class="sol-status wip">Prototype</span>
-              <span class="sol-arrow">Try it →</span>
+            <div class="tool-right">
+              <span class="tool-type">Web Tool</span>
+              <span class="tool-status proto">Prototype</span>
+              <span class="tool-arrow">Try it →</span>
             </div>
           </a>
         </li>
@@ -271,10 +246,35 @@
     </div>
   </section>
 
-  <section id="manifesto">
-    <div class="manifesto-inner">
-      <p class="fade"><strong>We pick one problem, go deep, and build something that actually works.</strong></p>
-      <p class="fade d1">No bloat. No feature creep. No solutions looking for a problem. Ceven Labs exists to experiment fast with AI and emerging tech — and ship tools that earn their place on your screen.</p>
+  <section id="thread">
+    <div class="thread-inner">
+      <div class="thread-left fade">
+        <h2>Different problems.<br>Same philosophy.</h2>
+        <p>Every tool we build starts with peer-reviewed research on how the body works, strips away everything irrelevant, and delivers something you can act on immediately, in plain language on the device in your pocket.</p>
+      </div>
+      <div class="thread-right">
+        <div class="thread-row fade d1">
+          <div class="thread-icon blue">🌙</div>
+          <div class="thread-text">
+            <h4>Circadian science</h4>
+            <p>LayOvr models your internal clock using the two-process sleep framework and Phase Response Curves, the same science chronobiology researchers use, turned into a clear day-by-day travel plan.</p>
+          </div>
+        </div>
+        <div class="thread-row fade d2">
+          <div class="thread-icon green">🚴</div>
+          <div class="thread-text">
+            <h4>Biomechanical fitting</h4>
+            <p>Bike Fit applies validated fitting methodologies that bike fitters use in studios: LeMond saddle height and body proportion geometry, but instantly, in your browser, from your measurements alone.</p>
+          </div>
+        </div>
+        <div class="thread-row fade d3">
+          <div class="thread-icon blue">🔒</div>
+          <div class="thread-text">
+            <h4>Private by default</h4>
+            <p>No backend. No analytics. No accounts. Your health data and body measurements stay on your device. That's not a cost decision. It's a principle every tool is built around from the start.</p>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -282,7 +282,7 @@
 
 <footer>
   <div class="footer-inner">
-    <span class="footer-left">© <span class="js-year">2025</span> Ceven Labs ApS · Aarhus, Denmark · <a href="mailto:hello@cevenlabs.com">hello@cevenlabs.com</a> · Built by <a href="https://cevendrell.com" target="_blank" rel="noopener">Carlos Ebrahim Vendrell</a></span>
+    <span class="footer-left">© <span class="js-year">2025</span> Ceven Labs · Aarhus, Denmark · <a href="mailto:hello@cevenlabs.com">hello@cevenlabs.com</a> · Built by <a href="https://cevendrell.com" target="_blank" rel="noopener">Carlos Ebrahim Vendrell</a></span>
     <div class="footer-right">
       <a href="pages/legal/privacy-policy.html">Privacy</a>
       <a href="pages/legal/terms.html">Terms</a>
@@ -294,17 +294,15 @@
 <script>
   const nav = document.getElementById('navbar');
   window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40), { passive: true });
-
   const hb = document.querySelector('.hamburger');
   if (hb) {
     hb.addEventListener('click', () => document.body.classList.toggle('nav-open'));
     document.querySelectorAll('.nav-links a').forEach(l => l.addEventListener('click', () => document.body.classList.remove('nav-open')));
     document.addEventListener('keydown', e => { if (e.key === 'Escape') document.body.classList.remove('nav-open'); });
   }
-
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); obs.unobserve(e.target); } });
-  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
   document.querySelectorAll('.fade').forEach(el => obs.observe(el));
 </script>
 <script>document.querySelectorAll('.js-year').forEach(e => e.textContent = new Date().getFullYear());</script>

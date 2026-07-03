@@ -3,18 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="About Ceven Labs — a one-person lab based in Aarhus, Denmark, experimenting with AI and fast-moving technology to build focused tools.">
+  <meta name="description" content="About Ceven Labs: science-backed tools for everyday health, built in Aarhus, Denmark.">
   <title>About | Ceven Labs</title>
   <link rel="icon" href="../../media/shared/cl-mark.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #06080f; --bg-alt: #080d1a; --navy: #040609;
       --cream: #ffffff; --cream-dark: #0a0f16; --cream-dim: #55566a;
       --text: #ededea; --dim: #a8a9b0; --mute: #6b6d78;
-      --accent: #3b82f6; --blue-d: #1d4ed8; --blue-l: #93c5fd; --brand: #3b82f6; --line: rgba(255,255,255,0.07);
+      --accent: #3b82f6; --blue-d: #1d4ed8; --blue-l: #93c5fd; --brand: #3b82f6;
+      --green: #10b981; --green-l: #6ee7b7; --line: rgba(255,255,255,0.07);
     }
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -25,7 +26,7 @@
     .ambient { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
     .orb { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.04; animation: drift 22s ease-in-out infinite; }
     .orb-1 { width: 600px; height: 600px; background: var(--brand); top: -20%; left: -15%; animation-duration: 25s; }
-    .orb-2 { width: 400px; height: 400px; background: var(--accent); bottom: 10%; right: -10%; animation-duration: 30s; animation-delay: -8s; }
+    .orb-2 { width: 400px; height: 400px; background: var(--green); bottom: 10%; right: -10%; animation-duration: 30s; animation-delay: -8s; }
     @keyframes drift { 0%, 100% { transform: translate(0,0) scale(1); } 33% { transform: translate(40px,-30px) scale(1.05); } 66% { transform: translate(-25px,20px) scale(0.95); } }
     .grain { position: fixed; inset: -50%; width: 200%; height: 200%; z-index: 1; pointer-events: none; opacity: 0.018; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); animation: grainMove 0.5s steps(1) infinite; }
     @keyframes grainMove { 0%,100% { transform: translate(0,0); } 25% { transform: translate(-2%,-3%); } 50% { transform: translate(2%,1%); } 75% { transform: translate(-1%,2%); } }
@@ -41,12 +42,9 @@
     .nav-links > li > a:hover::after { width: 100%; }
     .nav-links > li > a.active { color: var(--accent); }
     .nav-links > li > a.active::after { width: 100%; }
-    .nav-right { display: flex; align-items: center; }
-    .nav-cta { font-size: 0.8rem; font-weight: 600; padding: 0.65rem 1.2rem; border: 1px solid rgba(59,130,246,0.25); border-radius: 999px; color: var(--accent); transition: all 0.25s; }
-    .nav-cta:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
     .hamburger { display: none; flex-direction: column; gap: 5px; padding: 6px; background: none; border: none; cursor: pointer; }
     .hamburger span { width: 22px; height: 1.5px; background: var(--text); display: block; transition: all 0.3s; }
-    @media (max-width: 768px) { nav#navbar { padding: 1rem 1.5rem; } .nav-links, .nav-cta { display: none; } .hamburger { display: flex; } }
+    @media (max-width: 768px) { nav#navbar { padding: 1rem 1.5rem; } .nav-links { display: none; } .hamburger { display: flex; } }
     body.nav-open { overflow: hidden; }
     body.nav-open nav#navbar { background: var(--bg); border-bottom-color: var(--line); backdrop-filter: none; -webkit-backdrop-filter: none; transition: none; }
     body.nav-open .nav-links { display: flex !important; flex-direction: column; position: fixed; inset: 0; z-index: 999; background: var(--bg); padding: 5.5rem 2rem 2rem; gap: 0; align-items: flex-start; }
@@ -61,45 +59,38 @@
     main { position: relative; z-index: 2; }
     .section-inner { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
     .eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 1rem; }
+    .eyebrow::before { content: ''; display: inline-block; width: 20px; height: 1px; background: var(--accent); vertical-align: middle; margin-right: 0.65rem; }
 
     /* HERO */
     #hero { min-height: 60vh; background: var(--bg-alt); display: flex; align-items: center; padding: 9rem 0 5rem; position: relative; overflow: hidden; }
-    #hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 70% 60% at 20% 50%, rgba(74,144,232,0.05) 0%, transparent 70%); pointer-events: none; }
+    #hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 70% 60% at 20% 50%, rgba(59,130,246,0.05) 0%, transparent 70%); pointer-events: none; }
     .hero-inner { position: relative; z-index: 2; max-width: 1100px; margin: 0 auto; padding: 0 32px; width: 100%; }
     .hero-inner h1 { font-size: clamp(2.8rem, 6vw, 4.8rem); font-weight: 800; letter-spacing: -0.04em; color: #fff; line-height: 1.05; margin-bottom: 1.25rem; opacity: 0; animation: fadeUp 0.8s 0.2s forwards; }
-    .hero-inner h1 span { color: var(--accent); }
-    .hero-inner .hero-lead { font-size: 1.1rem; color: var(--dim); max-width: 540px; line-height: 1.85; opacity: 0; animation: fadeUp 0.8s 0.4s forwards; }
+    .hero-inner h1 span { color: var(--green); }
+    .hero-inner .hero-lead { font-size: 1.1rem; color: var(--dim); max-width: 560px; line-height: 1.85; opacity: 0; animation: fadeUp 0.8s 0.4s forwards; }
     @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* EYEBROW LINE */
-    .eyebrow::before { content: ''; display: inline-block; width: 20px; height: 1px; background: var(--accent); vertical-align: middle; margin-right: 0.65rem; }
-    #mission .eyebrow::before { background: #999; }
+    /* MISSION */
+    #mission { background: var(--cream); padding: 100px 0; position: relative; z-index: 2; }
+    .mission-full { max-width: 760px; }
+    .mission-full h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; letter-spacing: -0.04em; color: var(--cream-dark); margin-bottom: 1.5rem; line-height: 1.1; }
+    .mission-full p { font-size: 0.97rem; color: var(--cream-dim); line-height: 1.95; margin-bottom: 1.25rem; }
+    .mission-full p:last-child { margin-bottom: 0; }
+    #mission .eyebrow::before { background: #aaa; }
+    #mission .eyebrow { color: #999; }
 
     /* FOUNDER */
     #founder { background: var(--bg); padding: 100px 0; position: relative; z-index: 2; border-top: 1px solid rgba(255,255,255,0.04); }
     .founder-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 80px; align-items: center; }
-    .founder-quote-block { padding-left: 1.75rem; border-left: 2px solid var(--accent); }
-    .founder-quote-block blockquote { font-size: clamp(1.1rem, 2.2vw, 1.45rem); font-style: italic; font-weight: 400; line-height: 1.65; color: var(--text); margin-bottom: 1.5rem; }
+    .founder-quote-block { padding-left: 1.75rem; border-left: 2px solid var(--green); }
+    .founder-quote-block blockquote { font-size: clamp(1.05rem, 2.2vw, 1.35rem); font-style: italic; font-weight: 400; line-height: 1.7; color: var(--text); margin-bottom: 1.5rem; }
     .founder-quote-block cite { font-size: 0.85rem; color: var(--dim); font-style: normal; display: flex; flex-direction: column; gap: 0.2rem; }
     .founder-quote-block cite strong { color: var(--text); font-weight: 600; }
     .founder-details h2 { font-size: clamp(1.6rem, 3.5vw, 2.4rem); font-weight: 800; letter-spacing: -0.04em; color: #fff; margin-bottom: 1rem; line-height: 1.1; }
     .founder-details p { font-size: 0.95rem; color: var(--dim); line-height: 1.9; margin-bottom: 1.1rem; }
     .founder-link { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); transition: gap 0.2s; margin-top: 0.5rem; }
-    .founder-link:hover { gap: 0.75rem; color: #1d4ed8; }
+    .founder-link:hover { gap: 0.75rem; color: var(--blue-d); }
     @media (max-width: 900px) { .founder-grid { grid-template-columns: 1fr; gap: 48px; } }
-
-    /* MISSION */
-    #mission { background: var(--cream); padding: 100px 0; position: relative; z-index: 2; }
-    .mission-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
-    .mission-left h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; letter-spacing: -0.04em; color: var(--cream-dark); margin-bottom: 1.5rem; line-height: 1.1; }
-    .mission-left p { font-size: 0.95rem; color: var(--cream-dim); line-height: 1.9; margin-bottom: 1.1rem; }
-    .mission-left p:last-child { margin-bottom: 0; }
-    .mission-right { display: flex; flex-direction: column; gap: 24px; }
-    .value-card { padding: 1.75rem; background: #f9f8f6; border: 1px solid #e8e4de; border-radius: 14px; }
-    .value-card .v-icon { font-size: 1.5rem; margin-bottom: 0.75rem; }
-    .value-card h3 { font-size: 0.97rem; font-weight: 700; color: var(--cream-dark); margin-bottom: 0.4rem; }
-    .value-card p { font-size: 0.875rem; color: var(--cream-dim); line-height: 1.7; }
-    @media (max-width: 900px) { .mission-grid { grid-template-columns: 1fr; gap: 48px; } }
 
     /* COMPANY INFO */
     #company { background: var(--bg-alt); padding: 100px 0; position: relative; z-index: 2; border-top: 1px solid rgba(255,255,255,0.04); }
@@ -112,7 +103,7 @@
     .detail-label { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mute); padding-top: 0.1rem; }
     .detail-value { font-size: 0.92rem; color: var(--text); line-height: 1.6; }
     .detail-value a { color: var(--accent); }
-    .detail-value a:hover { color: #1d4ed8; }
+    .detail-value a:hover { color: var(--blue-d); }
     @media (max-width: 900px) { .company-grid { grid-template-columns: 1fr; gap: 48px; } }
 
     /* ROADMAP */
@@ -122,16 +113,10 @@
     .roadmap-items { display: flex; flex-direction: column; }
     .roadmap-item { display: grid; grid-template-columns: 160px 1fr; gap: 24px; padding: 1.75rem 0; border-bottom: 1px solid var(--line); }
     .roadmap-item:first-child { border-top: 1px solid var(--line); }
-    .roadmap-phase {
-      display: flex; flex-direction: column; gap: 0.35rem; padding-top: 0.15rem;
-    }
+    .roadmap-phase { display: flex; flex-direction: column; gap: 0.35rem; padding-top: 0.15rem; }
     .roadmap-phase .phase-label { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--mute); }
-    .phase-chip {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
-      padding: 4px 10px; border-radius: 999px; width: fit-content;
-    }
-    .phase-chip.active { background: rgba(74,222,128,0.12); color: #4ade80; border: 1px solid rgba(74,222,128,0.25); }
+    .phase-chip { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; width: fit-content; }
+    .phase-chip.active { background: rgba(16,185,129,0.12); color: var(--green-l); border: 1px solid rgba(16,185,129,0.25); }
     .phase-chip.next { background: rgba(59,130,246,0.1); color: var(--accent); border: 1px solid rgba(59,130,246,0.2); }
     .phase-chip.future { background: rgba(255,255,255,0.04); color: var(--mute); border: 1px solid var(--line); }
     .roadmap-item h3 { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 0.4rem; }
@@ -182,40 +167,44 @@
   <section id="hero">
     <div class="hero-inner">
       <span class="eyebrow" style="opacity:0; animation: fadeUp 0.8s 0.1s forwards;">About Ceven Labs</span>
-      <h1>One person.<br><span>One problem at a time.</span></h1>
-      <p class="hero-lead">Ceven Labs is a one-person lab from Aarhus, Denmark — experimenting with AI and fast-moving technology to build focused tools that solve real problems properly.</p>
+      <h1>Tools that make<br><span>real problems</span> easier.</h1>
+      <p class="hero-lead">Ceven Labs is based in Risskov, Denmark. We build science-grounded tools for the everyday health problems that existing software handles poorly or ignores entirely.</p>
     </div>
   </section>
 
   <!-- MISSION -->
   <section id="mission">
     <div class="section-inner">
-      <div class="mission-grid">
-        <div class="mission-left wow">
-          <span class="eyebrow" style="color: #999;">Our mission</span>
-          <h2>Why Ceven Labs exists</h2>
-          <p>Most software is built to be broad. Ceven Labs was built to go deep — find one specific, real problem, experiment fast with the best available technology, and ship something that actually works.</p>
-          <p>The lab sits at the edge of AI and fast-moving tech. Not to follow trends, but because these tools now make it possible to build things in weeks that used to take years — and the best time to use that leverage is on problems worth solving properly.</p>
-          <p>First target: jet lag. Not generic sleep tips, but a circadian engine that knows your flights, your meetings, and your biology. LayOvr is the first result.</p>
+      <div class="mission-full wow">
+        <span class="eyebrow">What we do</span>
+        <h2>Built on science.<br>Designed to use.</h2>
+        <p>There is no shortage of health apps. What is missing are tools that take the science seriously, skip the noise, and deliver something you can act on without reading a research paper first.</p>
+        <p>Ceven Labs starts from that gap. We take peer-reviewed work on how the human body actually functions, strip out everything that does not matter in practice, and build it into a product that fits into your day. No accounts, no subscriptions to things you will never use, no data sent to servers you cannot see.</p>
+        <p>The first area is circadian health. Jet lag is genuinely understood by science. The problem is that nobody has made that science usable for normal people with real travel schedules. LayOvr is the answer to that. Bike fitting follows the same logic: validated biomechanical methods that have existed for decades, finally available without booking a studio appointment.</p>
+        <p>Each tool we build is a version of the same question: what do we know about this problem, and why has no one made it easy yet?</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOUNDER -->
+  <section id="founder">
+    <div class="section-inner">
+      <div class="founder-grid">
+        <div class="founder-quote-block wow">
+          <blockquote>"I travel constantly for work. I kept showing up to important meetings jet-lagged, trying generic advice that never fit my actual schedule. The science on jet lag is solid. A tool that uses it properly just did not exist."</blockquote>
+          <cite>
+            <strong>Carlos Ebrahim Vendrell</strong>
+            Founder, Ceven Labs · Aarhus, Denmark
+          </cite>
         </div>
-        <div class="wow d2">
-          <div class="mission-right">
-            <div class="value-card">
-              <div class="v-icon">🎯</div>
-              <h3>Specific over generic</h3>
-              <p>We don't build apps that try to serve everyone. We pick one problem, one user, and go deep until the solution is genuinely better than anything else available.</p>
-            </div>
-            <div class="value-card">
-              <div class="v-icon">🔒</div>
-              <h3>Privacy by design</h3>
-              <p>Your health data and travel plans stay on your device. We built the app without a backend on purpose — it's not a cost decision, it's a principle.</p>
-            </div>
-            <div class="value-card">
-              <div class="v-icon">⚡</div>
-              <h3>Offline-first</h3>
-              <p>The core features work in airplane mode. That's not a nice-to-have when you're 35,000 feet above the Atlantic — it's the whole point.</p>
-            </div>
-          </div>
+        <div class="founder-details wow d2">
+          <span class="eyebrow">The founder</span>
+          <h2>Built by someone<br>who needed it.</h2>
+          <p>Carlos Ebrahim Vendrell is a Barcelona-born product and AI specialist who has spent the last decade in Denmark, working at the intersection of emerging technology and real-world applications. He leads AI projects at Grundfos and built Ceven Labs to solve the health and performance problems he kept running into himself.</p>
+          <p>LayOvr started as a personal spreadsheet. It became a Swift prototype. Then something worth sharing properly.</p>
+          <a href="https://cevendrell.com" target="_blank" rel="noopener" class="founder-link">
+            Visit cevendrell.com &nbsp;→
+          </a>
         </div>
       </div>
     </div>
@@ -227,69 +216,32 @@
       <div class="company-grid">
         <div class="company-left wow">
           <span class="eyebrow">The company</span>
-          <h2>Ceven Labs ApS</h2>
-          <p>Ceven Labs is a Danish private limited company (ApS), registered and operating in Aarhus, Denmark. We are enrolled in Apple's Developer Program and comply with Danish and EU regulations including GDPR.</p>
-          <p>We are a participant in Apple's Developer Program. Our apps are distributed exclusively through the Apple App Store.</p>
+          <h2>Ceven Labs</h2>
+          <p>Ceven Labs is a registered Danish company operating out of Risskov, near Aarhus. We comply with Danish and EU regulations including GDPR, and handle all health-related data with full on-device processing only.</p>
         </div>
         <div class="wow d2">
           <ul class="company-detail-list">
             <li class="company-detail">
               <span class="detail-label">Company</span>
-              <span class="detail-value">Ceven Labs ApS</span>
-            </li>
-            <li class="company-detail">
-              <span class="detail-label">Type</span>
-              <span class="detail-value">Private limited company (ApS)</span>
+              <span class="detail-value">Ceven Labs</span>
             </li>
             <li class="company-detail">
               <span class="detail-label">CVR</span>
-              <span class="detail-value">PLACEHOLDER-CVR</span>
+              <span class="detail-value">46571975</span>
             </li>
             <li class="company-detail">
               <span class="detail-label">Location</span>
-              <span class="detail-value">Aarhus, Denmark</span>
+              <span class="detail-value">Risskov, Denmark</span>
             </li>
             <li class="company-detail">
               <span class="detail-label">Founded</span>
-              <span class="detail-value">2025</span>
-            </li>
-            <li class="company-detail">
-              <span class="detail-label">Focus</span>
-              <span class="detail-value">AI tools & web applications</span>
+              <span class="detail-value">2026</span>
             </li>
             <li class="company-detail">
               <span class="detail-label">Contact</span>
               <span class="detail-value"><a href="mailto:hello@cevenlabs.com">hello@cevenlabs.com</a></span>
             </li>
-            <li class="company-detail">
-              <span class="detail-label">Apple</span>
-              <span class="detail-value">Apple Developer Program member</span>
-            </li>
           </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOUNDER -->
-  <section id="founder">
-    <div class="section-inner">
-      <div class="founder-grid">
-        <div class="founder-quote-block wow">
-          <blockquote>"I travel constantly for work. I got tired of showing up jet-lagged to meetings that mattered — and having no tool that actually accounted for my specific trip, my meetings, or the direction I was flying."</blockquote>
-          <cite>
-            <strong>Carlos Ebrahim Vendrell</strong>
-            Senior AI Project Manager · Aarhus, Denmark
-          </cite>
-        </div>
-        <div class="founder-details wow d2">
-          <span class="eyebrow">The founder</span>
-          <h2>One person.<br>One problem.<br>One obsession.</h2>
-          <p>Ceven Labs is a solo venture by Carlos — a Barcelona-born engineer who has spent the last decade in Denmark at the intersection of XR, AI, and travel. By day he leads AI projects at Grundfos. By night he builds the tools he wishes existed.</p>
-          <p>LayOvr started as a personal spreadsheet. Then a Swift prototype. Then something that actually worked well enough to share.</p>
-          <a href="https://cevendrell.com" target="_blank" rel="noopener" class="founder-link">
-            Read more at cevendrell.com &nbsp;→
-          </a>
         </div>
       </div>
     </div>
@@ -301,7 +253,7 @@
       <div class="wow">
         <span class="eyebrow">What's coming</span>
         <h2>The roadmap</h2>
-        <p class="sub">We're focused on doing one thing well before moving to the next. Here's where LayOvr is heading.</p>
+        <p class="sub">We build one thing well before moving to the next.</p>
       </div>
       <div class="roadmap-items">
         <div class="roadmap-item wow">
@@ -310,18 +262,18 @@
             <span class="phase-chip active">● In progress</span>
           </div>
           <div>
-            <h3>LayOvr — core iOS app</h3>
+            <h3>LayOvr: core iOS app</h3>
             <p>Multi-leg trip planner, circadian engine, meeting-anchored optimization, lounge intelligence, live flight lookup, HealthKit integration, in-app subscriptions.</p>
           </div>
         </div>
         <div class="roadmap-item wow d1">
           <div class="roadmap-phase">
             <span class="phase-label">v0.2</span>
-            <span class="phase-chip next">↑ Next</span>
+            <span class="phase-chip next">Next</span>
           </div>
           <div>
             <h3>Apple Watch companion</h3>
-            <p>Wrist-based nudges, real-time alertness score, in-flight sleep detection, and ambient light coaching.</p>
+            <p>Wrist-based nudges, real-time alertness score, in-flight sleep tracking, and ambient light coaching.</p>
           </div>
         </div>
         <div class="roadmap-item wow d2">
@@ -330,8 +282,8 @@
             <span class="phase-chip future">Planned</span>
           </div>
           <div>
-            <h3>Calendar integration &amp; team sync</h3>
-            <p>Auto-pull meetings from Calendar, shared plans for executive + EA pairs, corporate team accounts.</p>
+            <h3>Calendar integration and team sync</h3>
+            <p>Auto-pull meetings from Calendar, shared plans for executive and assistant pairs, corporate team accounts.</p>
           </div>
         </div>
         <div class="roadmap-item wow d3">
@@ -340,8 +292,8 @@
             <span class="phase-chip future">Exploring</span>
           </div>
           <div>
-            <h3>Next solution</h3>
-            <p>Ceven Labs' next experiment — currently being defined. Same principle: one problem, AI-native approach, shipped fast.</p>
+            <h3>Next tool</h3>
+            <p>The next problem we want to solve is already in view. Same approach: find the science, remove the friction, ship something useful.</p>
           </div>
         </div>
       </div>
@@ -352,7 +304,7 @@
 
 <footer>
   <div class="footer-slim">
-    <span class="footer-copy">© <span class="js-year">2025</span> Ceven Labs ApS · CVR: PLACEHOLDER-CVR · Built by <a href="https://cevendrell.com" target="_blank" rel="noopener" style="color:rgba(255,255,255,0.35); transition:color 0.2s;" onmouseover="this.style.color='#93c5fd'" onmouseout="this.style.color='rgba(255,255,255,0.35)'">Carlos Ebrahim Vendrell</a></span>
+    <span class="footer-copy">© <span class="js-year">2025</span> Ceven Labs · CVR: 46571975 · Built by <a href="https://cevendrell.com" target="_blank" rel="noopener" style="color:rgba(255,255,255,0.35); transition:color 0.2s;" onmouseover="this.style.color='#93c5fd'" onmouseout="this.style.color='rgba(255,255,255,0.35)'">Carlos Ebrahim Vendrell</a></span>
     <div class="footer-links">
       <a href="../legal/privacy-policy.html">Privacy Policy</a>
       <a href="../legal/terms.html">Terms of Use</a>

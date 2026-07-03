@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Bike Fit — precision bike geometry from your body measurements. Free, in-browser, no account required.">
+  <meta name="description" content="Bike Fit: precision bike geometry from your body measurements. Free, in-browser, no account required.">
   <title>Bike Fit | Ceven Labs</title>
   <link rel="icon" href="../../../media/shared/cl-mark.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,11 +11,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg:     #04070e; --bg-2: #060b15; --surface: #090e1d;
-      --blue:   #3b82f6; --blue-d:#1d4ed8; --blue-l:#93c5fd; --blue-faint: rgba(59,130,246,0.08);
-      --text:   #f0f4ff; --dim:  #8899bb; --mute: #3d4f6e;
-      --line:   rgba(255,255,255,0.07);
-      --green:  #4ade80;
+      --bg:      #04070e; --bg-2:  #060b15; --surface: #090e1d;
+      --blue:    #3b82f6; --blue-d:#1d4ed8; --blue-l: #93c5fd; --blue-faint: rgba(59,130,246,0.08);
+      --green:   #10b981; --green-l:#6ee7b7; --green-faint: rgba(16,185,129,0.08);
+      --text:    #f0f4ff; --dim:   #8899bb; --mute: #3d4f6e;
+      --line:    rgba(255,255,255,0.07);
     }
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; -webkit-font-smoothing: antialiased; }
@@ -28,7 +28,7 @@
     .nav-mark { width: 24px; height: 24px; border-radius: 5px; background: var(--blue); display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 800; color: #fff; flex-shrink: 0; }
     .nav-back { font-size: 0.82rem; color: var(--dim); transition: color 0.2s; display: flex; align-items: center; gap: 0.35rem; }
     .nav-back:hover { color: var(--text); }
-    .nav-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--blue-l); background: var(--blue-faint); padding: 3px 8px; border-radius: 3px; }
+    .nav-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--green-l); background: var(--green-faint); padding: 3px 8px; border-radius: 3px; }
     @media (max-width: 520px) { nav { padding: 1rem 1.25rem; } .nav-tag { display: none; } }
 
     /* LAYOUT */
@@ -58,7 +58,7 @@
     }
     .field input[type="number"]::-webkit-inner-spin-button,
     .field input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; }
-    .field input[type="number"]:focus { border-color: var(--blue); }
+    .field input[type="number"]:focus { border-color: var(--green); }
     .field-unit { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--mute); white-space: nowrap; min-width: 28px; }
 
     .bike-type-btns { display: flex; gap: 0.5rem; flex-wrap: wrap; }
@@ -67,8 +67,8 @@
       background: none; color: var(--dim); font-size: 0.82rem; font-weight: 600;
       cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif;
     }
-    .type-btn.active { border-color: var(--blue); background: var(--blue-faint); color: var(--blue-l); }
-    .type-btn:hover:not(.active) { border-color: var(--mute); color: var(--text); }
+    .type-btn.active, .flex-btn.active { border-color: var(--green); background: var(--green-faint); color: var(--green-l); }
+    .type-btn:hover:not(.active), .flex-btn:hover:not(.active) { border-color: var(--mute); color: var(--text); }
 
     /* RESULTS */
     .results-panel { position: sticky; top: 2rem; }
@@ -90,18 +90,18 @@
       font-family: 'JetBrains Mono', monospace;
       font-size: 1.1rem; font-weight: 500; color: var(--text); white-space: nowrap;
     }
-    .result-val.primary { font-size: 1.5rem; font-weight: 700; color: var(--blue-l); }
+    .result-val.primary { font-size: 1.5rem; font-weight: 700; color: var(--green-l); }
     .result-note { font-size: 0.78rem; color: var(--mute); line-height: 1.6; margin-top: 0.5rem; }
 
     .size-chip {
       display: inline-flex; align-items: center; justify-content: center;
       width: 52px; height: 52px; border-radius: 8px;
-      background: var(--blue-faint); border: 1px solid rgba(59,130,246,0.2);
-      font-size: 1.1rem; font-weight: 800; color: var(--blue-l);
+      background: var(--green-faint); border: 1px solid rgba(16,185,129,0.2);
+      font-size: 1.1rem; font-weight: 800; color: var(--green-l);
       letter-spacing: -0.02em;
     }
     .size-row { display: flex; gap: 0.5rem; align-items: center; margin-top: 0.75rem; }
-    .size-row .size-chip.recommend { background: rgba(59,130,246,0.15); border-color: var(--blue); color: #fff; }
+    .size-row .size-chip.recommend { background: rgba(16,185,129,0.15); border-color: var(--green); color: #fff; }
 
     .disclaimer { margin-top: 2.5rem; font-size: 0.78rem; color: var(--mute); line-height: 1.7; padding: 1rem 1.25rem; background: rgba(255,255,255,0.02); border: 1px solid var(--line); border-radius: 6px; }
     .disclaimer strong { color: var(--dim); }
@@ -120,7 +120,7 @@
     Ceven Labs
   </a>
   <div style="display:flex;align-items:center;gap:1rem;">
-    <span class="nav-tag">Web Tool</span>
+    <span class="nav-tag">Biomechanics</span>
     <a href="../index.html" class="nav-back">← Solutions</a>
   </div>
 </nav>
@@ -131,7 +131,7 @@
   <div class="tool-left">
     <div class="tool-header">
       <h1>Bike Fit</h1>
-      <p>Enter your body measurements to get precise geometry recommendations. Everything runs in your browser — nothing is sent anywhere.</p>
+      <p>Enter your body measurements to get precise geometry recommendations. Everything runs in your browser. Nothing is sent anywhere.</p>
     </div>
 
     <div class="form-section">
@@ -160,14 +160,14 @@
         </div>
       </div>
       <div class="field">
-        <label for="torso">Torso length <span style="color:var(--mute);font-weight:400;">(optional — C7 vertebra to hip)</span></label>
+        <label for="torso">Torso length <span style="color:var(--mute);font-weight:400;">(optional, C7 vertebra to hip)</span></label>
         <div class="field-row">
           <input type="number" id="torso" placeholder="57" min="40" max="80">
           <span class="field-unit">cm</span>
         </div>
       </div>
       <div class="field">
-        <label for="arm">Arm length <span style="color:var(--mute);font-weight:400;">(optional — shoulder to wrist)</span></label>
+        <label for="arm">Arm length <span style="color:var(--mute);font-weight:400;">(optional, shoulder to wrist)</span></label>
         <div class="field-row">
           <input type="number" id="arm" placeholder="60" min="40" max="90">
           <span class="field-unit">cm</span>
@@ -395,9 +395,9 @@
 
     // Frame note
     const notes = {
-      road: 'Based on LeMond method (inseam × 0.65). Overlap with adjacent size is common — test ride both.',
+      road: 'Based on LeMond method (inseam × 0.65). Overlap with adjacent size is common; test ride both.',
       gravel: 'Gravel frames typically run similar to road sizing. Many riders size down one for technical riding.',
-      mtb: 'Mountain bike sizing by rider height. Reach-focused modern geometry — verify with brand sizing chart.'
+      mtb: 'Mountain bike sizing by rider height. Reach-focused modern geometry; verify with brand sizing chart.'
     };
     document.getElementById('r-frame-note').textContent = notes[bikeType];
 
