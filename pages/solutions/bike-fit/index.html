@@ -3,17 +3,22 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Interactive bike fit: enter your body measurements, pick a frame from major brands, and watch the geometry and rider position update in real time. Runs entirely in your browser.">
-  <title>Bike Fit — interactive geometry | Ceven Labs</title>
+  <meta name="description" content="Interactive bike fit studio: enter your measurements, pick a frame from major brands, and watch an animated rider pedal on real geometry — with knee, hip, and torso angles measured live. Runs entirely in your browser.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://cevenlabs.com/pages/solutions/bike-fit/">
+  <meta property="og:title" content="Bike Fit — interactive geometry studio">
+  <meta property="og:description" content="Animated rider on real frame geometry, measured live. No account, nothing leaves your browser.">
+  <meta property="og:site_name" content="Ceven Labs">
+  <title>Bike Fit — interactive geometry studio | Ceven Labs</title>
   <link rel="icon" href="../../../media/shared/cl-mark.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #04070e; --bg-2: #060b15; --panel: #080d1a;
+      --bg: #04070e; --bg-2: #060b15; --panel: #080d1a; --panel-2: #0a101f;
       --accent: #fc4c02;          /* Strava orange */
-      --accent-l: #ff7d45;
+      --accent-l: #ff8a5c;
       --accent-dim: rgba(252,76,2,0.12);
       --blue: #3b82f6; --blue-l: #93c5fd;
       --text: #f0f4ff; --dim: #8899bb; --mute: #3d4f6e;
@@ -21,6 +26,7 @@
       --warn: #f59e0b; --error: #ef4444; --ok: #3b82f6;
     }
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; -webkit-font-smoothing: antialiased; }
     a { text-decoration: none; color: inherit; }
     ::selection { background: var(--accent); color: #fff; }
@@ -33,70 +39,105 @@
     .nav-back:hover { color: var(--text); }
     @media (max-width: 520px) { nav { padding: 1rem 1.25rem; } .nav-tag { display: none; } }
 
-    .tool-wrap { max-width: 1280px; margin: 0 auto; padding: 2.25rem 2rem 3rem; display: grid; grid-template-columns: 340px 1fr; gap: 2rem; align-items: start; }
-    @media (max-width: 900px) { .tool-wrap { grid-template-columns: 1fr; padding: 1.5rem 1.25rem 2.5rem; } }
+    /* HERO */
+    .tool-hero { max-width: 1360px; margin: 0 auto; padding: 2.75rem 2rem 0.5rem; }
+    .tool-hero h1 { font-size: clamp(1.9rem, 4vw, 2.9rem); font-weight: 800; letter-spacing: -0.045em; line-height: 1.02; margin-bottom: 0.7rem; }
+    .tool-hero h1 span { color: var(--accent); }
+    .tool-hero > p { font-size: 0.92rem; color: var(--dim); line-height: 1.75; max-width: 640px; }
+    .method-chips { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1.1rem; }
+    .method-chip { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--mute); border: 1px solid var(--line); padding: 4px 10px; border-radius: 999px; }
 
-    /* LEFT: INPUTS */
-    .tool-header { margin-bottom: 1.75rem; }
-    .tool-header h1 { font-size: clamp(1.6rem, 3.5vw, 2.2rem); font-weight: 800; letter-spacing: -0.04em; line-height: 1.05; margin-bottom: 0.6rem; }
-    .tool-header h1 span { color: var(--accent); }
-    .tool-header p { font-size: 0.88rem; color: var(--dim); line-height: 1.7; }
+    /* LAYOUT */
+    .tool-wrap { max-width: 1360px; margin: 0 auto; padding: 1.75rem 2rem 1.5rem; display: grid; grid-template-columns: 330px 1fr; gap: 1.75rem; align-items: start; }
+    @media (max-width: 940px) {
+      .tool-wrap { grid-template-columns: 1fr; padding: 1.25rem 1.25rem; }
+      .tool-left { order: 2; }
+      .tool-right { order: 1; }
+      .tool-hero { padding: 1.75rem 1.25rem 0; }
+    }
 
-    .form-section { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 1.25rem 1.25rem 1.4rem; margin-bottom: 1.1rem; }
-    .form-section-label { font-family: 'JetBrains Mono', monospace; font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--accent-l); margin-bottom: 1rem; }
+    /* INPUT CARDS */
+    .form-section { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 1.25rem 1.25rem 1.35rem; margin-bottom: 1rem; }
+    .form-section-label { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--accent-l); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.6rem; }
+    .form-section-label::after { content: ''; flex: 1; height: 1px; background: var(--line); }
 
-    .field { margin-bottom: 1rem; }
+    .field { margin-bottom: 1.05rem; }
     .field:last-child { margin-bottom: 0; }
     .field-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.35rem; }
     .field-row label { font-size: 0.82rem; font-weight: 600; color: var(--text); }
-    .field-val { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--accent-l); }
+    .field-val { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--accent-l); font-variant-numeric: tabular-nums; }
     input[type="range"] { width: 100%; accent-color: var(--accent); cursor: pointer; }
     select {
       width: 100%; background: var(--bg-2); color: var(--text); border: 1px solid var(--line);
-      border-radius: 6px; padding: 9px 10px; font-family: 'Inter', sans-serif; font-size: 0.85rem; cursor: pointer;
+      border-radius: 7px; padding: 9px 10px; font-family: 'Inter', sans-serif; font-size: 0.85rem; cursor: pointer;
       appearance: none; -webkit-appearance: none;
       background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%238899bb'/%3E%3C/svg%3E");
       background-repeat: no-repeat; background-position: right 12px center;
     }
     select:focus { outline: none; border-color: var(--accent); }
+    select:disabled { opacity: 0.4; cursor: not-allowed; }
     .seg { display: flex; gap: 6px; }
-    .seg button { flex: 1; background: var(--bg-2); border: 1px solid var(--line); color: var(--dim); font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 600; padding: 8px 4px; border-radius: 6px; cursor: pointer; transition: all 0.15s; }
+    .seg button { flex: 1; background: var(--bg-2); border: 1px solid var(--line); color: var(--dim); font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 600; padding: 8px 4px; border-radius: 7px; cursor: pointer; transition: all 0.15s; }
+    .seg button:hover { border-color: var(--mute); color: var(--text); }
     .seg button.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent-l); }
     .hint { font-size: 0.72rem; color: var(--mute); line-height: 1.6; margin-top: 0.4rem; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem; }
 
-    #custom-geo { display: none; }
+    #custom-geo { display: none; border-top: 1px dashed var(--line); padding-top: 1rem; margin-top: 1.1rem; }
     #custom-geo.visible { display: block; }
 
-    /* RIGHT: DRAWING */
-    .viz-panel { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
-    .viz-head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 0.9rem 1.25rem; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
-    .viz-title { font-family: 'JetBrains Mono', monospace; font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--mute); }
-    .fit-badge { font-size: 0.74rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 12px; border-radius: 999px; border: 1px solid; }
-    .fit-badge.ok { color: var(--ok); border-color: rgba(59,130,246,0.4); background: rgba(59,130,246,0.08); }
+    /* VIZ PANEL */
+    .viz-panel { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+    .viz-head { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; padding: 0.8rem 1.1rem; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+    .viz-head-left { display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
+    .viz-title { font-family: 'JetBrains Mono', monospace; font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.18em; color: var(--mute); }
+    .fit-badge { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 12px; border-radius: 999px; border: 1px solid; white-space: nowrap; }
+    .fit-badge.ok { color: var(--blue-l); border-color: rgba(59,130,246,0.4); background: rgba(59,130,246,0.08); }
     .fit-badge.warn { color: var(--warn); border-color: rgba(245,158,11,0.4); background: rgba(245,158,11,0.08); }
     .fit-badge.error { color: var(--error); border-color: rgba(239,68,68,0.45); background: rgba(239,68,68,0.1); }
-    #bike-svg { display: block; width: 100%; height: auto; background: radial-gradient(ellipse 90% 70% at 55% 40%, rgba(59,130,246,0.05) 0%, transparent 70%); }
+    .viz-controls { display: flex; gap: 6px; flex-wrap: wrap; }
+    .chip-btn { font-family: 'JetBrains Mono', monospace; font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--dim); background: var(--bg-2); border: 1px solid var(--line); padding: 6px 12px; border-radius: 999px; cursor: pointer; transition: all 0.15s; }
+    .chip-btn:hover { color: var(--text); border-color: var(--mute); }
+    .chip-btn.on { color: var(--accent-l); border-color: rgba(252,76,2,0.45); background: var(--accent-dim); }
 
-    #alerts { display: flex; flex-direction: column; gap: 8px; padding: 0 1.25rem; }
+    #bike-svg { display: block; width: 100%; height: auto; background: radial-gradient(ellipse 85% 70% at 55% 42%, rgba(59,130,246,0.05) 0%, transparent 70%); }
+
+    #alerts { display: flex; flex-direction: column; gap: 8px; padding: 0 1.1rem; }
     #alerts:not(:empty) { padding-bottom: 1rem; }
     .alert { font-size: 0.82rem; line-height: 1.6; padding: 10px 14px; border-radius: 8px; border: 1px solid; }
     .alert.warn { color: #fbd38d; border-color: rgba(245,158,11,0.35); background: rgba(245,158,11,0.07); }
     .alert.error { color: #fca5a5; border-color: rgba(239,68,68,0.4); background: rgba(239,68,68,0.08); }
 
-    .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); border-top: 1px solid var(--line); }
-    .metric { padding: 0.9rem 1.1rem; border-right: 1px solid var(--line); }
-    .metric:last-child { border-right: none; }
-    .metric-label { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--mute); margin-bottom: 0.3rem; }
-    .metric-val { font-family: 'JetBrains Mono', monospace; font-size: 1.02rem; font-weight: 500; color: var(--text); }
-    .metric-val small { font-size: 0.68rem; color: var(--dim); }
-    @media (max-width: 640px) { .metric { border-bottom: 1px solid var(--line); } }
+    /* METRICS */
+    .metrics { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); }
+    .metric { padding: 0.85rem 1rem 0.9rem; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .metric:nth-child(4n) { border-right: none; }
+    .metric:nth-child(n+5) { border-bottom: none; }
+    .metric-label { font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.13em; color: var(--mute); margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.4rem; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; display: none; }
+    .dot.ok { display: inline-block; background: var(--blue); box-shadow: 0 0 6px rgba(59,130,246,0.7); }
+    .dot.warn { display: inline-block; background: var(--warn); box-shadow: 0 0 6px rgba(245,158,11,0.7); }
+    .dot.err { display: inline-block; background: var(--error); box-shadow: 0 0 6px rgba(239,68,68,0.7); }
+    .metric-val { font-family: 'JetBrains Mono', monospace; font-size: 1.05rem; font-weight: 600; color: var(--text); font-variant-numeric: tabular-nums; }
+    .metric-val small { font-size: 0.66rem; color: var(--dim); font-weight: 400; }
+    .metric-sub { font-size: 0.66rem; color: var(--mute); margin-top: 0.25rem; line-height: 1.4; }
+    @media (max-width: 720px) {
+      .metrics { grid-template-columns: repeat(2, 1fr); }
+      .metric:nth-child(4n) { border-right: 1px solid var(--line); }
+      .metric:nth-child(2n) { border-right: none; }
+      .metric:nth-child(n+5) { border-bottom: 1px solid var(--line); }
+      .metric:nth-child(n+7) { border-bottom: none; }
+    }
 
-    .disclaimer { margin-top: 1.5rem; font-size: 0.76rem; color: var(--mute); line-height: 1.7; padding: 1rem 1.25rem; background: rgba(255,255,255,0.02); border: 1px solid var(--line); border-radius: 8px; }
-    .disclaimer strong { color: var(--dim); }
-    .disclaimer a { color: var(--dim); text-decoration: underline; }
+    /* DISCLAIMER + FOOTER */
+    .disclaimer { max-width: 1360px; margin: 0 auto 2.5rem; padding: 0 2rem; }
+    .disclaimer-inner { font-size: 0.76rem; color: var(--mute); line-height: 1.7; padding: 1rem 1.25rem; background: rgba(255,255,255,0.02); border: 1px solid var(--line); border-radius: 10px; }
+    .disclaimer-inner strong { color: var(--dim); }
+    .disclaimer-inner a { color: var(--dim); text-decoration: underline; }
+    @media (max-width: 940px) { .disclaimer { padding: 0 1.25rem; } }
 
     footer { background: var(--bg-2); }
-    .footer-slim { max-width: 1280px; margin: 0 auto; padding: 24px 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; border-top: 1px solid rgba(255,255,255,0.06); }
+    .footer-slim { max-width: 1360px; margin: 0 auto; padding: 24px 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; border-top: 1px solid rgba(255,255,255,0.06); }
     .footer-copy { font-size: 0.82rem; color: rgba(255,255,255,0.25); }
     .footer-copy a { color: rgba(255,255,255,0.35); transition: color 0.2s; }
     .footer-copy a:hover { color: var(--accent-l); }
@@ -119,15 +160,20 @@
   </div>
 </nav>
 
+<header class="tool-hero">
+  <h1>Bike Fit <span>studio</span>.</h1>
+  <p>Set your measurements, pick a frame, choose where your hands go — and watch yourself pedal on it. Every angle is measured live. Everything runs in your browser; nothing is sent anywhere.</p>
+  <div class="method-chips">
+    <span class="method-chip">LeMond 0.883 saddle height</span>
+    <span class="method-chip">Two-link inverse kinematics</span>
+    <span class="method-chip">Representative brand geometry</span>
+  </div>
+</header>
+
 <div class="tool-wrap">
 
   <!-- LEFT: INPUTS -->
   <div class="tool-left">
-    <div class="tool-header">
-      <h1>Bike Fit, <span>live</span>.</h1>
-      <p>Enter your measurements and pick a frame. The drawing updates as you type — everything runs in your browser, nothing is sent anywhere.</p>
-    </div>
-
     <div class="form-section">
       <p class="form-section-label">Your body</p>
       <div class="field">
@@ -146,7 +192,7 @@
           <button data-flex="med" class="active">Average</button>
           <button data-flex="high">High</button>
         </div>
-        <p class="hint">Sets spacer stack under the stem and how low you can comfortably ride.</p>
+        <p class="hint">Sets the spacer stack under the stem.</p>
       </div>
     </div>
 
@@ -156,9 +202,21 @@
         <div class="field-row"><label for="in-model">Frame</label></div>
         <select id="in-model"></select>
       </div>
-      <div class="field">
-        <div class="field-row"><label for="in-size">Size</label></div>
-        <select id="in-size"></select>
+      <div class="two-col field">
+        <div>
+          <div class="field-row"><label for="in-size">Size</label></div>
+          <select id="in-size"></select>
+        </div>
+        <div>
+          <div class="field-row"><label for="in-crank">Cranks</label></div>
+          <select id="in-crank">
+            <option value="165">165 mm</option>
+            <option value="167.5">167.5 mm</option>
+            <option value="170">170 mm</option>
+            <option value="172.5" selected>172.5 mm</option>
+            <option value="175">175 mm</option>
+          </select>
+        </div>
       </div>
       <div class="field">
         <div class="field-row"><label for="in-stem">Stem length</label><span class="field-val" id="val-stem">100 mm</span></div>
@@ -184,8 +242,16 @@
       </div>
     </div>
 
-    <div class="disclaimer">
-      <strong>These are starting points, not a professional fit.</strong> Frame data is representative of published geometry charts but may differ from the current model year — verify with the manufacturer. Rider proportions use population-average assumptions. Make position changes gradually, and stop if you experience pain or numbness — use of these estimates is at your own risk. See our <a href="../../legal/terms.html">Terms of Use</a>.
+    <div class="form-section">
+      <p class="form-section-label">Riding position</p>
+      <div class="field">
+        <div class="seg" id="in-pos">
+          <button data-pos="tops">Tops</button>
+          <button data-pos="hoods" class="active">Hoods</button>
+          <button data-pos="drops">Drops</button>
+        </div>
+        <p class="hint">Where your hands sit on the bar. The rider — and every angle — follows.</p>
+      </div>
     </div>
   </div>
 
@@ -193,22 +259,48 @@
   <div class="tool-right">
     <div class="viz-panel">
       <div class="viz-head">
-        <span class="viz-title" id="viz-title">Geometry preview</span>
-        <span class="fit-badge ok" id="fit-badge">Balanced</span>
+        <div class="viz-head-left">
+          <span class="viz-title" id="viz-title">Geometry</span>
+          <span class="fit-badge ok" id="fit-badge">Balanced</span>
+        </div>
+        <div class="viz-controls">
+          <button class="chip-btn on" id="btn-play" aria-pressed="true">⏸ Pause</button>
+          <button class="chip-btn on" id="btn-dims" aria-pressed="true">Dims</button>
+          <button class="chip-btn" id="btn-link">Copy link</button>
+          <button class="chip-btn" id="btn-copy">Copy fit</button>
+        </div>
       </div>
-      <svg id="bike-svg" viewBox="-950 -1350 2540 1680" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Side view of the bike frame and rider position"></svg>
+      <svg id="bike-svg" viewBox="-950 -1350 2540 1680" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Animated side view of the bike frame and pedaling rider">
+        <defs>
+          <pattern id="bp-grid" width="100" height="100" patternUnits="userSpaceOnUse">
+            <path d="M 100 0 L 0 0 0 100" fill="none" stroke="rgba(147,197,253,0.05)" stroke-width="2"/>
+          </pattern>
+        </defs>
+        <g id="g-grid"></g>
+        <g id="g-back"></g>
+        <g id="g-static"></g>
+        <g id="g-front"></g>
+      </svg>
       <div id="alerts"></div>
       <div class="metrics">
-        <div class="metric"><div class="metric-label">Suggested size</div><div class="metric-val" id="m-size">—</div></div>
-        <div class="metric"><div class="metric-label">Saddle height</div><div class="metric-val" id="m-saddle">—</div></div>
-        <div class="metric"><div class="metric-label">Saddle–bar drop</div><div class="metric-val" id="m-drop">—</div></div>
-        <div class="metric"><div class="metric-label">Saddle–hood reach</div><div class="metric-val" id="m-reach">—</div></div>
-        <div class="metric"><div class="metric-label">Torso angle</div><div class="metric-val" id="m-torso">—</div></div>
-        <div class="metric"><div class="metric-label">Stretch</div><div class="metric-val" id="m-stretch">—</div></div>
+        <div class="metric"><div class="metric-label"><span class="dot" id="d-size"></span>Suggested size</div><div class="metric-val" id="m-size">—</div><div class="metric-sub" id="s-size">by rider height</div></div>
+        <div class="metric"><div class="metric-label">Saddle height</div><div class="metric-val" id="m-saddle">—</div><div class="metric-sub">BB → saddle, LeMond</div></div>
+        <div class="metric"><div class="metric-label"><span class="dot" id="d-knee"></span>Knee angle</div><div class="metric-val" id="m-knee">—</div><div class="metric-sub">bottom of stroke · target 138–148°</div></div>
+        <div class="metric"><div class="metric-label"><span class="dot" id="d-hip"></span>Hip angle</div><div class="metric-val" id="m-hip">—</div><div class="metric-sub">top of stroke · keep above ~50°</div></div>
+        <div class="metric"><div class="metric-label"><span class="dot" id="d-torso"></span>Torso angle</div><div class="metric-val" id="m-torso">—</div><div class="metric-sub" id="s-torso">from horizontal</div></div>
+        <div class="metric"><div class="metric-label">Saddle–bar drop</div><div class="metric-val" id="m-drop">—</div><div class="metric-sub">saddle top → bar clamp</div></div>
+        <div class="metric"><div class="metric-label">Reach to hands</div><div class="metric-val" id="m-reach">—</div><div class="metric-sub">saddle → grip, horizontal</div></div>
+        <div class="metric"><div class="metric-label"><span class="dot" id="d-stretch"></span>Stretch</div><div class="metric-val" id="m-stretch">—</div><div class="metric-sub">of torso + arm span</div></div>
       </div>
     </div>
   </div>
 
+</div>
+
+<div class="disclaimer">
+  <div class="disclaimer-inner">
+    <strong>These are starting points, not a professional fit.</strong> Frame data is representative of published geometry charts but may differ from the current model year — verify with the manufacturer. Rider proportions use population-average assumptions. Make position changes gradually, and stop if you experience pain or numbness — use of these estimates is at your own risk. See our <a href="../../legal/terms.html">Terms of Use</a>.
+  </div>
 </div>
 
 <footer>
@@ -228,8 +320,6 @@
 /* ============================================================
    Geometry data — representative of published geometry charts.
    All lengths mm, angles degrees.
-   stack/reach: frame stack & reach · sta/hta: seat/head tube angle
-   st: seat tube length (c-t) · cs: chainstay · wb: wheelbase
    ============================================================ */
 const BIKES = {
   tarmac: { name: 'Specialized Tarmac SL8', type: 'Race', sizes: {
@@ -285,39 +375,56 @@ const BIKES = {
 const D2R = Math.PI / 180;
 const BB_DROP = 72;          // BB below axles
 const WHEEL_R = 336;         // 700c + 28 mm tyre
-const CRANK = 172.5;
 const CROWN_Y = 425;         // fork crown height above BB
 const SPACERS = { low: 38, med: 22, high: 8 };
 const LEMOND = 0.883;        // saddle height = inseam × 0.883
+const CADENCE = 42;          // display rpm — calm
+const GEAR = 2.55;           // wheel revs per crank rev, for spoke spin
 
 /* Anthropometry (population averages). Leg segments scale with inseam
    (saddle height does too, so extension stays consistent across body types);
-   torso, arms, and head scale with total height. Leg lengths include the
-   shoe and the plantarflexed foot's lever to the pedal spindle. */
-const A_FEMUR = 0.63, A_SHANK = 0.69;   // × inseam: hip→knee, knee→pedal spindle
-const A_TORSO = 0.288, A_ARM = 0.315;   // × height: hip→shoulder, shoulder→hand
+   torso, arms, and head scale with total height. The leg is a proper
+   hip→knee→ankle chain; the foot connects the ankle to the pedal spindle
+   as a fixed plantarflexed lever, so knee angles are anatomical
+   (hip–knee–ankle), matching how fitters measure them. */
+const A_FEMUR = 0.555, A_TIBIA = 0.588; // × inseam
+const A_TORSO = 0.288, A_ARM = 0.36;    // × height (shoulder → grip center)
 const A_HEAD_R = 0.052;
+const FOOT_VEC = { x: -25, y: 85 };     // ankle position relative to pedal spindle
+
+/* Hand target offset from the bar clamp, per riding position */
+const HAND = {
+  tops:  { x: -4,  y: 8 },
+  hoods: { x: 75,  y: 12 },
+  drops: { x: 55,  y: -88 }
+};
 
 const $ = id => document.getElementById(id);
-const state = { height: 178, inseam: 84, flex: 'med', model: 'tarmac', size: '54', stem: 100,
+const state = { height: 178, inseam: 84, flex: 'med', model: 'tarmac', size: '56',
+                stem: 100, crank: 172.5, pos: 'hoods',
                 cstack: 560, creach: 385, csta: 73.5, chta: 73 };
+let showDims = true;
 
-/* Two-link inverse kinematics: joint between p1 and p2 with segment
-   lengths l1, l2. Returns both solutions; `clamped` if out of reach. */
+/* Two-link IK: joint between p1 and p2 with segment lengths l1, l2. */
 function ik(p1, p2, l1, l2) {
   const dx = p2.x - p1.x, dy = p2.y - p1.y;
-  const d = Math.hypot(dx, dy);
-  const clamped = d > l1 + l2;
+  const d = Math.hypot(dx, dy) || 0.001;
   const dc = Math.min(Math.max(d, Math.abs(l1 - l2) + 1), l1 + l2 - 0.5);
   const a = (l1 * l1 - l2 * l2 + dc * dc) / (2 * dc);
   const h = Math.sqrt(Math.max(l1 * l1 - a * a, 0));
   const ux = dx / d, uy = dy / d;
-  const base = { x: p1.x + a * ux, y: p1.y + a * uy };
+  const bx = p1.x + a * ux, by = p1.y + a * uy;
   return {
-    left:  { x: base.x - h * uy, y: base.y + h * ux },
-    right: { x: base.x + h * uy, y: base.y - h * ux },
-    clamped
+    left:  { x: bx - h * uy, y: by + h * ux },
+    right: { x: bx + h * uy, y: by - h * ux }
   };
+}
+const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+/* Interior angle at joint j between segments j→a and j→b, degrees */
+function jointAngle(j, a, b) {
+  const v1 = { x: a.x - j.x, y: a.y - j.y }, v2 = { x: b.x - j.x, y: b.y - j.y };
+  const c = (v1.x * v2.x + v1.y * v2.y) / (Math.hypot(v1.x, v1.y) * Math.hypot(v2.x, v2.y));
+  return Math.acos(Math.min(1, Math.max(-1, c))) / D2R;
 }
 
 function suggestedSize(model, heightCm) {
@@ -325,7 +432,6 @@ function suggestedSize(model, heightCm) {
   const bands = [163, 170, 177, 184, 191];
   let i = bands.findIndex(b => heightCm < b);
   if (i === -1) i = bands.length;
-  // Map 6 height bands onto however many sizes the model has
   return keys[Math.min(Math.round(i * (keys.length - 1) / bands.length), keys.length - 1)];
 }
 
@@ -337,87 +443,116 @@ function geo() {
   return BIKES[state.model].sizes[state.size];
 }
 
-/* SVG helpers — world coords are y-up with BB at (0,0); flip y on output */
+/* ---- SVG string helpers — world coords y-up, flipped on output ---- */
 const P = n => n.toFixed(1);
-const line = (a, b, cls, w, color, dash) =>
-  `<line x1="${P(a.x)}" y1="${P(-a.y)}" x2="${P(b.x)}" y2="${P(-b.y)}" stroke="${color}" stroke-width="${w}" stroke-linecap="round"${dash ? ` stroke-dasharray="${dash}"` : ''}/>`;
+const line = (a, b, w, color, dash, cap) =>
+  `<line x1="${P(a.x)}" y1="${P(-a.y)}" x2="${P(b.x)}" y2="${P(-b.y)}" stroke="${color}" stroke-width="${w}" stroke-linecap="${cap || 'round'}"${dash ? ` stroke-dasharray="${dash}"` : ''}/>`;
 const circle = (c, r, color, w, fill) =>
   `<circle cx="${P(c.x)}" cy="${P(-c.y)}" r="${r}" stroke="${color}" stroke-width="${w}" fill="${fill || 'none'}"/>`;
+const joint = (c, r, color) => circle(c, r, color, 7, '#0a1120');
+const text = (p, str, size, color, anchor) =>
+  `<text x="${P(p.x)}" y="${P(-p.y)}" font-family="'JetBrains Mono',monospace" font-size="${size}" fill="${color}" text-anchor="${anchor || 'start'}">${str}</text>`;
+/* Arc between two directions around a center, as a sampled polyline (no flag headaches) */
+function arc(c, r, a1, a2, color, w) {
+  let d = a2 - a1;
+  while (d > Math.PI) d -= 2 * Math.PI;
+  while (d < -Math.PI) d += 2 * Math.PI;
+  const n = 14; let pts = [];
+  for (let i = 0; i <= n; i++) {
+    const a = a1 + d * i / n;
+    pts.push(`${P(c.x + r * Math.cos(a))},${P(-(c.y + r * Math.sin(a)))}`);
+  }
+  return `<polyline points="${pts.join(' ')}" fill="none" stroke="${color}" stroke-width="${w}"/>`;
+}
 
-function render() {
+/* ---- palette for the drawing ---- */
+const C = {
+  frame: '#3b82f6', fork: '#93c5fd', steel: '#94a3b8', steelD: '#64748b',
+  wheel: '#22314f', hub: '#2c3d61', spoke: '#1a2745',
+  rider: '#fc4c02', riderFar: 'rgba(252,76,2,0.30)', riderErr: '#ef4444',
+  dims: 'rgba(147,197,253,0.35)', dimText: '#5f7396', ground: '#131c30',
+  angle: 'rgba(252,76,2,0.55)'
+};
+
+/* Shared scene cache: rebuilt by renderStatic, read by renderDynamic */
+let S = null;
+
+function computeScene() {
   const g = geo();
-  const H = state.height * 10, I = state.inseam * 10; // mm
+  const H = state.height * 10, I = state.inseam * 10;
+  const CRANK = state.crank;
   const alerts = [];
 
-  /* ---- frame joints ---- */
   const rearAxle = { x: -Math.sqrt(g.cs * g.cs - BB_DROP * BB_DROP), y: BB_DROP };
   const frontAxle = { x: rearAxle.x + g.wb, y: BB_DROP };
   const headTop = { x: g.reach, y: g.stack };
-  const htDir = { x: Math.cos(g.hta * D2R), y: -Math.sin(g.hta * D2R) };  // down the steerer
-  const t = (g.stack - CROWN_Y) / Math.sin(g.hta * D2R);
-  const headBot = { x: headTop.x + t * htDir.x, y: CROWN_Y };
-  const staDir = { x: -Math.cos(g.sta * D2R), y: Math.sin(g.sta * D2R) }; // up the seat tube
+  const htDir = { x: Math.cos(g.hta * D2R), y: -Math.sin(g.hta * D2R) };
+  const tHT = (g.stack - CROWN_Y) / Math.sin(g.hta * D2R);
+  const headBot = { x: headTop.x + tHT * htDir.x, y: CROWN_Y };
+  const staDir = { x: -Math.cos(g.sta * D2R), y: Math.sin(g.sta * D2R) };
   const stTop = { x: g.st * staDir.x, y: g.st * staDir.y };
   const bb = { x: 0, y: 0 };
 
-  /* ---- saddle & bars ---- */
-  const saddleH = LEMOND * I; // BB → saddle top along seat tube
+  const saddleH = LEMOND * I;
   const post = { x: saddleH * staDir.x, y: saddleH * staDir.y };
   const saddle = { x: post.x - 12, y: post.y + 20 };
   const spacers = SPACERS[state.flex];
   const clamp = { x: headTop.x - spacers * htDir.x, y: headTop.y - spacers * htDir.y };
   const stemA = -8 * D2R;
   const bar = { x: clamp.x + state.stem * Math.cos(stemA), y: clamp.y + state.stem * Math.sin(stemA) };
-  const hood = { x: bar.x + 75, y: bar.y + 12 };
+  const hand = { x: bar.x + HAND[state.pos].x, y: bar.y + HAND[state.pos].y };
 
-  /* ---- rider ---- */
   const hip = { x: saddle.x - 8, y: saddle.y + 62 };
-  const femur = A_FEMUR * I, shank = A_SHANK * I;
+  const femur = A_FEMUR * I, tibia = A_TIBIA * I;
   const torso = A_TORSO * H, arm = A_ARM * H;
   const headR = A_HEAD_R * H;
 
-  // Legs: near leg to the lower-forward pedal, far leg opposite
-  const ca = 25 * D2R; // crank angle from vertical-down, near side tilted forward
-  const pedalNear = { x: CRANK * Math.sin(ca), y: -CRANK * Math.cos(ca) };
-  const pedalFar = { x: -pedalNear.x, y: -pedalNear.y };
-  const kneeNearIK = ik(hip, pedalNear, femur, shank);
-  const kneeFarIK = ik(hip, pedalFar, femur, shank);
-  const kneeNear = kneeNearIK.left.x > kneeNearIK.right.x ? kneeNearIK.left : kneeNearIK.right;
-  const kneeFar = kneeFarIK.left.x > kneeFarIK.right.x ? kneeFarIK.left : kneeFarIK.right;
-
-  // Bottom-of-stroke over-extension check (worst case)
-  const pedalBottom = { x: 0, y: -CRANK };
-  const legNeeded = Math.hypot(pedalBottom.x - hip.x, pedalBottom.y - hip.y);
-  if (legNeeded > (femur + shank) * 0.985) {
-    alerts.push({ level: 'error', msg: 'Saddle height exceeds your leg extension at the bottom of the stroke. Double-check your inseam — or the frame is too large.' });
+  /* worst-case leg extension at bottom dead center (measured to the ankle) */
+  const ankleBDC = { x: FOOT_VEC.x, y: -CRANK + FOOT_VEC.y };
+  const ext = dist(hip, ankleBDC) / (femur + tibia);
+  let legErr = false;
+  if (ext > 1) {
+    legErr = true;
+    alerts.push({ level: 'error', msg: 'Saddle height exceeds your leg extension at the bottom of the stroke. Double-check your inseam, or try shorter cranks — otherwise the frame is too large.' });
+  } else if (ext > 0.975) {
+    alerts.push({ level: 'warn', msg: 'Leg extension is right at its limit at the bottom of the stroke. Shorter cranks or a few mm off the saddle height would add margin.' });
   }
 
-  // Torso + arms: shoulder solved from the hip–hand triangle
-  const armEff = arm * 0.96; // slight elbow bend
-  const dHand = Math.hypot(hood.x - hip.x, hood.y - hip.y);
+  /* torso + arms */
+  const armEff = arm * 0.95;
+  const dHand = dist(hip, hand);
   const stretch = dHand / (torso + armEff);
   let shoulder, overReach = false;
   if (stretch >= 0.88) {
     overReach = true;
     if (stretch >= 1) {
-      const u = { x: (hood.x - hip.x) / dHand, y: (hood.y - hip.y) / dHand };
+      const u = { x: (hand.x - hip.x) / dHand, y: (hand.y - hip.y) / dHand };
       shoulder = { x: hip.x + torso * u.x, y: hip.y + torso * u.y };
     } else {
-      const s = ik(hip, hood, torso, armEff);
+      const s = ik(hip, hand, torso, armEff);
       shoulder = s.left.y > s.right.y ? s.left : s.right;
     }
-    alerts.push({ level: 'error', msg: 'Out of reasonable proportions: you would need nearly straight arms and a flat back to reach the hoods. Choose a smaller size or a much shorter stem.' });
+    alerts.push({ level: 'error', msg: 'Out of reasonable proportions: you would need nearly straight arms and a flat back to reach this grip. Choose a smaller size or a much shorter stem.' });
   } else {
-    const s = ik(hip, hood, torso, armEff);
-    shoulder = s.left.y > s.right.y ? s.left : s.right; // shoulder above the hip–hand line
+    const s = ik(hip, hand, torso, armEff);
+    shoulder = s.left.y > s.right.y ? s.left : s.right;
   }
-  const elbowIK = ik(shoulder, hood, arm * 0.53, arm * 0.47);
-  const elbow = elbowIK.left.y < elbowIK.right.y ? elbowIK.left : elbowIK.right; // elbow hangs down
+  const eIK = ik(shoulder, hand, arm * 0.53, arm * 0.47);
+  const elbow = eIK.left.y < eIK.right.y ? eIK.left : eIK.right;
   const torsoA = Math.atan2(shoulder.y - hip.y, shoulder.x - hip.x) / D2R;
-  const neckDir = { x: (shoulder.x - hip.x) / torso, y: (shoulder.y - hip.y) / torso };
-  const head = { x: shoulder.x + neckDir.x * (headR + 55) + 25, y: shoulder.y + neckDir.y * (headR + 55) + 10 };
+  const nd = { x: (shoulder.x - hip.x) / torso, y: (shoulder.y - hip.y) / torso };
+  const head = { x: shoulder.x + nd.x * (headR + 55) + 25, y: shoulder.y + nd.y * (headR + 55) + 10 };
 
-  /* ---- proportion & fit warnings ---- */
+  /* reference-pose joint angles */
+  const kBDC = ik(hip, pedalBDC, femur, shank);
+  const kneeBDCpt = kBDC.left.x > kBDC.right.x ? kBDC.left : kBDC.right;
+  const kneeBDC = jointAngle(kneeBDCpt, hip, pedalBDC);
+  const pedalTDC = { x: 0, y: CRANK };
+  const kTDC = ik(hip, pedalTDC, femur, shank);
+  const kneeTDCpt = kTDC.left.x > kTDC.right.x ? kTDC.left : kTDC.right;
+  const hipA = jointAngle(hip, shoulder, kneeTDCpt);
+
+  /* remaining warnings */
   const ratio = state.inseam / state.height;
   if (ratio < 0.40 || ratio > 0.52) {
     alerts.push({ level: 'warn', msg: `Inseam is ${(ratio * 100).toFixed(0)}% of your height — outside the usual 40–52% range. Double-check both measurements.` });
@@ -428,90 +563,245 @@ function render() {
   if (torsoA > 55) {
     alerts.push({ level: 'warn', msg: 'Very upright / cramped position. Consider a larger size or a longer stem.' });
   }
-  const postShowing = saddleH - g.st;
-  if (postShowing < 40) {
+  if (saddleH - g.st < 40) {
     alerts.push({ level: 'warn', msg: 'Almost no seatpost showing — this frame is on the large side for your inseam.' });
   }
   const drop = saddle.y - clamp.y;
   if (drop > 110 && state.flex === 'low') {
     alerts.push({ level: 'warn', msg: `Saddle-to-bar drop of ${Math.round(drop)} mm is aggressive for low flexibility.` });
   }
+  if (hipA < 45 && !legErr && !overReach) {
+    alerts.push({ level: 'warn', msg: 'Hip angle is quite closed at the top of the stroke — a taller bar position or shorter cranks may help.' });
+  }
 
-  /* ---- draw ---- */
-  const FRAME = '#3b82f6', FORK = '#93c5fd', WHEEL = '#22314f', RIDER = '#fc4c02',
-        RIDER_FAR = 'rgba(252,76,2,0.35)', HW = 14, GROUND = BB_DROP - WHEEL_R;
+  return { g, H, I, CRANK, rearAxle, frontAxle, headTop, headBot, htDir, staDir, stTop, bb,
+           saddleH, post, saddle, spacers, clamp, bar, hand, hip, femur, shank, torso, arm,
+           headR, shoulder, elbow, head, torsoA, stretch, kneeBDC, hipA, drop,
+           legErr, overReach, alerts };
+}
+
+/* ---------------- static layer ---------------- */
+function renderStatic() {
+  S = computeScene();
+  const { rearAxle, frontAxle, headTop, headBot, stTop, bb, post, saddle, clamp, bar,
+          hand, hip, shoulder, elbow, head, headR, torsoA } = S;
+  const GROUND = BB_DROP - WHEEL_R;
+  const rc = (S.legErr || S.overReach) ? C.riderErr : C.rider;
   const el = [];
-  el.push(line({ x: rearAxle.x - 420, y: GROUND }, { x: frontAxle.x + 420, y: GROUND }, '', 3, '#131c30'));
-  el.push(circle(rearAxle, WHEEL_R, WHEEL, 16));
-  el.push(circle(frontAxle, WHEEL_R, WHEEL, 16));
-  el.push(circle(rearAxle, 26, '#2c3d61', 10));
-  el.push(circle(frontAxle, 26, '#2c3d61', 10));
-  // far-side crank + leg behind the frame
-  el.push(line(bb, pedalFar, '', 10, '#1d2b47'));
-  el.push(line(hip, kneeFar, '', 15, RIDER_FAR));
-  el.push(line(kneeFar, pedalFar, '', 15, RIDER_FAR));
-  // frame
-  el.push(line(bb, rearAxle, '', HW, FRAME));                 // chainstay
-  el.push(line(stTop, rearAxle, '', HW, FRAME));              // seatstay
-  el.push(line(bb, stTop, '', HW, FRAME));                    // seat tube
-  el.push(line(bb, headBot, '', HW, FRAME));                  // down tube
-  el.push(line(stTop, headTop, '', HW, FRAME));               // top tube
-  el.push(line(headTop, headBot, '', HW + 4, FRAME));         // head tube
-  el.push(line(headBot, frontAxle, '', 11, FORK));            // fork
-  el.push(line(stTop, post, '', 9, '#64748b'));               // seatpost
-  el.push(line({ x: saddle.x - 130, y: saddle.y }, { x: saddle.x + 130, y: saddle.y }, '', 13, '#cbd5e1')); // saddle
-  el.push(line(headTop, clamp, '', 12, '#64748b'));           // spacers
-  el.push(line(clamp, bar, '', 11, '#94a3b8'));               // stem
-  // drop bar
+
+  /* ground + shadows */
+  el.push(line({ x: rearAxle.x - 460, y: GROUND }, { x: frontAxle.x + 460, y: GROUND }, 3, C.ground, null, 'butt'));
+  for (const ax of [rearAxle, frontAxle]) {
+    el.push(`<ellipse cx="${P(ax.x)}" cy="${P(-(GROUND - 12))}" rx="230" ry="22" fill="rgba(0,0,0,0.35)"/>`);
+  }
+
+  /* wheels (rims + hubs; spokes live in the dynamic layer) */
+  el.push(circle(rearAxle, WHEEL_R, C.wheel, 17));
+  el.push(circle(frontAxle, WHEEL_R, C.wheel, 17));
+  el.push(circle(rearAxle, WHEEL_R - 26, 'rgba(34,49,79,0.35)', 5));
+  el.push(circle(frontAxle, WHEEL_R - 26, 'rgba(34,49,79,0.35)', 5));
+  el.push(circle(rearAxle, 27, C.hub, 10));
+  el.push(circle(frontAxle, 27, C.hub, 10));
+
+  /* frame */
+  const HW = 15;
+  el.push(line(bb, rearAxle, HW, C.frame));
+  el.push(line(stTop, rearAxle, HW, C.frame));
+  el.push(line(bb, stTop, HW, C.frame));
+  el.push(line(bb, headBot, HW, C.frame));
+  el.push(line(stTop, headTop, HW, C.frame));
+  el.push(line(headTop, headBot, HW + 5, C.frame));
+  el.push(line(headBot, frontAxle, 11, C.fork));
+  el.push(line(stTop, post, 9, C.steelD));
+
+  /* saddle — gentle top curve */
+  el.push(`<path d="M ${P(saddle.x - 132)} ${P(-(saddle.y - 4))} Q ${P(saddle.x - 40)} ${P(-(saddle.y + 14))} ${P(saddle.x + 30)} ${P(-(saddle.y + 4))} L ${P(saddle.x + 128)} ${P(-(saddle.y - 2))}" fill="none" stroke="#cbd5e1" stroke-width="13" stroke-linecap="round"/>`);
+
+  /* cockpit */
+  el.push(line(headTop, clamp, 12, C.steelD));
+  el.push(line(clamp, bar, 11, C.steel));
   el.push(`<path d="M ${P(bar.x)} ${P(-bar.y)} c 55 0 95 8 95 55 c 0 52 -42 72 -78 66" stroke="#cbd5e1" stroke-width="10" fill="none" stroke-linecap="round"/>`);
-  // near crank + pedals
-  el.push(line(bb, pedalNear, '', 11, '#475569'));
-  el.push(circle(bb, 32, '#475569', 11));
-  el.push(line({ x: pedalNear.x - 38, y: pedalNear.y }, { x: pedalNear.x + 38, y: pedalNear.y }, '', 9, '#64748b'));
-  // rider (near side)
-  const riderErr = overReach || legNeeded > (femur + shank) * 0.985;
-  const rc = riderErr ? '#ef4444' : RIDER;
-  el.push(line(hip, kneeNear, '', 16, rc));
-  el.push(line(kneeNear, pedalNear, '', 16, rc));
-  el.push(line(hip, shoulder, '', 17, rc));
-  el.push(line(shoulder, elbow, '', 13, rc));
-  el.push(line(elbow, hood, '', 13, rc));
+  el.push(circle(bar, 9, C.steel, 7, '#0a1120'));
+
+  /* dimension overlay */
+  if (showDims) {
+    const dm = C.dims, dt = C.dimText, fs = 34;
+    // reach (horizontal) + stack (vertical) from BB
+    el.push(line(bb, { x: headTop.x, y: 0 }, 3, dm, '14 12', 'butt'));
+    el.push(line({ x: headTop.x, y: 0 }, headTop, 3, dm, '14 12', 'butt'));
+    el.push(text({ x: headTop.x / 2 - 60, y: -52 }, `REACH ${Math.round(S.g.reach)}`, fs, dt));
+    el.push(text({ x: headTop.x + 26, y: headTop.y / 2 }, `STACK ${Math.round(S.g.stack)}`, fs, dt));
+    // saddle height along seat tube
+    el.push(line(bb, post, 3, dm, '14 12', 'butt'));
+    el.push(text({ x: post.x - 250, y: post.y / 2 }, `SADDLE ${Math.round(S.saddleH)}`, fs, dt));
+    // drop between saddle top and bar clamp
+    el.push(line({ x: saddle.x + 150, y: saddle.y }, { x: clamp.x + 60, y: saddle.y }, 3, dm, '10 10', 'butt'));
+    el.push(line({ x: clamp.x + 60, y: saddle.y }, { x: clamp.x + 60, y: clamp.y }, 3, dm, '10 10', 'butt'));
+    el.push(text({ x: clamp.x + 78, y: (saddle.y + clamp.y) / 2 - 10 }, `DROP ${Math.round(S.drop)}`, fs, dt));
+  }
+
+  /* rider torso + arms + head (static — hands don't move while pedaling) */
+  el.push(line(hip, shoulder, 17, rc));
+  el.push(line(shoulder, elbow, 13, rc));
+  el.push(line(elbow, hand, 13, rc));
   el.push(circle(head, headR, rc, 10, '#0a1120'));
-  el.push(circle(hip, 15, rc, 0, rc));
-  el.push(circle(shoulder, 13, rc, 0, rc));
-  el.push(circle(kneeNear, 12, rc, 0, rc));
+  el.push(joint(shoulder, 13, rc));
+  el.push(joint(elbow, 10, rc));
+  el.push(joint(hip, 14, rc));
 
-  // dynamic viewBox
-  const pts = [rearAxle, frontAxle, headTop, post, saddle, hood, shoulder, head, { x: 0, y: GROUND }];
-  const minX = Math.min(...pts.map(p => p.x)) - WHEEL_R - 80;
-  const maxX = Math.max(...pts.map(p => p.x)) + WHEEL_R + 80;
-  const maxY = Math.max(...pts.map(p => p.y)) + headR + 70;
+  /* torso angle arc at the hip */
+  const aT = Math.atan2(shoulder.y - hip.y, shoulder.x - hip.x);
+  el.push(arc(hip, 120, 0, aT, C.angle, 4));
+  el.push(text({ x: hip.x + 140, y: hip.y + 46 }, `${Math.round(torsoA)}°`, 36, C.rider));
+
+  $('g-static').innerHTML = el.join('');
+
+  /* viewBox — computed once per state change (animation stays inside) */
+  const pts = [rearAxle, frontAxle, headTop, post, saddle, hand, shoulder, head];
+  const minX = Math.min(...pts.map(p => p.x)) - WHEEL_R - 110;
+  const maxX = Math.max(...pts.map(p => p.x)) + WHEEL_R + 110;
+  const maxY = Math.max(...pts.map(p => p.y)) + headR + 80;
   const svg = $('bike-svg');
-  svg.setAttribute('viewBox', `${P(minX)} ${P(-maxY)} ${P(maxX - minX)} ${P(maxY - GROUND + 50)}`);
-  svg.innerHTML = el.join('');
+  svg.setAttribute('viewBox', `${P(minX)} ${P(-maxY)} ${P(maxX - minX)} ${P(maxY - GROUND + 60)}`);
+  $('g-grid').innerHTML = `<rect x="${P(minX)}" y="${P(-maxY)}" width="${P(maxX - minX)}" height="${P(maxY - GROUND + 60)}" fill="url(#bp-grid)"/>`;
 
-  /* ---- metrics & alerts ---- */
-  const sug = state.model === 'custom' ? '—' : suggestedSize(state.model, state.height);
-  $('m-size').innerHTML = state.model === 'custom' ? '—' : `${sug} <small>${state.size === sug ? '(selected)' : `(riding ${state.size})`}</small>`;
-  $('m-saddle').innerHTML = `${Math.round(saddleH)} <small>mm</small>`;
-  $('m-drop').innerHTML = `${Math.round(drop)} <small>mm</small>`;
-  $('m-reach').innerHTML = `${Math.round(hood.x - saddle.x)} <small>mm</small>`;
-  $('m-torso').innerHTML = `${Math.round(torsoA)}<small>°</small>`;
-  $('m-stretch').innerHTML = `${Math.round(stretch * 100)}<small>%</small>`;
+  renderPanel();
+}
+
+/* ---------------- dynamic layer (legs, cranks, spokes) ---------------- */
+let phi = 115 * D2R;   // crank angle from top dead center, clockwise = forward
+function renderDynamic() {
+  if (!S) return;
+  const { bb, hip, femur, shank, rearAxle, frontAxle, CRANK } = S;
+  const rc = (S.legErr || S.overReach) ? C.riderErr : C.rider;
+
+  const pNear = { x: bb.x + CRANK * Math.sin(phi), y: bb.y + CRANK * Math.cos(phi) };
+  const pFar = { x: bb.x - CRANK * Math.sin(phi), y: bb.y - CRANK * Math.cos(phi) };
+  const kN = ik(hip, pNear, femur, shank);
+  const kF = ik(hip, pFar, femur, shank);
+  const kneeN = kN.left.x > kN.right.x ? kN.left : kN.right;
+  const kneeF = kF.left.x > kF.right.x ? kF.left : kF.right;
+
+  /* back layer: far leg + far crank + spokes */
+  const back = [];
+  const wheelDeg = (phi / D2R) * GEAR;
+  for (const ax of [rearAxle, frontAxle]) {
+    const sp = [];
+    for (let k = 0; k < 5; k++) {
+      const a = (k * 72) * D2R;
+      sp.push(`<line x1="${P(ax.x + 34 * Math.cos(a))}" y1="${P(-(ax.y + 34 * Math.sin(a)))}" x2="${P(ax.x + (WHEEL_R - 30) * Math.cos(a))}" y2="${P(-(ax.y + (WHEEL_R - 30) * Math.sin(a)))}" stroke="${C.spoke}" stroke-width="7"/>`);
+    }
+    back.push(`<g transform="rotate(${P(wheelDeg)} ${P(ax.x)} ${P(-ax.y)})">${sp.join('')}</g>`);
+  }
+  back.push(line(bb, pFar, 10, '#1d2b47'));
+  back.push(line({ x: pFar.x - 34, y: pFar.y }, { x: pFar.x + 42, y: pFar.y }, 9, '#31415f'));
+  back.push(line(hip, kneeF, 15, C.riderFar));
+  back.push(line(kneeF, pFar, 15, C.riderFar));
+  $('g-back').innerHTML = back.join('');
+
+  /* front layer: near crank + pedal + near leg + live knee angle */
+  const front = [];
+  front.push(line(bb, pNear, 12, '#475569'));
+  front.push(circle(bb, 34, '#475569', 11));
+  front.push(circle(bb, 10, '#64748b', 0, '#64748b'));
+  front.push(line({ x: pNear.x - 36, y: pNear.y }, { x: pNear.x + 44, y: pNear.y }, 10, C.steelD));
+  front.push(line(hip, kneeN, 16, rc));
+  front.push(line(kneeN, pNear, 16, rc));
+  front.push(joint(kneeN, 12, rc));
+  front.push(circle(pNear, 8, rc, 6, '#0a1120'));
+
+  /* live knee angle arc + label */
+  const kA = jointAngle(kneeN, hip, pNear);
+  const a1 = Math.atan2(hip.y - kneeN.y, hip.x - kneeN.x);
+  const a2 = Math.atan2(pNear.y - kneeN.y, pNear.x - kneeN.x);
+  front.push(arc(kneeN, 78, a1, a2, C.angle, 4));
+  front.push(text({ x: kneeN.x + 96, y: kneeN.y - 14 }, `${Math.round(kA)}°`, 36, C.rider));
+
+  $('g-front').innerHTML = front.join('');
+}
+
+/* ---------------- metrics + alerts panel ---------------- */
+function setDot(id, cls) { $(id).className = 'dot' + (cls ? ' ' + cls : ''); }
+
+function renderPanel() {
+  const sug = state.model === 'custom' ? null : suggestedSize(state.model, state.height);
+  if (sug) {
+    const keys = Object.keys(BIKES[state.model].sizes);
+    const off = Math.abs(keys.indexOf(sug) - keys.indexOf(state.size));
+    $('m-size').innerHTML = `${sug}`;
+    $('s-size').textContent = state.size === sug ? 'matches selected size' : `you selected ${state.size}`;
+    setDot('d-size', off === 0 ? 'ok' : off === 1 ? 'warn' : 'err');
+  } else {
+    $('m-size').textContent = '—';
+    $('s-size').textContent = 'custom geometry';
+    setDot('d-size', '');
+  }
+  $('m-saddle').innerHTML = `${Math.round(S.saddleH)} <small>mm</small>`;
+  $('m-knee').innerHTML = `${Math.round(S.kneeBDC)}<small>°</small>`;
+  setDot('d-knee', S.kneeBDC >= 138 && S.kneeBDC <= 148 ? 'ok' : (S.kneeBDC >= 133 && S.kneeBDC <= 153 ? 'warn' : 'err'));
+  $('m-hip').innerHTML = `${Math.round(S.hipA)}<small>°</small>`;
+  setDot('d-hip', S.hipA >= 52 ? 'ok' : S.hipA >= 45 ? 'warn' : 'err');
+  $('m-torso').innerHTML = `${Math.round(S.torsoA)}<small>°</small>`;
+  $('s-torso').textContent = S.torsoA < 25 ? 'aggressive — pro race' : S.torsoA < 35 ? 'race' : S.torsoA < 45 ? 'sporty' : S.torsoA < 55 ? 'endurance' : 'upright';
+  setDot('d-torso', S.torsoA >= 25 && S.torsoA <= 50 ? 'ok' : (S.torsoA >= 20 && S.torsoA <= 58 ? 'warn' : 'err'));
+  $('m-drop').innerHTML = `${Math.round(S.drop)} <small>mm</small>`;
+  $('m-reach').innerHTML = `${Math.round(S.hand.x - S.saddle.x)} <small>mm</small>`;
+  $('m-stretch').innerHTML = `${Math.round(S.stretch * 100)}<small>%</small>`;
+  setDot('d-stretch', S.stretch < 0.82 ? 'ok' : S.stretch < 0.88 ? 'warn' : 'err');
+
   $('viz-title').textContent = state.model === 'custom'
-    ? 'Custom geometry' : `${BIKES[state.model].name} · ${state.size}`;
+    ? `Custom · ${state.pos}` : `${BIKES[state.model].name} · ${state.size} · ${state.pos}`;
 
-  $('alerts').innerHTML = alerts.map(a => `<div class="alert ${a.level}">${a.msg}</div>`).join('');
+  $('alerts').innerHTML = S.alerts.map(a => `<div class="alert ${a.level}">${a.msg}</div>`).join('');
   const badge = $('fit-badge');
-  if (alerts.some(a => a.level === 'error')) { badge.className = 'fit-badge error'; badge.textContent = 'Check fit'; }
-  else if (alerts.length) { badge.className = 'fit-badge warn'; badge.textContent = 'Borderline'; }
+  if (S.alerts.some(a => a.level === 'error')) { badge.className = 'fit-badge error'; badge.textContent = 'Check fit'; }
+  else if (S.alerts.length) { badge.className = 'fit-badge warn'; badge.textContent = 'Borderline'; }
   else {
     badge.className = 'fit-badge ok';
-    badge.textContent = torsoA < 32 ? 'Race position' : torsoA < 42 ? 'Sporty' : 'Relaxed';
+    badge.textContent = S.torsoA < 32 ? 'Race position' : S.torsoA < 42 ? 'Sporty' : 'Relaxed';
   }
 }
 
-/* ---- wiring ---- */
+/* ---------------- animation loop ---------------- */
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+let playing = !reducedMotion;
+let lastT = 0;
+function loop(t) {
+  if (playing && lastT) {
+    const dt = Math.min(t - lastT, 60);
+    phi += dt * 0.001 * (CADENCE / 60) * 2 * Math.PI;
+    renderDynamic();
+  }
+  lastT = t;
+  requestAnimationFrame(loop);
+}
+
+/* ---------------- URL state ---------------- */
+const HASH_KEYS = ['height', 'inseam', 'flex', 'model', 'size', 'stem', 'crank', 'pos', 'cstack', 'creach', 'csta', 'chta'];
+let hashTimer = null;
+function writeHash() {
+  clearTimeout(hashTimer);
+  hashTimer = setTimeout(() => {
+    const p = new URLSearchParams();
+    HASH_KEYS.forEach(k => p.set(k, state[k]));
+    history.replaceState(null, '', '#' + p.toString());
+  }, 200);
+}
+function readHash() {
+  if (!location.hash) return;
+  const p = new URLSearchParams(location.hash.slice(1));
+  HASH_KEYS.forEach(k => {
+    if (!p.has(k)) return;
+    const v = p.get(k);
+    if (['flex', 'model', 'size', 'pos'].includes(k)) state[k] = v;
+    else { const n = parseFloat(v); if (isFinite(n)) state[k] = n; }
+  });
+  if (!BIKES[state.model]) state.model = 'tarmac';
+  if (!['low', 'med', 'high'].includes(state.flex)) state.flex = 'med';
+  if (!HAND[state.pos]) state.pos = 'hoods';
+}
+
+/* ---------------- wiring ---------------- */
 function fillSizes(selectSuggested) {
   const sel = $('in-size');
   const keys = Object.keys(BIKES[state.model].sizes);
@@ -523,46 +813,107 @@ function fillSizes(selectSuggested) {
   sel.disabled = state.model === 'custom';
 }
 
-const modelSel = $('in-model');
-modelSel.innerHTML = Object.entries(BIKES)
-  .map(([k, b]) => `<option value="${k}">${b.name}${b.type !== 'Custom' ? ` (${b.type})` : ''}</option>`).join('');
-modelSel.value = state.model;
-modelSel.addEventListener('change', () => {
-  state.model = modelSel.value;
-  $('custom-geo').classList.toggle('visible', state.model === 'custom');
-  fillSizes(true);
-  render();
-});
-$('in-size').addEventListener('change', e => { state.size = e.target.value; render(); });
+function update() { renderStatic(); renderDynamic(); writeHash(); }
 
-function bindRange(id, key, fmt) {
-  const el = $(id);
-  el.addEventListener('input', () => {
-    state[key] = parseFloat(el.value);
-    $(id.replace('in-', 'val-')).textContent = fmt(state[key]);
-    if (key === 'height') fillSizes(false);
-    render();
+function initControls() {
+  const modelSel = $('in-model');
+  modelSel.innerHTML = Object.entries(BIKES)
+    .map(([k, b]) => `<option value="${k}">${b.name}${b.type !== 'Custom' ? ` (${b.type})` : ''}</option>`).join('');
+  modelSel.value = state.model;
+  modelSel.addEventListener('change', () => {
+    state.model = modelSel.value;
+    $('custom-geo').classList.toggle('visible', state.model === 'custom');
+    fillSizes(true);
+    update();
+  });
+  $('in-size').addEventListener('change', e => { state.size = e.target.value; update(); });
+  $('in-crank').addEventListener('change', e => { state.crank = parseFloat(e.target.value); update(); });
+
+  const fmt = { height: v => `${v} cm`, inseam: v => `${v} cm`, stem: v => `${v} mm`,
+                cstack: v => `${v} mm`, creach: v => `${v} mm`, csta: v => `${v}°`, chta: v => `${v}°` };
+  for (const key of ['height', 'inseam', 'stem', 'cstack', 'creach', 'csta', 'chta']) {
+    const el = $('in-' + key);
+    el.value = state[key];
+    $('val-' + key).textContent = fmt[key](state[key]);
+    el.addEventListener('input', () => {
+      state[key] = parseFloat(el.value);
+      $('val-' + key).textContent = fmt[key](state[key]);
+      if (key === 'height') fillSizes(false);
+      update();
+    });
+  }
+
+  const wireSeg = (wrapId, attr, key) => {
+    document.querySelectorAll(`#${wrapId} button`).forEach(btn => {
+      btn.classList.toggle('active', btn.dataset[attr] === state[key]);
+      btn.addEventListener('click', () => {
+        document.querySelectorAll(`#${wrapId} button`).forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        state[key] = btn.dataset[attr];
+        update();
+      });
+    });
+  };
+  wireSeg('in-flex', 'flex', 'flex');
+  wireSeg('in-pos', 'pos', 'pos');
+
+  $('in-crank').value = String(state.crank);
+  $('custom-geo').classList.toggle('visible', state.model === 'custom');
+
+  /* viz controls */
+  const playBtn = $('btn-play');
+  const syncPlay = () => {
+    playBtn.textContent = playing ? '⏸ Pause' : '▶ Play';
+    playBtn.classList.toggle('on', playing);
+    playBtn.setAttribute('aria-pressed', playing);
+  };
+  playBtn.addEventListener('click', () => { playing = !playing; syncPlay(); });
+  syncPlay();
+
+  const dimsBtn = $('btn-dims');
+  dimsBtn.addEventListener('click', () => {
+    showDims = !showDims;
+    dimsBtn.classList.toggle('on', showDims);
+    dimsBtn.setAttribute('aria-pressed', showDims);
+    renderStatic();
+  });
+
+  const flash = (btn, ok) => {
+    const orig = btn.textContent;
+    btn.textContent = ok ? '✓ Copied' : '✕ Failed';
+    setTimeout(() => { btn.textContent = orig; }, 1400);
+  };
+  $('btn-link').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(location.href); flash($('btn-link'), true); }
+    catch { flash($('btn-link'), false); }
+  });
+  $('btn-copy').addEventListener('click', async () => {
+    const bikeName = state.model === 'custom' ? 'Custom geometry' : `${BIKES[state.model].name}, size ${state.size}`;
+    const summary = [
+      'Bike Fit — cevenlabs.com',
+      `Rider: ${state.height} cm / ${state.inseam} cm inseam / ${state.flex} flexibility`,
+      `Bike: ${bikeName}, ${state.stem} mm stem, ${state.crank} mm cranks`,
+      `Position: ${state.pos}`,
+      `Saddle height (BB→saddle): ${Math.round(S.saddleH)} mm`,
+      `Saddle→bar drop: ${Math.round(S.drop)} mm`,
+      `Reach to hands: ${Math.round(S.hand.x - S.saddle.x)} mm`,
+      `Knee angle @ bottom of stroke: ${Math.round(S.kneeBDC)}° (target 138–148°)`,
+      `Hip angle @ top of stroke: ${Math.round(S.hipA)}°`,
+      `Torso angle: ${Math.round(S.torsoA)}° · Stretch: ${Math.round(S.stretch * 100)}%`,
+      'Estimates only — not a professional bike fit.'
+    ].join('\n');
+    try { await navigator.clipboard.writeText(summary); flash($('btn-copy'), true); }
+    catch { flash($('btn-copy'), false); }
   });
 }
-bindRange('in-height', 'height', v => `${v} cm`);
-bindRange('in-inseam', 'inseam', v => `${v} cm`);
-bindRange('in-stem', 'stem', v => `${v} mm`);
-bindRange('in-cstack', 'cstack', v => `${v} mm`);
-bindRange('in-creach', 'creach', v => `${v} mm`);
-bindRange('in-csta', 'csta', v => `${v}°`);
-bindRange('in-chta', 'chta', v => `${v}°`);
 
-document.querySelectorAll('#in-flex button').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('#in-flex button').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    state.flex = btn.dataset.flex;
-    render();
-  });
-});
-
-fillSizes(true);
-render();
+/* ---------------- boot ---------------- */
+readHash();
+initControls();
+fillSizes(false);
+renderStatic();
+renderDynamic();
+requestAnimationFrame(loop);
 </script>
 <script>document.querySelectorAll('.js-year').forEach(e => e.textContent = new Date().getFullYear());</script>
 </body>
