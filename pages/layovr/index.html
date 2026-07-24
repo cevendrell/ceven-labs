@@ -261,6 +261,7 @@
     .appstore-badge.tf-badge { background: transparent; color: var(--text); border: 1px solid rgba(255,255,255,0.16); }
     .appstore-badge.tf-badge:hover { border-color: var(--accent); box-shadow: 0 12px 32px rgba(59,130,246,0.14); }
     .appstore-badge.tf-badge .appstore-badge-sub { opacity: 0.55; }
+    .is-soon { opacity: 0.45; cursor: default; pointer-events: none; }
 
     /* FEATURE SHOWCASE (screenshot-led) */
     .showcase { display: flex; flex-direction: column; gap: 5.5rem; margin-bottom: 5.5rem; }
@@ -394,11 +395,10 @@
         <h1 class="hero-h1">Arrive sharp,<br><em>anywhere.</em></h1>
         <p class="hero-tagline">A science-backed jet lag companion for business travelers. Build your circadian plan around your flights and meetings, so you peak when it matters.</p>
         <div class="hero-cta">
-          <a href="PLACEHOLDER-APPSTORE-URL" class="btn btn-accent">PLACEHOLDER — Download on App Store</a>
+          <a href="https://testflight.apple.com/join/VdCAJYk7" class="btn btn-accent" target="_blank" rel="noopener">Join the TestFlight beta</a>
           <a href="#how" class="btn btn-outline">How it works</a>
         </div>
-        <p class="beta-cta"><a href="PLACEHOLDER-TESTFLIGHT-URL">PLACEHOLDER — Join the TestFlight beta &rarr;</a></p>
-        <p class="hero-note" style="margin-top:0.75rem; opacity:0; animation: fadeUp 0.8s 0.8s forwards;">Free to start · iOS 17+ · Requires iPhone</p>
+        <p class="hero-note" style="margin-top:1.1rem; opacity:0; animation: fadeUp 0.8s 0.8s forwards;">Free to start · iOS 17+ · iPhone · App Store release coming soon</p>
       </div>
       <div class="hero-visual">
         <div class="hero-carousel" id="heroCarousel">
@@ -566,7 +566,7 @@
             <li>Airport lounge directory</li>
             <li>1 saved trip</li>
           </ul>
-          <a href="#cta" class="pricing-cta ghost">Download free</a>
+          <a href="https://testflight.apple.com/join/VdCAJYk7" class="pricing-cta ghost" target="_blank" rel="noopener">Join the free beta</a>
         </div>
         <div class="pricing-card featured wow d1">
           <div class="pricing-badge">Best value</div>
@@ -585,7 +585,7 @@
             <li>Aircraft cabin notes</li>
             <li>Unlimited saved trips &amp; history</li>
           </ul>
-          <a href="#cta" class="pricing-cta accent">PLACEHOLDER — Get Premium</a>
+          <span class="pricing-cta accent is-soon" aria-disabled="true">Coming soon</span>
         </div>
       </div>
       <p class="pricing-disclaimer wow d2">Prices are provisional and subject to change before launch. Premium is offered as an auto-renewing subscription. Cancel anytime in iOS Settings. Subscriptions managed by Apple.</p>
@@ -596,22 +596,22 @@
   <section id="cta">
     <div class="section-inner" id="notify">
       <h2 class="wow">Ready to arrive sharp?</h2>
-      <p class="wow d1">LayOvr is in beta now. Join the TestFlight to try it today — or grab it on the App Store the moment it launches.</p>
+      <p class="wow d1">LayOvr is in beta now. Join the TestFlight to try it today, with the full App Store release coming soon.</p>
       <div class="wow d2 cta-badges">
-        <a href="PLACEHOLDER-APPSTORE-URL" class="appstore-badge">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-          <div class="appstore-badge-text">
-            <span class="appstore-badge-sub">PLACEHOLDER — Download on the</span>
-            <span class="appstore-badge-title">App Store</span>
-          </div>
-        </a>
-        <a href="PLACEHOLDER-TESTFLIGHT-URL" class="appstore-badge tf-badge">
+        <a href="https://testflight.apple.com/join/VdCAJYk7" class="appstore-badge" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2 3 20h18L12 2zm0 4.6L17.6 18H6.4L12 6.6z"/></svg>
           <div class="appstore-badge-text">
-            <span class="appstore-badge-sub">PLACEHOLDER — Test the beta on</span>
+            <span class="appstore-badge-sub">Test the beta on</span>
             <span class="appstore-badge-title">TestFlight</span>
           </div>
         </a>
+        <span class="appstore-badge tf-badge is-soon" aria-disabled="true">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          <div class="appstore-badge-text">
+            <span class="appstore-badge-sub">Coming soon to the</span>
+            <span class="appstore-badge-title">App Store</span>
+          </div>
+        </span>
       </div>
       <p class="cta-note wow d3">iOS 17+ · iPhone · Free to start · No credit card required</p>
     </div>
