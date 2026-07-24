@@ -106,7 +106,7 @@
     .hero-inner {
       position: relative; z-index: 2;
       max-width: 1100px; margin: 0 auto; padding: 0 32px; width: 100%;
-      display: grid; grid-template-columns: 1.1fr 1fr; gap: 5rem; align-items: center;
+      display: grid; grid-template-columns: 1fr 1.05fr; gap: 4rem; align-items: center;
     }
     .hero-app-name {
       font-family: 'JetBrains Mono', monospace;
@@ -114,7 +114,6 @@
       color: var(--accent); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;
       opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
     }
-    .hero-app-name img { width: 28px; height: 28px; border-radius: 7px; }
     .hero-h1 {
       font-size: clamp(3.4rem, 7vw, 5.8rem); font-weight: 800;
       letter-spacing: -0.05em; line-height: 0.95; color: var(--text);
@@ -144,14 +143,10 @@
       display: flex; flex-direction: column; align-items: center; gap: 1.5rem;
       opacity: 0; animation: fadeUp 0.8s 0.4s forwards;
     }
-    .app-icon-large {
-      width: 128px; height: 128px; border-radius: 28px; overflow: hidden;
-      box-shadow: 0 40px 100px rgba(0,0,0,0.6), 0 0 0 1px rgba(59,130,246,0.2);
-    }
-    .app-icon-large img { width: 100%; height: 100%; object-fit: cover; }
     .hero-screenshot-row {
-      display: flex; gap: 12px; justify-content: center;
+      display: flex; gap: 9px; justify-content: center; align-items: center;
     }
+    .hero-screenshot-row .phone-shot { width: 158px; border-radius: 24px; }
     .phone-shot {
       width: 124px; border-radius: 20px; overflow: hidden;
       border: 1px solid rgba(255,255,255,0.09);
@@ -177,14 +172,19 @@
     #problem .section-header h2 { font-size: clamp(2rem, 4.5vw, 3.2rem); font-weight: 800; letter-spacing: -0.04em; color: var(--cream-dark); margin-bottom: 0.75rem; }
     #problem .section-header p { font-size: 0.97rem; color: var(--cream-dim); max-width: 560px; margin: 0 auto; line-height: 1.8; }
     .problem-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-    .problem-card {
-      background: #f9f8f6; border: 1px solid #e8e4de; border-radius: 16px; padding: 32px;
-      transition: box-shadow 0.3s;
+    .problem-tile {
+      position: relative; border-radius: 18px; padding: 34px 30px; min-height: 208px;
+      display: flex; flex-direction: column; justify-content: center; overflow: hidden;
+      color: #fff; box-shadow: 0 12px 34px rgba(0,0,0,0.12);
     }
-    .problem-card:hover { box-shadow: 0 12px 40px rgba(0,0,0,0.08); }
-    .problem-card .p-icon { font-size: 2rem; margin-bottom: 1rem; }
-    .problem-card h3 { font-size: 1rem; font-weight: 700; color: var(--cream-dark); margin-bottom: 0.6rem; }
-    .problem-card p { font-size: 0.875rem; color: var(--cream-dim); line-height: 1.7; }
+    .problem-tile.tile-a { background: linear-gradient(150deg, #1e40af, #2563eb); }
+    .problem-tile.tile-b { background: linear-gradient(150deg, #0f766e, #0e7490); }
+    .problem-tile.tile-c { background: linear-gradient(150deg, #b45309, #c2410c); }
+    .problem-tile h3 { font-size: 1.2rem; font-weight: 700; letter-spacing: -0.01em; line-height: 1.25; transition: transform 0.45s cubic-bezier(0.16,1,0.3,1); }
+    .problem-tile p { font-size: 0.9rem; line-height: 1.65; color: rgba(255,255,255,0.92); max-height: 0; opacity: 0; overflow: hidden; margin-top: 0; transition: max-height 0.45s ease, opacity 0.4s ease, margin-top 0.45s ease; }
+    .problem-tile:hover h3 { transform: translateY(-6px); }
+    .problem-tile:hover p { max-height: 220px; opacity: 1; margin-top: 14px; }
+    @media (hover: none) { .problem-tile p { max-height: 220px; opacity: 1; margin-top: 14px; } .problem-tile h3 { transform: none; } }
     @media (max-width: 768px) { .problem-grid { grid-template-columns: 1fr; } }
 
     /* HOW IT WORKS */
@@ -219,21 +219,8 @@
     .features-header { margin-bottom: 64px; }
     .features-header h2 { font-size: clamp(2rem, 4.5vw, 3rem); font-weight: 800; letter-spacing: -0.04em; color: #fff; margin-bottom: 0.75rem; }
     .features-header p { color: var(--dim); font-size: 0.97rem; max-width: 560px; line-height: 1.8; }
-    .features-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
-    .feature-card {
-      padding: 32px; border: 1px solid var(--line); border-radius: 16px;
-      background: rgba(255,255,255,0.015);
-      transition: border-color 0.3s, background 0.3s;
-    }
-    .feature-card:hover { border-color: rgba(59,130,246,0.2); background: rgba(59,130,246,0.03); }
-    .feature-card .f-icon { font-size: 1.75rem; margin-bottom: 1.25rem; }
-    .feature-card h3 { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; letter-spacing: -0.01em; }
-    .feature-card p { font-size: 0.875rem; color: var(--dim); line-height: 1.75; }
-    .feature-card.premium { border-color: rgba(59,130,246,0.15); }
-    .feature-card.premium h3::after { content: ' ✦'; color: var(--accent); font-size: 0.7rem; vertical-align: super; }
     .premium-note { font-size: 0.78rem; color: var(--mute); margin-top: 32px; }
     .premium-note span { color: var(--accent); }
-    @media (max-width: 768px) { .features-grid { grid-template-columns: 1fr; } }
 
     /* TestFlight beta CTA (under App Store links) */
     .beta-cta { margin-top: 1rem; font-size: 0.85rem; opacity: 0; animation: fadeUp 0.8s 0.75s forwards; }
@@ -259,6 +246,15 @@
       .showcase-row.reverse .showcase-visual { order: 0; }
       .showcase-visual .phone-shot { width: 210px; }
     }
+
+    /* FEATURE LIST (professional bullets) */
+    .feature-list { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 0 3.5rem; }
+    .feature-list li { display: flex; gap: 0.9rem; align-items: flex-start; padding: 1.5rem 0; border-top: 1px solid var(--line); }
+    .fl-check { color: var(--accent); flex-shrink: 0; font-weight: 700; font-size: 0.95rem; line-height: 1.5; }
+    .fl-body h4 { font-size: 0.98rem; font-weight: 700; color: var(--text); margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.55rem; flex-wrap: wrap; letter-spacing: -0.01em; }
+    .fl-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.56rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); border: 1px solid rgba(59,130,246,0.3); border-radius: 999px; padding: 2px 7px; font-weight: 500; }
+    .fl-body p { font-size: 0.85rem; color: var(--dim); line-height: 1.65; }
+    @media (max-width: 768px) { .feature-list { grid-template-columns: 1fr; gap: 0; } }
 
     /* PRICING */
     #pricing {
@@ -363,10 +359,7 @@
   <section id="hero">
     <div class="hero-inner">
       <div>
-        <div class="hero-app-name">
-          <img src="../../media/shared/layovr-icon.png" alt="LayOvr icon">
-          LayOvr by Ceven Labs
-        </div>
+        <div class="hero-app-name">LayOvr by Ceven Labs</div>
         <h1 class="hero-h1">Arrive sharp,<br><em>anywhere.</em></h1>
         <p class="hero-tagline">A science-backed jet lag companion for business travelers. Build your circadian plan around your flights and meetings, so you peak when it matters.</p>
         <div class="hero-cta">
@@ -377,13 +370,10 @@
         <p class="hero-note" style="margin-top:0.75rem; opacity:0; animation: fadeUp 0.8s 0.8s forwards;">Free to start · iOS 17+ · Requires iPhone</p>
       </div>
       <div class="hero-visual">
-        <div class="app-icon-large">
-          <img src="../../media/shared/layovr-icon.png" alt="LayOvr">
-        </div>
         <div class="hero-screenshot-row">
           <div class="phone-shot"><img src="../../media/layovr/02_plan.png" alt="LayOvr trip plan — day-by-day sleep-shift overview" loading="lazy"></div>
           <div class="phone-shot featured"><img src="../../media/layovr/01_now.png" alt="LayOvr Now screen — your next action with a live countdown" loading="lazy"></div>
-          <div class="phone-shot"><img src="../../media/layovr/03_science.png" alt="LayOvr — the circadian science behind your plan" loading="lazy"></div>
+          <div class="phone-shot"><img src="../../media/layovr/04_lounges.png" alt="LayOvr lounge directory across your connecting airports" loading="lazy"></div>
         </div>
       </div>
     </div>
@@ -398,18 +388,15 @@
         <p>Existing apps are generic. None of them account for your specific schedule, meetings, or the way your body actually works across time zones.</p>
       </div>
       <div class="problem-grid">
-        <div class="problem-card wow">
-          <div class="p-icon">😴</div>
+        <div class="problem-tile tile-a wow">
           <h3>Generic plans don't fit your trip</h3>
           <p>Off-the-shelf advice ignores your actual flights, layovers, and the specific meeting you can't show up tired to.</p>
         </div>
-        <div class="problem-card wow d1">
-          <div class="p-icon">☕</div>
+        <div class="problem-tile tile-b wow d1">
           <h3>Caffeine and naps at the wrong time</h3>
           <p>Most people guess at coffee timing. Done wrong, it pushes your circadian clock the wrong direction and worsens jet lag.</p>
         </div>
-        <div class="problem-card wow d2">
-          <div class="p-icon">✈️</div>
+        <div class="problem-tile tile-c wow d2">
           <h3>Delayed flights derail everything</h3>
           <p>When your connection is delayed by two hours, your whole plan shifts. No existing app replans around that in real time.</p>
         </div>
@@ -474,48 +461,53 @@
         </div>
 
         <div class="showcase-row wow">
-          <div class="showcase-visual"><div class="phone-shot"><img src="../../media/layovr/03_science.png" alt="LayOvr explaining the circadian science behind the plan" loading="lazy"></div></div>
+          <div class="showcase-visual"><div class="phone-shot"><img src="../../media/layovr/04_lounges.png" alt="LayOvr lounge directory across connecting airports" loading="lazy"></div></div>
           <div class="showcase-text">
-            <span class="showcase-tag">The science, in plain terms</span>
-            <h3>Real chronobiology, not guesswork.</h3>
-            <p>Every recommendation traces back to the same science used for astronaut adaptation: the two-process sleep model, the light phase-response curve, and caffeine's adenosine half-life — each step explained so you know why it works.</p>
+            <span class="showcase-tag">Layover intelligence</span>
+            <h3>Turn a layover into recovery.</h3>
+            <p>Find business lounges across your connecting airports, with strategic nap timing and shower and hydration guidance for the stopover — so a long layover works with your body clock instead of against it.</p>
           </div>
         </div>
       </div>
 
-      <div class="features-grid">
-        <div class="feature-card wow">
-          <div class="f-icon">🧬</div>
-          <h3>Offline circadian engine</h3>
-          <p>The two-process sleep model (Process S + C) runs entirely on-device in Swift. Airplane mode is the use case. No server required for your plan.</p>
-        </div>
-        <div class="feature-card wow d1">
-          <div class="f-icon">🎯</div>
-          <h3>Meeting-anchored optimization</h3>
-          <p>Name the moment you need to peak. LayOvr reverse-engineers your entire circadian schedule to maximise alertness at that exact time.</p>
-        </div>
-        <div class="feature-card wow d2 premium">
-          <div class="f-icon">🛫</div>
-          <h3>Live flight lookup & delay re-plan</h3>
-          <p>Search by flight number. When your connection is delayed, LayOvr replans your entire circadian schedule around the new timing.</p>
-        </div>
-        <div class="feature-card wow d3 premium">
-          <div class="f-icon">❤️</div>
-          <h3>HealthKit personalization</h3>
-          <p>Read-only access to your sleep history and HRV automatically derives your chronotype and tightens the model over time. No watch required.</p>
-        </div>
-        <div class="feature-card wow">
-          <div class="f-icon">🛋️</div>
-          <h3>Lounge & layover intelligence</h3>
-          <p>Database of 50+ business lounges with terminal wayfinding. Layover blocks get strategic nap suggestions and lounge-specific guidance.</p>
-        </div>
-        <div class="feature-card wow d1 premium">
-          <div class="f-icon">🔁</div>
-          <h3>Multi-leg & multi-city trips</h3>
-          <p>Full itinerary support: CPH → DXB → PEK with a layover, or a four-city tour. The engine handles complex routes cleanly.</p>
-        </div>
-      </div>
-      <p class="premium-note wow d2"><span>✦ Premium</span> features require a LayOvr Premium subscription.</p>
+      <ul class="feature-list wow">
+        <li>
+          <span class="fl-check">✓</span>
+          <div class="fl-body">
+            <h4>Offline circadian engine</h4>
+            <p>The two-process sleep model runs entirely on-device. Airplane mode is the use case — no server required for your plan.</p>
+          </div>
+        </li>
+        <li>
+          <span class="fl-check">✓</span>
+          <div class="fl-body">
+            <h4>Meeting-anchored optimization <span class="fl-tag">Premium</span></h4>
+            <p>Name the moment you need to peak. LayOvr reverse-engineers your whole schedule to maximise alertness at that exact time.</p>
+          </div>
+        </li>
+        <li>
+          <span class="fl-check">✓</span>
+          <div class="fl-body">
+            <h4>Live flight lookup &amp; delay re-plan <span class="fl-tag">Premium</span></h4>
+            <p>Search by flight number. When your connection is delayed, LayOvr replans your entire schedule around the new timing.</p>
+          </div>
+        </li>
+        <li>
+          <span class="fl-check">✓</span>
+          <div class="fl-body">
+            <h4>Lounge &amp; layover intelligence</h4>
+            <p>A directory of business lounges across your connecting airports, with strategic nap suggestions for every layover block.</p>
+          </div>
+        </li>
+        <li>
+          <span class="fl-check">✓</span>
+          <div class="fl-body">
+            <h4>Multi-leg &amp; multi-city trips <span class="fl-tag">Premium</span></h4>
+            <p>Full itinerary support: CPH → DXB → PEK with a layover, or a four-city tour. Complex routes handled cleanly.</p>
+          </div>
+        </li>
+      </ul>
+      <p class="premium-note wow d2"><span>Premium</span> features require a LayOvr Premium subscription.</p>
     </div>
   </section>
 
@@ -525,7 +517,7 @@
       <div class="pricing-header wow">
         <span class="eyebrow">Pricing</span>
         <h2>Start free. Go premium when it clicks.</h2>
-        <p>The science engine is always free. Premium unlocks live flight data, multi-leg trips, and HealthKit personalization.</p>
+        <p>The science engine is always free. Premium unlocks meeting-anchored optimization, live flight data, and multi-leg trips.</p>
       </div>
       <div class="pricing-grid">
         <div class="pricing-card wow">
@@ -539,7 +531,7 @@
             <li>Single round-trip planning</li>
             <li>Manual flight entry</li>
             <li>Sleep, light &amp; caffeine windows</li>
-            <li>60+ airport lounge database</li>
+            <li>Airport lounge directory</li>
             <li>1 saved trip</li>
           </ul>
           <a href="#cta" class="pricing-cta ghost">Download free</a>
@@ -553,13 +545,14 @@
           <div class="pricing-divider"></div>
           <ul class="pricing-features">
             <li>Everything in Free</li>
+            <li>Meeting-anchored optimization</li>
             <li>Live flight lookup by flight number</li>
             <li>Real-time delay re-planning</li>
             <li>Multi-leg &amp; multi-city trips</li>
             <li>Return leg + post-trip recovery</li>
-            <li>HealthKit personalization</li>
+            <li>Full airport database</li>
+            <li>Aircraft cabin notes</li>
             <li>Unlimited saved trips &amp; history</li>
-            <li>Per-aircraft concierge notes</li>
           </ul>
           <a href="#cta" class="pricing-cta accent">PLACEHOLDER — Get Premium</a>
         </div>
