@@ -7,7 +7,7 @@ The repo root is the working directory for all edits.
 ## Site structure
 Static HTML site. No build step — edits to `.html` files are the final output.
 - `index.html` — homepage (Ceven Labs company landing page)
-- `pages/layovr/` — LayOvr app marketing page
+- `layovr/` — LayOvr app marketing page
 - `pages/solutions/` — solutions overview; `pages/solutions/bike-fit/` — Bike Fit web tool
 - `pages/about/` — About Ceven Labs (company info, CVR, founder)
 - `pages/support/` — Support & FAQ (Apple App Store support URL)
@@ -35,7 +35,7 @@ Strings marked `PLACEHOLDER` (in caps) need to be filled in before launch:
 These pages are specifically required for App Store Connect:
 - **Privacy Policy URL**: `pages/legal/privacy-policy.html`
 - **Support URL**: `pages/support/index.html`
-- **Marketing URL**: `pages/layovr/index.html`
+- **Marketing URL**: `layovr/index.html`
 
 ## Design tokens
 Color palette (shared across all pages):
