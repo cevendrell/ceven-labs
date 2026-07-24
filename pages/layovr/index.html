@@ -655,7 +655,7 @@
     const slides = Array.from(car.querySelectorAll('.hc-slide'));
     const n = slides.length;
     if (!n) return;
-    let active = 1; // start on the featured "Now" screen
+    let active = 0; // start on the CPH–SFO plan overview
     let timer = null;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     function render() {
