@@ -109,11 +109,16 @@
       display: grid; grid-template-columns: 1fr 1.05fr; gap: 4rem; align-items: center;
     }
     .hero-app-name {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.72rem; letter-spacing: 0.24em; text-transform: uppercase;
-      color: var(--accent); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 1.15rem; letter-spacing: -0.01em; text-transform: none;
+      color: var(--dim); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.85rem;
       opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
     }
+    .hero-app-name .app-mark {
+      width: 46px; height: 46px; border-radius: 11px; flex-shrink: 0;
+      box-shadow: 0 3px 14px rgba(0,0,0,0.45);
+    }
+    .hero-app-name strong { color: var(--text); font-weight: 700; }
     .hero-h1 {
       font-size: clamp(3.4rem, 7vw, 5.8rem); font-weight: 800;
       letter-spacing: -0.05em; line-height: 0.95; color: var(--text);
@@ -334,6 +339,7 @@
     /* CTA */
     #cta { background: var(--navy); padding: 80px 0; position: relative; z-index: 2; text-align: center; border-top: 1px solid var(--line); }
     #cta::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(59,130,246,0.06) 0%, transparent 70%); pointer-events: none; }
+    #cta .cta-icon { width: 72px; height: 72px; border-radius: 17px; margin: 0 auto 1.5rem; display: block; box-shadow: 0 6px 24px rgba(0,0,0,0.5); }
     #cta h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; letter-spacing: -0.03em; color: #fff; margin-bottom: 1rem; }
     #cta p { color: var(--dim); font-size: 0.97rem; margin-bottom: 2rem; max-width: 480px; margin-left: auto; margin-right: auto; line-height: 1.8; }
     .appstore-badge { display: inline-flex; align-items: center; gap: 0.75rem; background: #fff; border-radius: 12px; padding: 0.85rem 1.5rem; transition: all 0.25s; color: #000; }
@@ -391,7 +397,7 @@
   <section id="hero">
     <div class="hero-inner">
       <div>
-        <div class="hero-app-name">LayOvr by Ceven Labs</div>
+        <div class="hero-app-name"><img class="app-mark" src="../media/shared/layovr-icon.png" alt="LayOvr app icon"><span><strong>LayOvr</strong> by Ceven Labs</span></div>
         <h1 class="hero-h1">Arrive sharp,<br><em>anywhere.</em></h1>
         <p class="hero-tagline">A science-backed jet lag companion for business travelers. Build your circadian plan around your flights and meetings, so you peak when it matters.</p>
         <div class="hero-cta">
@@ -595,6 +601,7 @@
   <!-- CTA / NOTIFY -->
   <section id="cta">
     <div class="section-inner" id="notify">
+      <img class="cta-icon wow" src="../media/shared/layovr-icon.png" alt="LayOvr app icon">
       <h2 class="wow">Ready to arrive sharp?</h2>
       <p class="wow d1">LayOvr is in beta now. Join the TestFlight to try it today, with the full App Store release coming soon.</p>
       <div class="wow d2 cta-badges">
