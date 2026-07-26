@@ -886,6 +886,19 @@ function tube(a, b, wa, wb, fill, stroke) {
     { x: a.x - nx * wa / 2, y: a.y - ny * wa / 2 }
   ], fill, stroke, 2);
 }
+/* External tangent between two circles, the line a real chain would take.
+   Returns the two touch points. sign picks which side: -1 upper, +1 lower.
+   Derivation: the touch points are c1 + r1*u and c2 + r2*u for a shared unit
+   normal u, and the connecting line is perpendicular to u, which requires
+   D·u = r1 - r2 where D = c2 - c1. */
+function tangent(c1, r1, c2, r2, sign) {
+  const dx = c2.x - c1.x, dy = c2.y - c1.y;
+  const D = Math.hypot(dx, dy) || 1;
+  const a = Math.atan2(dy, dx) + sign * Math.acos(Math.max(-1, Math.min(1, (r1 - r2) / D)));
+  const u = { x: Math.cos(a), y: Math.sin(a) };
+  return [{ x: c1.x + r1 * u.x, y: c1.y + r1 * u.y },
+          { x: c2.x + r2 * u.x, y: c2.y + r2 * u.y }];
+}
 /* Annulus drawn as a stroked circle at the mid radius. Used for rims and tyres. */
 function ring(c, rIn, rOut, fill) {
   const rm = (rIn + rOut) / 2;
@@ -1073,7 +1086,9 @@ function renderStatic() {
   S = computeScene();
   const { rearAxle, frontAxle, headTop, headBot, htDir, staDir, stTop, bb, post, saddle,
           clamp, bar, hand, hip, shoulder, elbow, head, headR, torsoA, sty, GROUND } = S;
-  const rc = (S.legErr || S.overReach) ? C.riderErr : C.rider;
+  const bad = S.legErr || S.overReach;
+  const rc = bad ? C.riderErr : C.rider;        // gradient, for filled limbs
+  const rcFlat = bad ? C.riderErr : C.riderFlat; // solid, for strokes and joints
   const paint = PAINT[sty.paint];
   $('pg0').setAttribute('stop-color', paint[0]);
   $('pg1').setAttribute('stop-color', paint[1]);
@@ -1131,15 +1146,31 @@ function renderStatic() {
   /* highlight along the top of the down tube, sells the carbon finish */
   el.push(line({ x: bb.x + 14, y: bb.y - 6 }, { x: headBot.x + 4, y: headBot.y - 8 }, 3, 'rgba(255,255,255,0.13)', null, 'butt'));
 
-  /* drivetrain */
-  const chainringR = 101;
+  /* drivetrain: chainring, cassette, derailleur and a chain that actually
+     runs on tangents. Top run rides from chainring to cassette; the lower
+     run drops back to the jockey wheel and climbs the front of the cassette. */
+  const CR = 101;                                   // about a 50t chainring
+  const COG = 58;                                   // about a 30t sprocket
+  const JR = 22;                                    // jockey wheel
+  const jockey = { x: rearAxle.x + 26, y: rearAxle.y - 96 };
+
   el.push(disc(bb, 40, '#3d4a63'));
-  el.push(circle(bb, chainringR, C.cassette, 5));
-  el.push(circle(bb, chainringR - 13, 'rgba(124,138,168,0.4)', 3));
-  el.push(circle(rearAxle, 58, C.cassette, 6));
+  el.push(circle(bb, CR, C.cassette, 5));
+  el.push(circle(bb, CR - 13, 'rgba(124,138,168,0.4)', 3));
+  el.push(circle(rearAxle, COG, C.cassette, 6));
   el.push(circle(rearAxle, 40, 'rgba(124,138,168,0.5)', 4));
-  el.push(line({ x: bb.x, y: chainringR }, { x: rearAxle.x, y: rearAxle.y + 58 }, 4, C.chain, null, 'butt'));
-  el.push(line({ x: bb.x, y: -chainringR }, { x: rearAxle.x + 60, y: rearAxle.y - 34 }, 4, C.chain, null, 'butt'));
+
+  /* derailleur cage hanging off the dropout, so the pulley is not floating */
+  el.push(line({ x: rearAxle.x + 10, y: rearAxle.y - 32 }, jockey, 7, '#46536e'));
+  el.push(circle(jockey, JR, C.cassette, 5));
+  el.push(disc(jockey, 6, '#7c8aa8'));
+
+  const [ct1, ct2] = tangent(bb, CR, rearAxle, COG, -1);
+  el.push(line(ct1, ct2, 5, C.chain, null, 'butt'));
+  const [cb1, cb2] = tangent(bb, CR, jockey, JR, 1);
+  el.push(line(cb1, cb2, 5, C.chain, null, 'butt'));
+  const [cj1, cj2] = tangent(jockey, JR, rearAxle, COG, -1);
+  el.push(line(cj1, cj2, 5, C.chain, null, 'butt'));
 
   /* disc rotors and calipers, the modern giveaway */
   for (const ax of [rearAxle, frontAxle]) {
@@ -1217,23 +1248,17 @@ function renderStatic() {
   el.push(tube(elbow, hand, 21, 15, rc));
   el.push(disc(hand, 15, C.skin));
 
-  /* aero helmet: ellipse aligned to the torso lean, with a tail */
-  const hAng = -torsoA * 0.55;
-  el.push(`<g transform="rotate(${P(hAng)} ${P(head.x)} ${P(-head.y)})">
-    <ellipse cx="${P(head.x)}" cy="${P(-head.y)}" rx="${P(headR * 1.24)}" ry="${P(headR * 0.94)}" fill="${rc}"/>
-    <path d="M ${P(head.x - headR * 1.1)} ${P(-head.y - headR * 0.2)} L ${P(head.x - headR * 2.0)} ${P(-head.y + headR * 0.5)} L ${P(head.x - headR * 0.7)} ${P(-head.y + headR * 0.72)} Z" fill="${rc}"/>
-    <ellipse cx="${P(head.x + headR * 0.5)} " cy="${P(-head.y + headR * 0.42)}" rx="${P(headR * 0.62)}" ry="${P(headR * 0.34)}" fill="rgba(10,17,32,0.62)"/>
-    <path d="M ${P(head.x - headR * 0.9)} ${P(-head.y - headR * 0.62)} Q ${P(head.x)} ${P(-head.y - headR * 1.06)} ${P(head.x + headR * 0.86)} ${P(-head.y - headR * 0.4)}" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="5"/>
-  </g>`);
+  /* head */
+  el.push(circle(head, headR, rcFlat, 10, '#0a1120'));
 
-  el.push(joint(shoulder, 13, C.riderFlat));
-  el.push(joint(elbow, 10, C.riderFlat));
-  el.push(joint(hip, 14, C.riderFlat));
+  el.push(joint(shoulder, 13, rcFlat));
+  el.push(joint(elbow, 10, rcFlat));
+  el.push(joint(hip, 14, rcFlat));
 
   /* torso angle arc at the hip */
   const aT = Math.atan2(shoulder.y - hip.y, shoulder.x - hip.x);
   el.push(arc(hip, 128, 0, aT, C.angle, 4));
-  el.push(text({ x: hip.x + 148, y: hip.y + 46 }, `${Math.round(torsoA)}°`, 36, C.riderFlat));
+  el.push(text({ x: hip.x + 148, y: hip.y + 46 }, `${Math.round(torsoA)}°`, 36, rcFlat));
 
   $('g-static').innerHTML = el.join('');
 
@@ -1257,7 +1282,9 @@ let phi = 115 * D2R;
 function renderDynamic() {
   if (!S) return;
   const { bb, hip, femur, tibia, rearAxle, frontAxle, CRANK, RIM_IN } = S;
-  const rc = (S.legErr || S.overReach) ? C.riderErr : C.rider;
+  const bad = S.legErr || S.overReach;
+  const rc = bad ? C.riderErr : C.rider;
+  const rcFlat = bad ? C.riderErr : C.riderFlat;
 
   const pNear = { x: bb.x + CRANK * Math.sin(phi), y: bb.y + CRANK * Math.cos(phi) };
   const pFar = { x: bb.x - CRANK * Math.sin(phi), y: bb.y - CRANK * Math.cos(phi) };
@@ -1300,14 +1327,14 @@ function renderDynamic() {
     { x: aNear.x - 16, y: aNear.y + 6 }, { x: pNear.x + 56, y: pNear.y + 20 },
     { x: pNear.x + 58, y: pNear.y + 2 }, { x: aNear.x - 14, y: aNear.y - 14 }
   ], C.shoe));
-  front.push(joint(kneeN, 12, C.riderFlat));
-  front.push(joint(aNear, 9, C.riderFlat));
+  front.push(joint(kneeN, 12, rcFlat));
+  front.push(joint(aNear, 9, rcFlat));
 
   const kA = jointAngle(kneeN, hip, aNear);
   const a1 = Math.atan2(hip.y - kneeN.y, hip.x - kneeN.x);
   const a2 = Math.atan2(aNear.y - kneeN.y, aNear.x - kneeN.x);
   front.push(arc(kneeN, 84, a1, a2, C.angle, 4));
-  front.push(text({ x: kneeN.x + 102, y: kneeN.y - 14 }, `${Math.round(kA)}°`, 40, C.riderFlat));
+  front.push(text({ x: kneeN.x + 102, y: kneeN.y - 14 }, `${Math.round(kA)}°`, 40, rcFlat));
 
   $('g-front').innerHTML = front.join('');
 }
