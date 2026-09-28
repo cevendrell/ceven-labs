@@ -32,7 +32,7 @@
 <!-- Dark only. There is no light mode and no theme toggle: an observatory is
      read at night, and one palette rendered well beats two rendered adequately. -->
 <meta name="color-scheme" content="dark">
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
 /* ─────────────────────────────────────────────────────────────────────────
    Tokens. Dark only.
@@ -103,13 +103,13 @@ button, input, textarea, select { font:inherit; color:inherit; }
 #topbar { position:sticky; top:0; z-index:80;
           background:#05164d; color:var(--on-navy);
           border-bottom:1px solid rgba(255,255,255,0.06); }
-.bar { max-width:1240px; margin:0 auto; padding:0 var(--pad);
-       display:flex; align-items:center; gap:20px; min-height:56px; flex-wrap:wrap; }
+.bar { display:flex; align-items:center; gap:20px; flex-wrap:wrap;
+       padding:1.25rem 2.5rem; }
 /* The bar needs three rows on a phone. Pinning a quarter of the screen for it
    is a worse trade than making the reader scroll up for the nav, so below this
    width it scrolls away with the page. */
 @media (max-width:760px){
-  .bar { padding:10px var(--pad); gap:10px; }
+  .bar { padding: 1rem 1.5rem; gap:10px; }
   .mark { order:0; }
   #nav  { order:2; }
 }
@@ -117,17 +117,18 @@ button, input, textarea, select { font:inherit; color:inherit; }
 /* Identity strip: the CL mark and the Ceven Labs wordmark are the
    same across every product's nav, so the family reads as one. The
    product's own wordmark follows behind a hair-thin divider. */
-.nav-logo { display:flex; align-items:center; gap:.55rem; flex-shrink:0;
+.nav-logo { display:flex; align-items:center; gap:.6rem; flex-shrink:0;
             text-decoration:none; color:var(--on-navy);
-            font-family:var(--sans); font-size:.95rem; font-weight:700;
-            letter-spacing:-.01em;
+            font-family:'Inter',sans-serif;
+            font-size:.95rem; font-weight:700; letter-spacing:-.01em;
             transition: opacity var(--t-fast) linear; }
 .nav-logo:hover { opacity:.85; }
 .nav-mark { width:26px; height:26px; border-radius:6px;
             background:#3b82f6; color:#fff;
             display:flex; align-items:center; justify-content:center;
-            font-family:var(--sans); font-size:10px; font-weight:800;
-            letter-spacing:-.03em; flex-shrink:0; }
+            font-family:'Inter',sans-serif;
+            font-size:10px; font-weight:800; letter-spacing:-.03em;
+            flex-shrink:0; }
 .nav-sep { color:var(--on-navy-2); opacity:.35; margin:0 3px;
            font-size:1rem; user-select:none; }
 
