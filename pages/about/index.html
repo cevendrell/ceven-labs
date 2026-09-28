@@ -15,7 +15,7 @@
       --cream: #ffffff; --cream-dark: #0a0f16; --cream-dim: #55566a;
       --text: #ededea; --dim: #a8a9b0; --mute: #6b6d78;
       --accent: #3b82f6; --blue-d: #1d4ed8; --blue-l: #93c5fd; --brand: #3b82f6;
-      --orange: #fc4c02; --orange-l: #ff8a5c; --line: rgba(255,255,255,0.07);
+      --amber: #d2955c; --amber-l: #e5b183; --line: rgba(255,255,255,0.07);
     }
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -26,7 +26,7 @@
     .ambient { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
     .orb { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.04; animation: drift 22s ease-in-out infinite; }
     .orb-1 { width: 600px; height: 600px; background: var(--brand); top: -20%; left: -15%; animation-duration: 25s; }
-    .orb-2 { width: 400px; height: 400px; background: var(--orange); bottom: 10%; right: -10%; animation-duration: 30s; animation-delay: -8s; }
+    .orb-2 { width: 400px; height: 400px; background: var(--amber); bottom: 10%; right: -10%; animation-duration: 30s; animation-delay: -8s; }
     @keyframes drift { 0%, 100% { transform: translate(0,0) scale(1); } 33% { transform: translate(40px,-30px) scale(1.05); } 66% { transform: translate(-25px,20px) scale(0.95); } }
     .grain { position: fixed; inset: -50%; width: 200%; height: 200%; z-index: 1; pointer-events: none; opacity: 0.018; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); animation: grainMove 0.5s steps(1) infinite; }
     @keyframes grainMove { 0%,100% { transform: translate(0,0); } 25% { transform: translate(-2%,-3%); } 50% { transform: translate(2%,1%); } 75% { transform: translate(-1%,2%); } }
@@ -66,7 +66,7 @@
     #hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 70% 60% at 20% 50%, rgba(59,130,246,0.05) 0%, transparent 70%); pointer-events: none; }
     .hero-inner { position: relative; z-index: 2; max-width: 1100px; margin: 0 auto; padding: 0 32px; width: 100%; }
     .hero-inner h1 { font-size: clamp(2.8rem, 6vw, 4.8rem); font-weight: 800; letter-spacing: -0.04em; color: #fff; line-height: 1.05; margin-bottom: 1.25rem; opacity: 0; animation: fadeUp 0.8s 0.2s forwards; }
-    .hero-inner h1 span { color: var(--orange); }
+    .hero-inner h1 span { color: var(--amber); }
     .hero-inner .hero-lead { font-size: 1.1rem; color: var(--dim); max-width: 560px; line-height: 1.85; opacity: 0; animation: fadeUp 0.8s 0.4s forwards; }
     @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -122,9 +122,10 @@
     Ceven Labs
   </a>
   <ul class="nav-links">
-    <li><a href="../solutions/index.html">Solutions</a></li>
-    <li><a href="index.html" class="active">About</a></li>
-    <li><a href="../support/index.html">Support</a></li>
+    <li><a href="../../layovr/index.html">LayOvr</a></li>
+    <li><a href="../../ovrhead/index.html">OvrHead</a></li>
+    <li><a href="../../pages/about/index.html">About</a></li>
+    <li><a href="../../pages/support/index.html">Support</a></li>
   </ul>
   <button class="hamburger" aria-label="Menu">
     <span></span><span></span><span></span>
@@ -150,7 +151,7 @@
         <h2>Built on science.<br>Designed to use.</h2>
         <p>There is no shortage of health apps. What is missing are tools that take the science seriously, skip the noise, and deliver something you can act on without reading a research paper first.</p>
         <p>Ceven Labs starts from that gap. We take peer-reviewed work on how the human body actually functions, strip out everything that does not matter in practice, and build it into a product that fits into your day. No accounts, no subscriptions to things you will never use, no data sent to servers you cannot see.</p>
-        <p>The first area is circadian health. Jet lag is genuinely understood by science; nobody had made that science usable for people with real travel schedules. LayOvr is the answer to that. Bike fitting follows the same logic: validated biomechanical methods that have existed for decades, finally available without booking a studio appointment.</p>
+        <p>The first area is circadian health. Jet lag is genuinely understood by science; nobody had made it usable for people with real travel schedules. LayOvr is the answer to that. OvrHead follows the same logic in the opposite direction: aviation data arrives late, aggregated and interpreted; a receiver on a roof arrives instantly, ungrouped and interpreted by nobody. Publish the raw record, carry the evidence with every claim.</p>
         <p>Each tool we build is a version of the same question: what do we know about this problem, and why has no one made it easy yet?</p>
       </div>
     </div>

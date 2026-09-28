@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Ceven Labs solutions: LayOvr jet lag planning and the interactive Bike Fit geometry tool.">
+  <meta name="description" content="Ceven Labs solutions: LayOvr jet lag planning and OvrHead, an aviation observatory over Aarhus.">
   <title>Solutions | Ceven Labs</title>
   <link rel="icon" href="../../media/shared/cl-mark.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -74,12 +74,13 @@
     .sol-card-footer { margin-top: 2.5rem; display: flex; align-items: center; justify-content: space-between; padding-top: 1.5rem; border-top: 1px solid var(--line); }
     .sol-card-status { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: var(--mute); }
     .sol-card-status.wip::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); box-shadow: 0 0 8px var(--blue); flex-shrink: 0; }
-    .sol-card-status.proto::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #fc4c02; box-shadow: 0 0 8px #fc4c02; flex-shrink: 0; }
+    .sol-card-status.proto::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #d2955c; box-shadow: 0 0 8px #d2955c; flex-shrink: 0; }
+    .sol-card-status.live::before  { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #5cc191; box-shadow: 0 0 8px #5cc191; flex-shrink: 0; }
 
     /* Domain tag */
     .sol-domain { display: inline-block; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; margin-bottom: 1rem; }
     .sol-domain.sleep { color: var(--blue-l); background: rgba(59,130,246,0.1); }
-    .sol-domain.body { color: #ff7d45; background: rgba(252,76,2,0.12); }
+    .sol-domain.body { color: #d99c69; background: rgba(210, 149, 92,0.12); }
     .sol-card-cta {
       font-size: 0.82rem; font-weight: 700; color: var(--blue-l);
       display: flex; align-items: center; gap: 0.4rem; transition: gap 0.2s;
@@ -131,9 +132,10 @@
     Ceven Labs
   </a>
   <ul class="nav-links">
-    <li><a href="index.html" class="active">Solutions</a></li>
-    <li><a href="../about/index.html">About</a></li>
-    <li><a href="../support/index.html">Support</a></li>
+    <li><a href="../../layovr/index.html">LayOvr</a></li>
+    <li><a href="../../ovrhead/index.html">OvrHead</a></li>
+    <li><a href="../../pages/about/index.html">About</a></li>
+    <li><a href="../../pages/support/index.html">Support</a></li>
   </ul>
   <button class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
 </nav>
@@ -166,21 +168,21 @@
         </div>
       </a>
 
-      <a href="bike-fit/index.html" class="sol-card fade d1">
+      <a href="../../ovrhead/index.html" class="sol-card fade d1">
         <span class="sol-card-num">02</span>
-        <span class="sol-domain body">Biomechanics</span>
-        <span class="sol-card-type">Web Tool</span>
-        <h2 class="sol-card-name">Bike Fit</h2>
-        <p class="sol-card-desc">Enter your body measurements, pick a frame from major brands, and watch a live side-view drawing of the bike and your riding position update in real time — right in your browser.</p>
+        <span class="sol-domain body">Observatory</span>
+        <span class="sol-card-type">Web Observatory</span>
+        <h2 class="sol-card-name">OvrHead</h2>
+        <p class="sol-card-desc">One antenna in Aarhus reads every aircraft that passes overhead, matches each callsign to its scheduled route and checks the route against the direction the aircraft was travelling. Weeks of the record turn into readings on European air corridors, right in your browser.</p>
         <ul class="sol-features">
-          <li>Real-time geometry drawing with rider stick figure</li>
-          <li>Representative geometry from Specialized, Trek, Cannondale, Canyon & Giant</li>
-          <li>LeMond saddle height, reach, drop & torso angle</li>
-          <li>Proportion warnings when the fit doesn't work</li>
+          <li>Live radar, city-pair map and week-over-week trend detection</li>
+          <li>~40k flights on record, refreshed nightly</li>
+          <li>The whole flight table queryable in-browser via DuckDB</li>
+          <li>Every claim carries the evidence and the SQL that produced it</li>
         </ul>
         <div class="sol-card-footer">
-          <span class="sol-card-status proto">Prototype</span>
-          <span class="sol-card-cta">Try it →</span>
+          <span class="sol-card-status live">Live</span>
+          <span class="sol-card-cta">Open it →</span>
         </div>
       </a>
 

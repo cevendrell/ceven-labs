@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Ceven Labs: science-backed health tools for real moments — jet lag planning and interactive bike fitting. Built in Aarhus, Denmark.">
+  <meta name="description" content="Ceven Labs: instruments for what usually stays private. LayOvr, a science-backed jet lag companion. OvrHead, an aviation observatory reading the sky over Aarhus. Built in Denmark.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://cevenlabs.com/">
   <meta property="og:title" content="Ceven Labs">
-  <meta property="og:description" content="Science-backed tools built for the way you move through the world.">
+  <meta property="og:description" content="Two instruments built at the edge of what is measurable. Real research, clear output, nothing to sign up for.">
   <title>Ceven Labs</title>
   <link rel="icon" href="media/shared/cl-mark.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,8 +21,8 @@
       --blue:    #3b82f6;
       --blue-d:  #1d4ed8;
       --blue-l:  #93c5fd;
-      --orange:   #fc4c02;
-      --orange-l: #ff8a5c;
+      --amber:   #d2955c;
+      --amber-l: #e5b183;
       --text:    #f0f4ff;
       --dim:     #8899bb;
       --mute:    #3d4f6e;
@@ -78,7 +78,7 @@
     }
     #hero::after {
       width: 600px; height: 600px;
-      background: radial-gradient(circle, rgba(252,76,2,0.07) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(210, 149, 92,0.07) 0%, transparent 70%);
       bottom: -10%; right: -5%;
     }
     .hero-inner { max-width: 1100px; margin: 0 auto; padding: 0 40px; width: 100%; position: relative; z-index: 1; }
@@ -88,12 +88,12 @@
       font-size: 0.72rem; color: var(--mute); letter-spacing: 0.14em;
       text-transform: uppercase; margin-bottom: 2.5rem;
     }
-    .hero-kicker-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--orange); box-shadow: 0 0 8px var(--orange); flex-shrink: 0; }
+    .hero-kicker-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--amber); box-shadow: 0 0 8px var(--amber); flex-shrink: 0; }
     .hero-h1 {
       font-size: clamp(3.4rem, 8vw, 7rem); font-weight: 800;
       letter-spacing: -0.055em; line-height: 0.94; color: var(--text); margin-bottom: 2rem;
     }
-    .hero-h1 .accent-orange { color: var(--orange); }
+    .hero-h1 .accent-amber { color: var(--amber); }
     .hero-sub {
       font-size: 1.05rem; color: var(--dim); max-width: 500px;
       line-height: 1.85; font-weight: 400; margin-bottom: 2.5rem;
@@ -102,7 +102,7 @@
     .btn-primary { display: inline-flex; align-items: center; gap: 0.4rem; background: var(--blue); color: #fff; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.04em; padding: 12px 24px; border-radius: 6px; transition: background 0.2s; }
     .btn-primary:hover { background: var(--blue-d); }
     .btn-ghost { display: inline-flex; align-items: center; gap: 0.4rem; border: 1px solid var(--line); color: var(--dim); font-size: 0.82rem; font-weight: 600; padding: 12px 24px; border-radius: 6px; transition: all 0.2s; }
-    .btn-ghost:hover { border-color: var(--orange); color: var(--orange-l); }
+    .btn-ghost:hover { border-color: var(--amber); color: var(--amber-l); }
 
     /* TOOLS LIST */
     #tools { padding: 80px 0 100px; }
@@ -118,7 +118,7 @@
     .tool-num { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--mute); letter-spacing: 0.12em; }
     .tool-domain { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; }
     .tool-domain.sleep { color: var(--blue-l); background: rgba(59,130,246,0.1); }
-    .tool-domain.body { color: #ff7d45; background: rgba(252,76,2,0.12); }
+    .tool-domain.body { color: #d99c69; background: rgba(210, 149, 92,0.12); }
     .tool-name { font-size: clamp(1.5rem, 3.5vw, 2.2rem); font-weight: 700; color: var(--text); letter-spacing: -0.035em; margin-bottom: 0.45rem; }
     .tool-desc { font-size: 0.9rem; color: var(--dim); line-height: 1.75; max-width: 520px; }
     .tool-right { text-align: right; padding-top: 0.4rem; display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-end; }
@@ -126,7 +126,8 @@
     .tool-status { display: flex; align-items: center; gap: 0.45rem; font-size: 0.78rem; color: var(--mute); }
     .tool-status::before { content: ''; width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
     .tool-status.wip::before { background: var(--blue); box-shadow: 0 0 8px var(--blue); }
-    .tool-status.proto::before { background: #fc4c02; box-shadow: 0 0 8px #fc4c02; }
+    .tool-status.proto::before { background: #d2955c; box-shadow: 0 0 8px #d2955c; }
+    .tool-status.live::before  { background: #5cc191; box-shadow: 0 0 8px #5cc191; }
     .tool-arrow { font-size: 0.8rem; color: var(--blue); }
     @media (max-width: 580px) { .tool-item { grid-template-columns: 1fr; } .tool-right { text-align: left; align-items: flex-start; } }
 
@@ -139,7 +140,7 @@
     .thread-row { display: flex; gap: 1.25rem; align-items: flex-start; }
     .thread-icon { width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
     .thread-icon.blue { background: rgba(59,130,246,0.1); }
-    .thread-icon.orange { background: rgba(252,76,2,0.1); }
+    .thread-icon.amber { background: rgba(210, 149, 92,0.1); }
     .thread-text h4 { font-size: 0.9rem; font-weight: 700; color: var(--text); margin-bottom: 0.35rem; }
     .thread-text p { font-size: 0.84rem; color: var(--dim); line-height: 1.75; }
     @media (max-width: 720px) { .thread-inner { grid-template-columns: 1fr; gap: 2.5rem; } }
@@ -169,7 +170,8 @@
     Ceven Labs
   </a>
   <ul class="nav-links">
-    <li><a href="pages/solutions/index.html">Solutions</a></li>
+    <li><a href="layovr/index.html">LayOvr</a></li>
+    <li><a href="ovrhead/index.html">OvrHead</a></li>
     <li><a href="pages/about/index.html">About</a></li>
     <li><a href="pages/support/index.html">Support</a></li>
   </ul>
@@ -187,14 +189,14 @@
         Ceven Labs · Aarhus, Denmark
       </p>
       <h1 class="hero-h1 fade d1">
-        Built for<br>
-        the way<br>
-        you <span class="accent-orange">move.</span>
+        Instruments for<br>
+        what usually stays<br>
+        <span class="accent-amber">private.</span>
       </h1>
-      <p class="hero-sub fade d2">Science-backed tools that help you show up at your best — whether you're crossing time zones or dialing in your ride. Real research. Clear output. No account required.</p>
+      <p class="hero-sub fade d2">Two tools built at the edge of what is measurable. LayOvr models your circadian clock around real flights. OvrHead reads the sky over Aarhus and turns it into signals about air corridors, trade and connectivity. Both are built the same way: real research, clear output, nothing to sign up for.</p>
       <div class="hero-cta fade d3">
-        <a href="pages/solutions/index.html" class="btn-primary">See our tools</a>
-        <a href="pages/about/index.html" class="btn-ghost">About the lab</a>
+        <a href="ovrhead/index.html" class="btn-primary">Open OvrHead</a>
+        <a href="layovr/index.html" class="btn-ghost">See LayOvr</a>
       </div>
     </div>
   </section>
@@ -225,19 +227,19 @@
         </li>
 
         <li class="tool-item fade d1">
-          <a href="pages/solutions/bike-fit/index.html">
+          <a href="ovrhead/index.html">
             <div class="tool-left">
               <div class="tool-top">
                 <span class="tool-num">02</span>
-                <span class="tool-domain body">Biomechanics</span>
+                <span class="tool-domain body">Observatory</span>
               </div>
-              <p class="tool-name">Bike Fit</p>
-              <p class="tool-desc">Enter your measurements, pick a frame from major brands, and watch the bike geometry and your riding position redraw in real time — with warnings when the proportions don't work. No app, no account.</p>
+              <p class="tool-name">OvrHead</p>
+              <p class="tool-desc">One antenna over Aarhus reads every aircraft that passes overhead, matches each flight to the route it is flying, and turns weeks of the record into readings on European air corridors. The whole record is open. The whole tool runs in your browser.</p>
             </div>
             <div class="tool-right">
-              <span class="tool-type">Web Tool</span>
-              <span class="tool-status proto">Prototype</span>
-              <span class="tool-arrow">Try it →</span>
+              <span class="tool-type">Web Observatory</span>
+              <span class="tool-status live">Live</span>
+              <span class="tool-arrow">Open it →</span>
             </div>
           </a>
         </li>
@@ -249,29 +251,29 @@
   <section id="thread">
     <div class="thread-inner">
       <div class="thread-left fade">
-        <h2>Different problems.<br>Same philosophy.</h2>
-        <p>Every tool we build starts with peer-reviewed research on how the body works, strips away everything irrelevant, and delivers something you can act on immediately, in plain language on the device in your pocket.</p>
+        <h2>Different subjects.<br>Same instrument.</h2>
+        <p>Each tool takes a domain the world usually gives you late, aggregated and interpreted, and rebuilds it as something you can read directly. Peer-reviewed research where there is any; the raw record where there is not. No opinion smuggled in.</p>
       </div>
       <div class="thread-right">
         <div class="thread-row fade d1">
           <div class="thread-icon blue">🌙</div>
           <div class="thread-text">
-            <h4>Circadian science</h4>
-            <p>LayOvr models your internal clock using the two-process sleep framework and Phase Response Curves, the same science chronobiology researchers use, turned into a clear day-by-day travel plan.</p>
+            <h4>Circadian science, LayOvr</h4>
+            <p>The two-process sleep framework and Phase Response Curves, the same science chronobiology researchers use, turned into a day-by-day plan built around your exact flights and meetings.</p>
           </div>
         </div>
         <div class="thread-row fade d2">
-          <div class="thread-icon orange">🚴</div>
+          <div class="thread-icon amber">📡</div>
           <div class="thread-text">
-            <h4>Biomechanical fitting</h4>
-            <p>Bike Fit applies validated fitting methodologies that bike fitters use in studios: LeMond saddle height and body proportion geometry, but instantly, in your browser, from your measurements alone.</p>
+            <h4>Signals from the sky, OvrHead</h4>
+            <p>One antenna in Aarhus records every aircraft in range, matches each callsign to its scheduled route, and only believes the route when the aircraft was observed heading toward it. Every claim carries its evidence.</p>
           </div>
         </div>
         <div class="thread-row fade d3">
           <div class="thread-icon blue">🔒</div>
           <div class="thread-text">
             <h4>Private by default</h4>
-            <p>No backend. No analytics. No accounts. Your health data and body measurements stay on your device. That's not a cost decision. It's a principle every tool is built around from the start.</p>
+            <p>No backend, no analytics, no accounts. Personal data never leaves your device; public data runs in your browser off open files. That is not a cost decision. It is what these tools are built around from the start.</p>
           </div>
         </div>
       </div>
