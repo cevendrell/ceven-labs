@@ -117,6 +117,19 @@ button, input, textarea, select { font:inherit; color:inherit; }
 .mark span { font-size:.68rem; color:var(--on-navy-2); }
 @media (max-width:520px){ .mark span{ display:none } }
 
+/* Subtle way back to the parent site: a tiny chevron and label to the left
+   of the OVRHEAD mark. Muted enough to read as chrome, not as a nav item;
+   discoverable because the arrow makes its direction obvious. */
+.cl-back { display:inline-flex; align-items:center; gap:5px;
+           font-family:var(--mono); font-size:.62rem; letter-spacing:.16em;
+           text-transform:uppercase; text-decoration:none;
+           color:var(--on-navy-2); opacity:.55; margin-right:8px;
+           padding:5px 8px 5px 4px; border-radius:var(--r-control);
+           transition: opacity var(--t-fast) linear, color var(--t-fast) linear; }
+.cl-back:hover { opacity:1; color:var(--on-navy); }
+.cl-back svg { width:9px; height:9px; }
+@media (max-width:520px){ .cl-back { padding:5px 2px } .cl-back span { display:none } }
+
 #nav { display:flex; gap:2px; flex-wrap:wrap; }
 #nav a { font-size:.85rem; color:var(--on-navy-2); text-decoration:none;
          padding:7px 12px; border-radius:var(--r-control); white-space:nowrap; }
@@ -853,6 +866,13 @@ th.sortable .dir { display:inline-block; transition: transform var(--t-base) var
   <a class="skip" href="#main">Skip to content</a>
   <header id="topbar">
     <div class="bar">
+      <a class="cl-back" href="/" title="Back to Ceven Labs">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="15 6 9 12 15 18"/>
+        </svg>
+        <span>Ceven Labs</span>
+      </a>
       <a class="mark" href="#/"><b>OVRHEAD</b><span>Aarhus</span></a>
       <nav id="nav" aria-label="Sections">
         <span id="nav-pill" aria-hidden="true"></span>
