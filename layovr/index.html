@@ -61,7 +61,9 @@
     /* NAV */
     nav#navbar { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 1.25rem 2.5rem; display: flex; align-items: center; justify-content: space-between; background: rgba(6,8,15,0.60); backdrop-filter: blur(20px) saturate(140%); -webkit-backdrop-filter: blur(20px) saturate(140%); border-bottom: 1px solid transparent; transition: all 0.3s; }
     nav#navbar.scrolled { padding: 0.85rem 2.5rem; background: rgba(6,8,15,0.92); border-bottom-color: var(--line); }
-    .nav-logo { font-size: 1rem; font-weight: 700; letter-spacing: 0.02em; display: flex; align-items: center; gap: 0.6rem; }
+    .nav-logo { font-size: 0.95rem; font-weight: 700; letter-spacing: -0.01em; display: flex; align-items: center; gap: 0.6rem; color: var(--text); }
+    .nav-sep { color: var(--dim); opacity: 0.35; margin: 0 3px; font-size: 1rem; user-select: none; }
+    .nav-product { font-size: 0.9rem; font-weight: 600; color: var(--text); letter-spacing: -0.005em; margin-right: auto; padding-left: 0.1rem; }
     .nav-mark { width: 26px; height: 26px; border-radius: 6px; background: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; color: #fff; letter-spacing: -0.03em; flex-shrink: 0; }
     .nav-links { display: flex; gap: 2.25rem; list-style: none; align-items: center; }
     .nav-links > li > a { font-size: 0.85rem; font-weight: 500; color: var(--dim); padding: 0.5rem 0; position: relative; }
@@ -381,6 +383,8 @@
     <div class="nav-mark">CL</div>
     Ceven Labs
   </a>
+  <span class="nav-sep" aria-hidden="true">/</span>
+  <span class="nav-product">LayOvr</span>
   <ul class="nav-links">
     <li><a href="../pages/solutions/index.html">Solutions</a></li>
     <li><a href="../pages/about/index.html">About</a></li>

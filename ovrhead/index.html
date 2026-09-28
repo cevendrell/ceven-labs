@@ -97,38 +97,47 @@ button, input, textarea, select { font:inherit; color:inherit; }
 /* ── Shell ─────────────────────────────────────────────────────────────── */
 #shell { min-height:100vh; }
 
-/* Top bar in LayOvr's navy, using that project's on-navy pair. */
-#topbar { position:sticky; top:0; z-index:80; background:var(--navy); color:var(--on-navy); }
+/* Top bar. Same near-black translucent chrome as the rest of Ceven
+   Labs, with the identity mark on the left travelling from site to
+   site so the three products feel like one bar in three modes. */
+#topbar { position:sticky; top:0; z-index:80;
+          background:rgba(4,7,14,0.85); color:var(--on-navy);
+          backdrop-filter:blur(16px) saturate(120%);
+          -webkit-backdrop-filter:blur(16px) saturate(120%);
+          border-bottom:1px solid rgba(255,255,255,0.06); }
 .bar { max-width:1240px; margin:0 auto; padding:0 var(--pad);
        display:flex; align-items:center; gap:20px; min-height:56px; flex-wrap:wrap; }
 /* The bar needs three rows on a phone. Pinning a quarter of the screen for it
    is a worse trade than making the reader scroll up for the nav, so below this
    width it scrolls away with the page. */
 @media (max-width:760px){
-  #topbar { position:static; }
   .bar { padding:10px var(--pad); gap:10px; }
   .mark { order:0; }
   #nav  { order:2; }
 }
 
-.mark { display:flex; align-items:baseline; gap:9px; text-decoration:none; flex-shrink:0; }
-.mark b { font-family:var(--mono); font-size:.82rem; font-weight:600;
-          letter-spacing:.24em; color:var(--on-navy); }
-.mark span { font-size:.68rem; color:var(--on-navy-2); }
-@media (max-width:520px){ .mark span{ display:none } }
+/* Identity strip: the CL mark and the Ceven Labs wordmark are the
+   same across every product's nav, so the family reads as one. The
+   product's own wordmark follows behind a hair-thin divider. */
+.nav-logo { display:flex; align-items:center; gap:.55rem; flex-shrink:0;
+            text-decoration:none; color:var(--on-navy);
+            font-family:var(--sans); font-size:.95rem; font-weight:700;
+            letter-spacing:-.01em;
+            transition: opacity var(--t-fast) linear; }
+.nav-logo:hover { opacity:.85; }
+.nav-mark { width:26px; height:26px; border-radius:6px;
+            background:#3b82f6; color:#fff;
+            display:flex; align-items:center; justify-content:center;
+            font-family:var(--sans); font-size:10px; font-weight:800;
+            letter-spacing:-.03em; flex-shrink:0; }
+.nav-sep { color:var(--on-navy-2); opacity:.35; margin:0 3px;
+           font-size:1rem; user-select:none; }
 
-/* Subtle way back to the parent site: a tiny chevron and label to the left
-   of the OVRHEAD mark. Muted enough to read as chrome, not as a nav item;
-   discoverable because the arrow makes its direction obvious. */
-.cl-back { display:inline-flex; align-items:center; gap:5px;
-           font-family:var(--mono); font-size:.62rem; letter-spacing:.16em;
-           text-transform:uppercase; text-decoration:none;
-           color:var(--on-navy-2); opacity:.55; margin-right:8px;
-           padding:5px 8px 5px 4px; border-radius:var(--r-control);
-           transition: opacity var(--t-fast) linear, color var(--t-fast) linear; }
-.cl-back:hover { opacity:1; color:var(--on-navy); }
-.cl-back svg { width:9px; height:9px; }
-@media (max-width:520px){ .cl-back { padding:5px 2px } .cl-back span { display:none } }
+.mark { display:flex; align-items:baseline; gap:9px; text-decoration:none; flex-shrink:0; }
+.mark b { font-family:var(--mono); font-size:.78rem; font-weight:600;
+          letter-spacing:.22em; color:var(--on-navy); }
+.mark span { font-size:.66rem; color:var(--on-navy-2); }
+@media (max-width:520px){ .mark span{ display:none } }
 
 #nav { display:flex; gap:2px; flex-wrap:wrap; }
 #nav a { font-size:.85rem; color:var(--on-navy-2); text-decoration:none;
@@ -866,13 +875,11 @@ th.sortable .dir { display:inline-block; transition: transform var(--t-base) var
   <a class="skip" href="#main">Skip to content</a>
   <header id="topbar">
     <div class="bar">
-      <a class="cl-back" href="/" title="Back to Ceven Labs">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <polyline points="15 6 9 12 15 18"/>
-        </svg>
+      <a class="nav-logo" href="/" title="Ceven Labs">
+        <span class="nav-mark" aria-hidden="true">CL</span>
         <span>Ceven Labs</span>
       </a>
+      <span class="nav-sep" aria-hidden="true">/</span>
       <a class="mark" href="#/"><b>OVRHEAD</b><span>Aarhus</span></a>
       <nav id="nav" aria-label="Sections">
         <span id="nav-pill" aria-hidden="true"></span>
