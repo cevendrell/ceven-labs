@@ -63,7 +63,13 @@
     nav#navbar.scrolled { padding: 0.85rem 2.5rem; background: #05164d; border-bottom-color: var(--line); }
     .nav-logo { font-size: 0.95rem; font-weight: 700; letter-spacing: -0.01em; display: flex; align-items: center; gap: 0.6rem; color: var(--text); }
     .nav-sep { color: var(--dim); opacity: 0.35; margin: 0 3px; font-size: 1rem; user-select: none; }
-    .nav-product { font-size: 0.9rem; font-weight: 600; color: var(--text); letter-spacing: -0.005em; margin-right: auto; padding-left: 0.1rem; }
+    /* Airport-letter product mark, same treatment as OvrHead so the two
+       products read as siblings: mono, wide-tracked "LAYOVR" plus a
+       small secondary tag. */
+    .mark { display: flex; align-items: baseline; gap: 9px; flex-shrink: 0; margin-right: auto; padding-left: 0.1rem; color: inherit; }
+    .mark b { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.22em; color: var(--text); }
+    .mark span { font-size: 0.66rem; color: var(--dim); }
+    @media (max-width: 520px){ .mark span { display: none; } }
         /* Flat 4-item nav: two products, then info after a hair-thin
        divider.  Same shape on every marketing page. */
     .nav-links > li.nav-info:first-of-type::before {
@@ -394,7 +400,7 @@
     Ceven Labs
   </a>
   <span class="nav-sep" aria-hidden="true">/</span>
-  <span class="nav-product">LayOvr</span>
+  <a class="mark" href="index.html"><b>LAYOVR</b><span>Beta</span></a>
   <ul class="nav-links">
     <li><a href="../layovr/index.html">LayOvr</a></li>
     <li><a href="../ovrhead/index.html">OvrHead</a></li>
@@ -670,7 +676,7 @@
   document.querySelectorAll('.wow').forEach(el => revealObserver.observe(el));
 </script>
 <script>
-  // Hero coverflow carousel — auto-spins, click a side card to bring it forward
+  // Hero coverflow carousel: auto-spins, click a side card to bring it forward
   (function () {
     const car = document.getElementById('heroCarousel');
     if (!car) return;

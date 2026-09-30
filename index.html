@@ -84,23 +84,35 @@
     body.nav-open .hamburger span:nth-child(2) { opacity: 0; }
     body.nav-open .hamburger span:nth-child(3) { transform: rotate(-45deg) translate(4.5px, -4.5px); }
 
-    /* HERO: sized so both solution cards fit above the fold on a
-       typical 800px-tall laptop. Padding kept modest and the h1 pulled
-       back from the previous 7rem cap. */
+    /* HERO: no radial gradients. Depth comes from the plane silhouette
+       that scrolls at its own pace behind the copy. Padding sized so
+       the two solution cards still land above the fold. */
     #hero {
       min-height: 100vh; display: flex; align-items: center;
       padding: 6rem 0 3.5rem; position: relative; overflow: hidden;
     }
-    #hero::before, #hero::after { content: ''; position: absolute; border-radius: 50%; pointer-events: none; }
-    #hero::before {
-      width: 800px; height: 800px;
-      background: radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 70%);
-      top: -25%; left: -8%;
+    /* Massive plane silhouette pinned to the right, deliberately
+       cropped by the viewport edge so only half is visible. The shape
+       comes from a bundled webp used as a mask, and the gradient below
+       fills the shape. JS translates it on scroll at 0.35x for
+       parallax. */
+    #hero-plane {
+      position: absolute; top: 50%;
+      right: -30%;
+      width: min(1500px, 120vw); aspect-ratio: 1 / 1;
+      transform: translate(0, -50%);
+      transform-origin: center;
+      pointer-events: none; z-index: 0;
+      background: linear-gradient(135deg,
+        rgba(77,146,255,0.42) 0%,
+        rgba(255,160,64,0.28) 55%,
+        rgba(255,160,64,0.10) 100%);
+      -webkit-mask: url('media/shared/plane.webp') center / contain no-repeat;
+              mask: url('media/shared/plane.webp') center / contain no-repeat;
+      will-change: transform;
     }
-    #hero::after {
-      width: 600px; height: 600px;
-      background: radial-gradient(circle, rgba(255,160,64,0.11) 0%, transparent 70%);
-      bottom: -10%; right: -5%;
+    @media (max-width: 900px) {
+      #hero-plane { width: 160vw; right: -55%; opacity: 0.55; }
     }
     .hero-inner { max-width: 1100px; margin: 0 auto; padding: 0 40px; width: 100%; position: relative; z-index: 1; }
     .hero-kicker {
@@ -207,6 +219,9 @@
 <main>
 
   <section id="hero">
+    <!-- Top-down 4-engine airliner silhouette from media/shared/plane.webp
+         used as a CSS mask so the gradient underneath supplies the fill. -->
+    <div id="hero-plane" aria-hidden="true"></div>
     <div class="hero-inner">
       <p class="hero-kicker fade">
         <span class="hero-kicker-dot"></span>
@@ -288,7 +303,21 @@
 
 <script>
   const nav = document.getElementById('navbar');
-  window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40), { passive: true });
+  const plane = document.getElementById('hero-plane');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // The plane drifts slower than the page (0.35x) so it feels anchored
+  // in its own airspace as the reader moves. No rotation.
+  let ticking = false;
+  const onScroll = () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+    if (plane && !reduced) {
+      const drift = window.scrollY * 0.35;
+      plane.style.transform = `translate(0, calc(-50% + ${drift}px))`;
+    }
+  };
+  window.addEventListener('scroll', () => {
+    if (!ticking) { requestAnimationFrame(() => { onScroll(); ticking = false; }); ticking = true; }
+  }, { passive: true });
   const hb = document.querySelector('.hamburger');
   if (hb) {
     hb.addEventListener('click', () => document.body.classList.toggle('nav-open'));
