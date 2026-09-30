@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Ceven Labs builds tools for reading movement. LayOvr models your body across time zones. OvrHead reads the aircraft over Aarhus. Built in Denmark.">
+  <meta name="description" content="Ceven Labs builds tools for people who fly. LayOvr saves your energy for what matters after you land. OvrHead turns the aircraft above you into insight. Built in Aarhus.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://cevenlabs.com/">
   <meta property="og:title" content="Ceven Labs">
-  <meta property="og:description" content="Two tools for reading how the world moves.">
+  <meta property="og:description" content="Two tools for making the most of every flight.">
   <title>Ceven Labs</title>
   <link rel="icon" href="media/shared/cl-mark.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,15 +18,15 @@
       --bg:      #04070e;
       --bg-2:    #060b15;
       --surface: #080d1a;
-      --blue:    #3b82f6;
+      --blue:    #4d92ff;
       --blue-d:  #1d4ed8;
-      --blue-l:  #93c5fd;
-      --amber:   #d2955c;
-      --amber-l: #e5b183;
-      --text:    #f0f4ff;
-      --dim:     #8899bb;
-      --mute:    #3d4f6e;
-      --line:    rgba(255,255,255,0.07);
+      --blue-l:  #a9c8ff;
+      --amber:   #ffa040;
+      --amber-l: #ffbc7a;
+      --text:    #f4f7ff;
+      --dim:     #b0c0e0;
+      --mute:    #5a6f95;
+      --line:    rgba(255,255,255,0.09);
     }
 
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -99,7 +99,7 @@
     }
     #hero::after {
       width: 600px; height: 600px;
-      background: radial-gradient(circle, rgba(210, 149, 92,0.07) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(255,160,64,0.11) 0%, transparent 70%);
       bottom: -10%; right: -5%;
     }
     .hero-inner { max-width: 1100px; margin: 0 auto; padding: 0 40px; width: 100%; position: relative; z-index: 1; }
@@ -134,19 +134,15 @@
       color: inherit;
       transition: border-color 0.2s, background 0.2s, transform 0.2s;
     }
-    .solution:hover { border-color: var(--amber); background: rgba(210,149,92,0.05); transform: translateY(-1px); }
-    .solution-top { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; }
-    .solution-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; padding: 2px 8px; border-radius: 3px; }
-    .solution-tag.sleep { color: var(--blue-l); background: rgba(59,130,246,0.1); }
-    .solution-tag.body  { color: #d99c69;   background: rgba(210,149,92,0.12); }
-    .solution-name { font-size: 1.5rem; font-weight: 700; color: var(--text); letter-spacing: -0.035em; margin-bottom: 0.35rem; }
-    .solution-desc { font-size: 0.86rem; color: var(--dim); line-height: 1.6; }
-    .solution-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem; padding-top: 2px; }
-    .solution-status { display: flex; align-items: center; gap: 0.4rem; font-size: 0.72rem; color: var(--mute); white-space: nowrap; }
-    .solution-status::before { content: ''; width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-    .solution-status.wip::before  { background: var(--blue); box-shadow: 0 0 8px var(--blue); }
-    .solution-status.live::before { background: #5cc191;    box-shadow: 0 0 8px #5cc191; }
-    .solution-arrow { font-size: 0.85rem; color: var(--amber); }
+    .solution:hover { border-color: var(--amber); background: rgba(255,160,64,0.07); transform: translateY(-1px); }
+    .solution-name { font-size: 1.65rem; font-weight: 700; color: var(--text); letter-spacing: -0.035em; margin-bottom: 0.5rem; }
+    .solution-desc { font-size: 0.9rem; color: var(--dim); line-height: 1.6; }
+    .solution-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem; padding-top: 4px; }
+    .solution-status { display: flex; align-items: center; gap: 0.4rem; font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim); white-space: nowrap; }
+    .solution-status::before { content: ''; width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .solution-status.beta::before { background: var(--amber); box-shadow: 0 0 10px var(--amber); }
+    .solution-status.live::before { background: #4dd39a;    box-shadow: 0 0 10px #4dd39a; }
+    .solution-arrow { font-size: 0.85rem; font-weight: 700; color: var(--amber); }
     @media (max-width: 780px) { .solutions { grid-template-columns: 1fr; } }
     @media (max-width: 520px) {
       .solution { grid-template-columns: 1fr; }
@@ -217,30 +213,24 @@
         Ceven Labs · Aarhus, Denmark
       </p>
       <h1 class="hero-h1 fade d1">
-        Read how the world <span class="accent-amber">moves.</span>
+        Make more of every <span class="accent-amber">flight.</span>
       </h1>
-      <p class="hero-sub fade d2">Two tools built around the same idea. Take a domain the world hands over late and fragmented, and turn it into something you can read at a glance.</p>
+      <p class="hero-sub fade d2">Ceven Labs builds tools for people who fly, and for people the flights fly over. Two sides of the same sky, both worth reading.</p>
       <div class="solutions fade d3">
         <a href="layovr/index.html" class="solution">
           <div>
-            <div class="solution-top">
-              <span class="solution-tag sleep">Sleep &amp; Travel</span>
-            </div>
             <p class="solution-name">LayOvr</p>
-            <p class="solution-desc">Jet lag planning built around your exact flights. The circadian model runs offline on your iPhone.</p>
+            <p class="solution-desc">When you fly, arrive ready. LayOvr plans your sleep, light, and caffeine around your real flights so you land with energy for what actually matters.</p>
           </div>
           <div class="solution-right">
-            <span class="solution-status wip">In development</span>
+            <span class="solution-status beta">Beta</span>
             <span class="solution-arrow">View →</span>
           </div>
         </a>
         <a href="ovrhead/index.html" class="solution">
           <div>
-            <div class="solution-top">
-              <span class="solution-tag body">Observatory</span>
-            </div>
             <p class="solution-name">OvrHead</p>
-            <p class="solution-desc">Every aircraft passing over Aarhus, matched to its route. Weeks of the record, in your browser.</p>
+            <p class="solution-desc">When aircraft fly over you, learn something. OvrHead reads every plane over Aarhus and turns weeks of the record into a live picture of European airspace.</p>
           </div>
           <div class="solution-right">
             <span class="solution-status live">Live</span>
@@ -254,29 +244,29 @@
   <section id="thread">
     <div class="thread-inner">
       <div class="thread-left fade">
-        <h2>The world in motion,<br>read the same way twice.</h2>
-        <p>LayOvr and OvrHead sit at opposite ends of the same problem. One is the body under travel; the other is what carries the bodies. Both are built from the same three ideas.</p>
+        <h2>Two sides of the same sky.</h2>
+        <p>Flight is the thread. LayOvr is for the flights you take, and gives you back the time and energy jet lag quietly takes away. OvrHead is for the flights that fly over you, and turns them into something you can read. Both are built on the same three principles.</p>
       </div>
       <div class="thread-right">
         <div class="thread-row fade d1">
           <div class="thread-num">01</div>
           <div class="thread-text">
-            <h4>Movement is the material.</h4>
-            <p>Every reading starts with something moving. Aircraft crossing overhead, or a body crossing time zones. The physics is well known; what people usually get is the interpretation, second-hand and days late. These tools cut out the delay and show you the movement itself.</p>
+            <h4>The flight is worth reading.</h4>
+            <p>Every flight already carries a story. The one you take costs you a day on either end if you leave it to chance. The one that passes above you carries a route, a fleet, a weather deviation, a market decision. Both are readable; most people never see them read.</p>
           </div>
         </div>
         <div class="thread-row fade d2">
           <div class="thread-num">02</div>
           <div class="thread-text">
-            <h4>Data is the answer, not the pitch.</h4>
-            <p>LayOvr is built on the two-process sleep framework and Phase Response Curves, the same models chronobiology researchers use. OvrHead publishes the raw flight record beneath every reading, with the query that produced it. No opinion is smuggled in and no source is hidden.</p>
+            <h4>The science is the pitch.</h4>
+            <p>LayOvr runs the two-process sleep model and Phase Response Curves that circadian researchers actually use. OvrHead publishes the raw flight record under every reading, with the query that produced it. No opinion smuggled in, no source hidden.</p>
           </div>
         </div>
         <div class="thread-row fade d3">
           <div class="thread-num">03</div>
           <div class="thread-text">
-            <h4>The signal is for you, not for us.</h4>
-            <p>Nothing you do here goes anywhere else. LayOvr keeps your health data on your iPhone; OvrHead runs the whole flight database in your browser. No accounts, no analytics, no backend that would need protecting. It is what these tools are built around from the start.</p>
+            <h4>The signal is yours.</h4>
+            <p>Nothing you do here leaves your device. LayOvr keeps your health data on your iPhone. OvrHead runs the whole flight database in your browser. No accounts, no analytics, no backend that would need protecting.</p>
           </div>
         </div>
       </div>
