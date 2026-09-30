@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Ceven Labs: two tools built around movement. LayOvr models your body across time zones; OvrHead reads the aircraft crossing the sky over Aarhus. Signals about how the world travels, built in Denmark.">
+  <meta name="description" content="Ceven Labs builds tools for reading movement. LayOvr models your body across time zones. OvrHead reads the aircraft over Aarhus. Built in Denmark.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://cevenlabs.com/">
   <meta property="og:title" content="Ceven Labs">
-  <meta property="og:description" content="Two tools for reading how the world moves. Circadian science under real flights; a public record of the aircraft passing overhead.">
+  <meta property="og:description" content="Two tools for reading how the world moves.">
   <title>Ceven Labs</title>
   <link rel="icon" href="media/shared/cl-mark.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -84,10 +84,12 @@
     body.nav-open .hamburger span:nth-child(2) { opacity: 0; }
     body.nav-open .hamburger span:nth-child(3) { transform: rotate(-45deg) translate(4.5px, -4.5px); }
 
-    /* HERO */
+    /* HERO: sized so both solution cards fit above the fold on a
+       typical 800px-tall laptop. Padding kept modest and the h1 pulled
+       back from the previous 7rem cap. */
     #hero {
       min-height: 100vh; display: flex; align-items: center;
-      padding: 8rem 0 5rem; position: relative; overflow: hidden;
+      padding: 6rem 0 3.5rem; position: relative; overflow: hidden;
     }
     #hero::before, #hero::after { content: ''; position: absolute; border-radius: 50%; pointer-events: none; }
     #hero::before {
@@ -105,63 +107,53 @@
       display: flex; align-items: center; gap: 0.6rem;
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.72rem; color: var(--mute); letter-spacing: 0.14em;
-      text-transform: uppercase; margin-bottom: 2.5rem;
+      text-transform: uppercase; margin-bottom: 1.75rem;
     }
     .hero-kicker-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--amber); box-shadow: 0 0 8px var(--amber); flex-shrink: 0; }
     .hero-h1 {
-      font-size: clamp(3.4rem, 8vw, 7rem); font-weight: 800;
-      letter-spacing: -0.055em; line-height: 0.94; color: var(--text); margin-bottom: 2rem;
+      font-size: clamp(2.6rem, 6.2vw, 5rem); font-weight: 800;
+      letter-spacing: -0.045em; line-height: 1.02; color: var(--text); margin-bottom: 1.4rem;
+      max-width: 900px;
     }
     .hero-h1 .accent-amber { color: var(--amber); }
     .hero-sub {
-      font-size: 1.05rem; color: var(--dim); max-width: 500px;
-      line-height: 1.85; font-weight: 400; margin-bottom: 2.5rem;
+      font-size: 1rem; color: var(--dim); max-width: 620px;
+      line-height: 1.7; font-weight: 400; margin-bottom: 2.5rem;
     }
-    .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; }
-    /* The two hero CTAs are peers, not primary/secondary: same fill, same weight,
-       same padding. The tag on each says which world it opens. */
-    .btn-tool {
-      display: inline-flex; align-items: center; gap: 0.6rem;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--line); border-radius: 8px;
-      color: var(--text); font-size: 0.9rem; font-weight: 600;
-      letter-spacing: -0.01em; padding: 14px 20px 14px 22px;
+
+    /* Solution cards: two peers side by side, one row each on desktop,
+       stacked on narrow. Each card carries the full "what is it" answer
+       so the old #tools list is no longer needed. */
+    .solutions { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .solution {
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 1.25rem;
+      padding: 1.5rem 1.6rem;
+      background: rgba(255,255,255,0.025);
+      border: 1px solid var(--line); border-radius: 12px;
+      color: inherit;
       transition: border-color 0.2s, background 0.2s, transform 0.2s;
     }
-    .btn-tool:hover { border-color: var(--amber); background: rgba(210, 149, 92, 0.06); transform: translateY(-1px); }
-    .btn-tag {
-      font-family: 'JetBrains Mono', monospace; font-size: 0.62rem;
-      font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
-      color: var(--mute); padding: 2px 8px; border-left: 1px solid var(--line);
-      padding-left: 0.75rem;
+    .solution:hover { border-color: var(--amber); background: rgba(210,149,92,0.05); transform: translateY(-1px); }
+    .solution-top { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; }
+    .solution-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; padding: 2px 8px; border-radius: 3px; }
+    .solution-tag.sleep { color: var(--blue-l); background: rgba(59,130,246,0.1); }
+    .solution-tag.body  { color: #d99c69;   background: rgba(210,149,92,0.12); }
+    .solution-name { font-size: 1.5rem; font-weight: 700; color: var(--text); letter-spacing: -0.035em; margin-bottom: 0.35rem; }
+    .solution-desc { font-size: 0.86rem; color: var(--dim); line-height: 1.6; }
+    .solution-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem; padding-top: 2px; }
+    .solution-status { display: flex; align-items: center; gap: 0.4rem; font-size: 0.72rem; color: var(--mute); white-space: nowrap; }
+    .solution-status::before { content: ''; width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+    .solution-status.wip::before  { background: var(--blue); box-shadow: 0 0 8px var(--blue); }
+    .solution-status.live::before { background: #5cc191;    box-shadow: 0 0 8px #5cc191; }
+    .solution-arrow { font-size: 0.85rem; color: var(--amber); }
+    @media (max-width: 780px) { .solutions { grid-template-columns: 1fr; } }
+    @media (max-width: 520px) {
+      .solution { grid-template-columns: 1fr; }
+      .solution-right { flex-direction: row; align-items: center; justify-content: space-between; padding-top: 0; }
     }
 
-    /* TOOLS LIST */
-    #tools { padding: 80px 0 100px; }
     .inner { max-width: 1100px; margin: 0 auto; padding: 0 40px; }
-    .section-rule { padding-bottom: 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
-    .section-rule-label { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--mute); }
-
-    .tool-list { list-style: none; }
-    .tool-item { display: grid; grid-template-columns: 1fr auto; gap: 2rem; padding: 2.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); transition: opacity 0.2s; }
-    .tool-item:hover { opacity: 0.72; }
-    .tool-item a { display: contents; color: inherit; }
-    .tool-top { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.6rem; }
-    .tool-num { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--mute); letter-spacing: 0.12em; }
-    .tool-domain { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; }
-    .tool-domain.sleep { color: var(--blue-l); background: rgba(59,130,246,0.1); }
-    .tool-domain.body { color: #d99c69; background: rgba(210, 149, 92,0.12); }
-    .tool-name { font-size: clamp(1.5rem, 3.5vw, 2.2rem); font-weight: 700; color: var(--text); letter-spacing: -0.035em; margin-bottom: 0.45rem; }
-    .tool-desc { font-size: 0.9rem; color: var(--dim); line-height: 1.75; max-width: 520px; }
-    .tool-right { text-align: right; padding-top: 0.4rem; display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-end; }
-    .tool-type { font-family: 'JetBrains Mono', monospace; font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.16em; color: var(--mute); }
-    .tool-status { display: flex; align-items: center; gap: 0.45rem; font-size: 0.78rem; color: var(--mute); }
-    .tool-status::before { content: ''; width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-    .tool-status.wip::before { background: var(--blue); box-shadow: 0 0 8px var(--blue); }
-    .tool-status.proto::before { background: #d2955c; box-shadow: 0 0 8px #d2955c; }
-    .tool-status.live::before  { background: #5cc191; box-shadow: 0 0 8px #5cc191; }
-    .tool-arrow { font-size: 0.8rem; color: var(--blue); }
-    @media (max-width: 580px) { .tool-item { grid-template-columns: 1fr; } .tool-right { text-align: left; align-items: flex-start; } }
 
     /* THE THREAD */
     #thread { background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid rgba(255,255,255,0.08); padding: 80px 0; }
@@ -225,62 +217,37 @@
         Ceven Labs · Aarhus, Denmark
       </p>
       <h1 class="hero-h1 fade d1">
-        The way the<br>
-        world <span class="accent-amber">moves,</span><br>
-        turned into signals.
+        Read how the world <span class="accent-amber">moves.</span>
       </h1>
-      <p class="hero-sub fade d2">Ceven Labs builds tools for reading movement. LayOvr models what crossing time zones does to your body, and gives you a plan built around your actual flights. OvrHead listens to every aircraft passing over Aarhus and turns weeks of that record into a picture of how European air corridors run. Same idea, different subject: take a domain the world hands over late and fragmented, and rebuild it as something you can read at a glance.</p>
-      <div class="hero-cta fade d3">
-        <a href="layovr/index.html" class="btn-tool">LayOvr <span class="btn-tag">Sleep &amp; Travel</span></a>
-        <a href="ovrhead/index.html" class="btn-tool">OvrHead <span class="btn-tag">Observatory</span></a>
+      <p class="hero-sub fade d2">Two tools built around the same idea. Take a domain the world hands over late and fragmented, and turn it into something you can read at a glance.</p>
+      <div class="solutions fade d3">
+        <a href="layovr/index.html" class="solution">
+          <div>
+            <div class="solution-top">
+              <span class="solution-tag sleep">Sleep &amp; Travel</span>
+            </div>
+            <p class="solution-name">LayOvr</p>
+            <p class="solution-desc">Jet lag planning built around your exact flights. The circadian model runs offline on your iPhone.</p>
+          </div>
+          <div class="solution-right">
+            <span class="solution-status wip">In development</span>
+            <span class="solution-arrow">View →</span>
+          </div>
+        </a>
+        <a href="ovrhead/index.html" class="solution">
+          <div>
+            <div class="solution-top">
+              <span class="solution-tag body">Observatory</span>
+            </div>
+            <p class="solution-name">OvrHead</p>
+            <p class="solution-desc">Every aircraft passing over Aarhus, matched to its route. Weeks of the record, in your browser.</p>
+          </div>
+          <div class="solution-right">
+            <span class="solution-status live">Live</span>
+            <span class="solution-arrow">Open it →</span>
+          </div>
+        </a>
       </div>
-    </div>
-  </section>
-
-  <section id="tools">
-    <div class="inner">
-      <div class="section-rule fade">
-        <span class="section-rule-label">Tools</span>
-      </div>
-      <ul class="tool-list">
-
-        <li class="tool-item fade">
-          <a href="layovr/index.html">
-            <div class="tool-left">
-              <div class="tool-top">
-                <span class="tool-num">01</span>
-                <span class="tool-domain sleep">Sleep &amp; Travel</span>
-              </div>
-              <p class="tool-name">LayOvr</p>
-              <p class="tool-desc">Jet lag planning built around your exact flights and meetings. Science-backed circadian engine that runs offline on device. It tells you when to sleep, nap, get light, and cut caffeine so you peak when it matters.</p>
-            </div>
-            <div class="tool-right">
-              <span class="tool-type">iOS App</span>
-              <span class="tool-status wip">In development</span>
-              <span class="tool-arrow">View →</span>
-            </div>
-          </a>
-        </li>
-
-        <li class="tool-item fade d1">
-          <a href="ovrhead/index.html">
-            <div class="tool-left">
-              <div class="tool-top">
-                <span class="tool-num">02</span>
-                <span class="tool-domain body">Observatory</span>
-              </div>
-              <p class="tool-name">OvrHead</p>
-              <p class="tool-desc">One antenna over Aarhus reads every aircraft that passes overhead, matches each flight to the route it is flying, and turns weeks of the record into readings on European air corridors. The whole record is open. The whole tool runs in your browser.</p>
-            </div>
-            <div class="tool-right">
-              <span class="tool-type">Web Observatory</span>
-              <span class="tool-status live">Live</span>
-              <span class="tool-arrow">Open it →</span>
-            </div>
-          </a>
-        </li>
-
-      </ul>
     </div>
   </section>
 
