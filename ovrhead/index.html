@@ -1801,8 +1801,17 @@ function initSky(id, { margin = 12 } = {}) {
              brg: Math.atan2(Math.sin(Δλ) * Math.cos(φ),
                              Math.cos(φ0) * Math.sin(φ) - Math.sin(φ0) * Math.cos(φ) * Math.cos(Δλ)) };
   };
-  if (COAST === null) grab('coast.json', false).then(c => { COAST = c || false; })
-                                              .catch(() => { COAST = false; });
+  // Coast changes only when the receiver moves; let the browser cache it
+  // with its default policy instead of forcing a round-trip on every load.
+  // The generic grab() would attach cache:no-cache which added ~1 s of
+  // GitHub-raw revalidation for a 12 KB static file. And when it arrives
+  // we must call draw() ourselves - otherwise the coastline only appears
+  // if the reader happens to resize the window.
+  if (COAST === null) {
+    fetch(BASE + 'coast.json').then(r => r.ok ? r.json() : null)
+      .then(c => { COAST = c || false; draw(); })
+      .catch(() => { COAST = false; });
+  }
 
   function draw() {
     const w = cv.clientWidth, h = cv.clientHeight;
