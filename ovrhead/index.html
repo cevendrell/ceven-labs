@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>OvrHead - an observatory over Aarhus</title>
 <meta name="description" content="One antenna over Aarhus, Denmark. We turn a continuous record of aircraft passing overhead into signals about connectivity, capacity and trade - with the evidence attached.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2305164D'/%3E%3Ccircle cx='16' cy='16' r='2.6' fill='%238A5A33'/%3E%3Ccircle cx='16' cy='16' r='7.5' fill='none' stroke='%2382A5D6' stroke-width='1.1' opacity='.75'/%3E%3Ccircle cx='16' cy='16' r='12.5' fill='none' stroke='%2382A5D6' stroke-width='1.1' opacity='.35'/%3E%3C/svg%3E">
+<link rel="icon" href="../media/shared/cl-mark.svg" type="image/svg+xml">
 <link rel="canonical" href="https://cevenlabs.com/ovrhead/">
 <meta name="author" content="Carlos Ebrahim Vendrell">
 <meta name="color-scheme" content="light dark">
@@ -103,15 +103,17 @@ button, input, textarea, select { font:inherit; color:inherit; }
 #topbar { position:sticky; top:0; z-index:100;
           background:#05164d; color:var(--on-navy);
           border-bottom:1px solid rgba(255,255,255,0.08); }
-.bar { display:flex; align-items:center; gap:20px; flex-wrap:wrap;
-       padding:1.25rem 2.5rem; }
-/* The bar needs three rows on a phone. Pinning a quarter of the screen for it
-   is a worse trade than making the reader scroll up for the nav, so below this
-   width it scrolls away with the page. */
+/* Two-row chrome: row 1 is the identity + site nav (matches cevenlabs.com
+   and layovr), row 2 is the app toolbar (sections, search, freshness). */
+.bar { display:flex; align-items:center; gap:20px; flex-wrap:wrap; }
+.bar-main  { padding: 1.25rem 2.5rem; }
+.bar-tools { padding: 0.55rem 2.5rem; gap: 14px;
+             border-top: 1px solid rgba(255,255,255,0.06); }
+/* On a phone the whole chrome scrolls away with the page so the reader
+   is not giving up a quarter of the screen for nav they rarely need. */
 @media (max-width:760px){
-  .bar { padding: 1rem 1.5rem; gap:10px; }
-  .mark { order:0; }
-  #nav  { order:2; }
+  .bar-main  { padding: 1rem 1.5rem; gap: 10px; }
+  .bar-tools { padding: 0.5rem 1.5rem; gap: 10px; }
 }
 
 /* Identity strip: the CL mark and the Ceven Labs wordmark are the
@@ -138,36 +140,60 @@ button, input, textarea, select { font:inherit; color:inherit; }
 .mark span { font-size:.66rem; color:var(--on-navy-2); }
 @media (max-width:520px){ .mark span{ display:none } }
 
-#nav { display:flex; gap:2px; flex-wrap:wrap; }
-#nav a { font-size:.85rem; color:var(--on-navy-2); text-decoration:none;
-         padding:7px 12px; border-radius:var(--r-control); white-space:nowrap; }
+/* Site nav links (row 1), same shape as cevenlabs.com and layovr. */
+.nav-links { display:flex; gap:2rem; list-style:none; align-items:center;
+             margin-left:auto; }
+.nav-links a { font-size:.85rem; font-weight:500; text-decoration:none;
+               transition:color .2s; }
+.nav-links > li > a { position:relative; padding:0.35rem 0; }
+.nav-links > li:not(.nav-info) > a { color:var(--on-navy); font-weight:600; }
+.nav-links > li.nav-info > a { color:var(--on-navy-2); }
+.nav-links > li.nav-info:first-of-type::before {
+  content:''; display:inline-block; width:1px; height:14px;
+  background:rgba(255,255,255,0.14); margin:0 1rem 0 -.5rem;
+  vertical-align:middle;
+}
+.nav-links > li > a::after {
+  content:''; position:absolute; left:0; right:0; bottom:-6px;
+  height:1px; background:var(--accent); transform:scaleX(0);
+  transform-origin:left; transition:transform .18s ease;
+}
+.nav-links > li > a:hover::after { transform:scaleX(1); }
+@media (max-width:600px){ .nav-links { gap:1.2rem; } }
+
+/* Sections nav (row 2). Slimmed from the earlier single-row design so
+   the whole tool strip is only a touch taller than a form field. */
+#nav { display:flex; gap:2px; flex-wrap:wrap; position:relative; }
+#nav a { font-size:.78rem; color:var(--on-navy-2); text-decoration:none;
+         padding:5px 11px; border-radius:var(--r-control); white-space:nowrap;
+         letter-spacing:.005em; }
 #nav a:hover { color:var(--on-navy); background:rgba(238,241,248,.09); }
 /* The active background is drawn by #nav-pill, which slides - see Motion. */
 #nav a.on { color:var(--navy); font-weight:600; }
 
 /* Freshness is a permanent fixture of the chrome, not a footnote - every page
    should say how current the record is without the reader going looking. */
-.freshness { margin-left:auto; font-family:var(--mono); font-size:.68rem;
+.freshness { margin-left:auto; font-family:var(--mono); font-size:.66rem;
              color:var(--on-navy-2); text-decoration:none; white-space:nowrap;
              display:flex; align-items:center; gap:7px;
-             padding:6px 11px; border-radius:var(--r-control);
-             border:1px solid rgba(130,165,214,.28); }
+             padding:4px 9px; border-radius:var(--r-control);
+             border:1px solid rgba(130,165,214,.24); }
 .freshness:hover { border-color:var(--on-navy-2); color:var(--on-navy); }
 .freshness .dot { width:6px; height:6px; border-radius:50%; background:var(--rise);
                   flex-shrink:0; box-shadow:0 0 0 3px rgba(46,135,94,.22); }
 .freshness.stale .dot { background:var(--fall); box-shadow:0 0 0 3px rgba(217,123,115,.22); }
 .freshness b { font-weight:500; color:var(--on-navy); }
-@media (max-width:760px){ .freshness{ margin-left:0; order:4 } }
+@media (max-width:760px){ .freshness{ margin-left:0; } }
 
 #main { padding:0 var(--pad) 100px; min-width:0; }
 .wrap { max-width:1240px; margin:0 auto; }
 
 /* ── Search ────────────────────────────────────────────────────────────── */
-#search-wrap { position:relative; flex:0 1 210px; }
-@media (max-width:760px){ #search-wrap{ flex:1 1 160px; order:3 } }
+#search-wrap { position:relative; flex:0 1 230px; }
+@media (max-width:760px){ #search-wrap{ flex:1 1 160px; } }
 #search {
-  width:100%; background:rgba(238,241,248,.09); border:1px solid rgba(130,165,214,.28);
-  border-radius:var(--r-control); padding:7px 11px; font-size:.78rem; color:var(--on-navy);
+  width:100%; background:rgba(238,241,248,.07); border:1px solid rgba(130,165,214,.24);
+  border-radius:var(--r-control); padding:5px 11px; font-size:.76rem; color:var(--on-navy);
 }
 #search::placeholder { color:var(--on-navy-2); opacity:.68; }
 #search:focus { border-color:var(--on-navy-2); background:rgba(238,241,248,.14); }
@@ -873,13 +899,26 @@ th.sortable .dir { display:inline-block; transition: transform var(--t-base) var
 <div id="shell">
   <a class="skip" href="#main">Skip to content</a>
   <header id="topbar">
-    <div class="bar">
+    <!-- Row 1: identity + site nav, mirroring the Ceven Labs and LayOvr
+         marketing pages so the three products wear the same chrome. -->
+    <div class="bar bar-main">
       <a class="nav-logo" href="/" title="Ceven Labs">
         <span class="nav-mark" aria-hidden="true">CL</span>
         <span>Ceven Labs</span>
       </a>
       <span class="nav-sep" aria-hidden="true">/</span>
       <a class="mark" href="#/"><b>OVRHEAD</b><span>Aarhus</span></a>
+      <ul class="nav-links">
+        <li><a href="/layovr/">LayOvr</a></li>
+        <li><a href="/ovrhead/">OvrHead</a></li>
+        <li class="nav-info"><a href="/pages/about/">About</a></li>
+        <li class="nav-info"><a href="/pages/support/">Support</a></li>
+      </ul>
+    </div>
+    <!-- Row 2: OvrHead's own app toolbar. Section pill-nav on the left,
+         search in the middle, freshness on the right. Slimmer than
+         row 1 so the two bars together are not much taller than one. -->
+    <div class="bar bar-tools">
       <nav id="nav" aria-label="Sections">
         <span id="nav-pill" aria-hidden="true"></span>
         <a href="#/"        data-r="/"       >Signals</a>
