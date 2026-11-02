@@ -16,7 +16,9 @@
    Options
      parts      { stage, time, kpis, list }  elements to build each piece into;
                 any left out are stacked inside `host` (or skipped, see show)
-     show       { kpis, list, views, paths, legend, hint, mode, clock }  (all true)
+     show       { kpis, list, views, paths, legend, hint, clock }  (all true)
+     figures    an element holding your own [data-k=ac|pos|max] figures to fill
+     replayLabel  text before the day on the day chip (default 'Replay · ')
      pathsHost  element to put the Off/Day/Week toggle in, instead of the stage
      transparent  draw on the page background (no box), like a globe on a page
      shift      fraction of the stage width to move the scope right (or a
@@ -36,7 +38,7 @@ const RECORD_BASE = 'https://raw.githubusercontent.com/cevendrell/flight-macro/m
 const LAND_URL    = new URL('./radar-land.json', import.meta.url).href;
 const HYPARQUET   = 'https://cdn.jsdelivr.net/npm/hyparquet@1.31.4/+esm';
 const HYPARQUET_Z = 'https://cdn.jsdelivr.net/npm/hyparquet-compressors@1.1.2/+esm';
-const RANGE_KM = 300, POLL_MS = 3000, STATS_MS = 10000, TIMEOUT_MS = 4500, ALT_X = 6, TRAIL_N = 48;
+const RANGE_KM = 500, RING_KM = 100, MAX_KM = 540, POLL_MS = 3000, STATS_MS = 10000, TIMEOUT_MS = 4500, ALT_X = 6, TRAIL_N = 48;
 const FALLBACK_RX = { lat: 56.1629, lon: 10.2039 };
 const TZ = 'Europe/Copenhagen';
 
@@ -51,7 +53,7 @@ function altitudeColor(ft) {
   if (ft == null || ft === 'ground') return '#8a8f99';
   let c = ALT_STOPS[0][1]; for (const [a, col] of ALT_STOPS) if (ft >= a) c = col; return c;
 }
-const fmtAlt = ft => ft === 'ground' ? 'GND' : ft == null ? '—' : ft >= 1000 ? (ft / 1000).toFixed(1).replace(/\.0$/, '') + 'k' : Math.round(ft);
+const fmtAlt = ft => ft === 'ground' ? 'GND' : ft == null ? '—' : ft >= 5000 ? 'FL' + String(Math.round(ft / 100)).padStart(3, '0') : Math.round(ft / 100) * 100 + ' ft';
 const fmtSpeed = kt => kt == null ? '—' : Math.round(kt) + ' kt';
 const fmtDist = km => km == null ? '—' : km < 10 ? km.toFixed(1) + ' km' : Math.round(km) + ' km';
 const fmtRssi = db => db == null ? '—' : db.toFixed(1);
@@ -110,9 +112,20 @@ const CSS = `
 .rdr-tl { top:var(--rdr-top,1rem); left:var(--rdr-side,1rem); } .rdr-tr { top:var(--rdr-top,1rem); right:var(--rdr-side,1rem); flex-direction:column; align-items:flex-end; }
 .rdr-bl { bottom:var(--rdr-bottom,1rem); left:var(--rdr-side,1rem); flex-direction:column; align-items:flex-start; gap:.3rem; }
 .rdr-br { bottom:calc(var(--rdr-bottom,1rem) + .35rem); right:calc(var(--rdr-side,1rem) + 3.6rem); text-transform:none; letter-spacing:.04em; opacity:.7; }
-.rdr-mode { padding:.35rem .7rem; border-radius:var(--rdr-ctl); font-weight:600; background:var(--rdr-chip); border:1px solid var(--rdr-line); color:var(--rdr-ink2); }
-.rdr-mode[data-state=live] { color:var(--rdr-live); border-color:color-mix(in srgb, var(--rdr-live) 45%, transparent); }
-.rdr-mode[data-state=record] { color:var(--rdr-replay); border-color:color-mix(in srgb, var(--rdr-replay) 45%, transparent); }
+.rdr-chip { position:relative; display:inline-flex; align-items:center; gap:.45rem; padding:.42rem .75rem; border-radius:var(--rdr-ctl); font-family:var(--rdr-ui-font); font-size:var(--rdr-ui-size); font-weight:600;
+  letter-spacing:var(--rdr-ui-track); text-transform:var(--rdr-ui-case); background:var(--rdr-chip); border:1px solid var(--rdr-line); color:var(--rdr-ink2); cursor:pointer; white-space:nowrap; }
+.rdr-chip[data-state=live] { color:var(--rdr-live); border-color:color-mix(in srgb, var(--rdr-live) 45%, transparent); }
+.rdr-chip[data-state=record] { color:var(--rdr-replay); border-color:color-mix(in srgb, var(--rdr-replay) 45%, transparent); }
+.rdr-chip:hover { border-color:currentColor; }
+.rdr-caret { width:9px; height:6px; fill:none; stroke:currentColor; stroke-width:1.6; }
+.rdr-chip select { position:absolute; inset:0; width:100%; height:100%; opacity:0; cursor:pointer; font-size:16px; appearance:none; -webkit-appearance:none; border:0; }
+.rdr-tl .rdr-play { width:32px; height:32px; }
+.rdr-legend { right:var(--rdr-side,1rem); bottom:calc(var(--rdr-bottom,1rem) + 3.8rem); flex-direction:column; align-items:flex-end; gap:.45rem; letter-spacing:.08em; }
+.rdr-legb { display:flex; gap:.45rem; height:132px; }
+.rdr-gradv { display:block; width:5px; height:100%; border-radius:3px; background:linear-gradient(0deg,#ff4444 0 12.5%,#ff8c1a 12.5% 25%,#ffd633 25% 50%,#66cc44 50% 75%,#33cccc 75% 100%); }
+.rdr-legl { display:flex; flex-direction:column; justify-content:space-between; align-items:flex-end; font-size:.52rem; letter-spacing:.04em; line-height:1; margin:-.25em 0; }
+.rdr-legl em { font-style:normal; }
+.rdr-place.ring { font-size:.5rem; letter-spacing:.08em; text-transform:none; color:color-mix(in srgb, var(--rdr-accent) 70%, transparent); }
 .rdr-clock { font-size:1rem; letter-spacing:.08em; color:var(--rdr-hl); font-variant-numeric:tabular-nums; }
 .rdr-seg { display:inline-flex; gap:2px; padding:2px; border-radius:var(--rdr-ctl); background:var(--rdr-seg-bg); border:1px solid var(--rdr-seg-line); }
 .rdr-seg button, .rdr-seg .lbl { font-family:var(--rdr-ui-font); font-size:var(--rdr-ui-size); font-weight:var(--rdr-ui-weight); letter-spacing:var(--rdr-ui-track); text-transform:var(--rdr-ui-case); }
@@ -144,7 +157,8 @@ const CSS = `
   font-family:var(--rdr-mono); font-size:.62rem; letter-spacing:.1em; color:var(--rdr-mute); }
 .rdr > .rdr-time { border-top:1px solid var(--rdr-line); border-bottom:1px solid var(--rdr-line); }
 .rdr-time[hidden] { display:none; }
-.rdr-time.is-live .rdr-play, .rdr-time.is-live .rdr-speed { display:none; }
+.rdr-time.is-live .rdr-speed { display:none; }
+.is-live .rdr-play { display:none; }
 .rdr-play { flex:none; width:30px; height:30px; border-radius:50%; border:1px solid var(--rdr-seg-line); background:var(--rdr-seg-bg); cursor:pointer; display:grid; place-items:center; padding:0; }
 .rdr-play svg { width:11px; height:11px; fill:var(--rdr-hl); } .rdr-play .pl { display:none; }
 .rdr-play[aria-pressed=true] .pa { display:none; } .rdr-play[aria-pressed=true] .pl { display:inline; }
@@ -180,7 +194,8 @@ const CSS = `
   :where(html) { --rdr-h:460px; }
   .rdr-br, .rdr-info { display:none; }
   .rdr-card { top:auto; bottom:4.2rem; right:.75rem; left:.75rem; width:auto; }
-  .rdr-tl { right:.75rem; left:.75rem; top:.75rem; } .rdr-tr { top:3.2rem; right:.75rem; } .rdr-bl { left:.75rem; bottom:.75rem; }
+  .rdr-tl { right:.75rem; left:.75rem; top:.75rem; } .rdr-tr { top:3.4rem; right:.75rem; } .rdr-bl { left:.75rem; bottom:.75rem; }
+  .rdr-legend { right:.75rem; bottom:4rem; } .rdr-legb { height:96px; }
   .rdr-compass { right:.75rem; bottom:.75rem; width:40px; height:40px; }
   .rdr-time { flex-wrap:wrap; padding:.7rem .75rem .5rem; } .rdr-scrub { order:5; flex-basis:100%; }
   .rdr-kpi { padding:.65rem .7rem; gap:.25rem; } .rdr-kpi b { font-size:1.05rem; } .rdr-kpi span { font-size:.5rem; letter-spacing:.08em; }
@@ -189,7 +204,7 @@ const CSS = `
 `;
 
 const SEG_VIEWS = `<div class="rdr-seg" role="group" aria-label="View"><button type="button" data-view="radar" aria-pressed="false">Radar</button><button type="button" data-view="tilt" aria-pressed="true">Tilt</button><button type="button" data-view="low" aria-pressed="false">Low</button></div>`;
-const SEG_PATHS = `<div class="rdr-seg" role="group" aria-label="Flight paths"><span class="lbl">Paths</span><button type="button" data-paths="off" aria-pressed="true">Off</button><button type="button" data-paths="day" aria-pressed="false">Day</button><button type="button" data-paths="week" aria-pressed="false">Week</button></div>`;
+const SEG_PATHS = `<div class="rdr-seg" role="group" aria-label="Flight tracks"><span class="lbl">Tracks</span><button type="button" data-paths="off" aria-pressed="true">Off</button><button type="button" data-paths="sofar" aria-pressed="false" title="Tracks build up as the replay runs">Build up</button><button type="button" data-paths="day" aria-pressed="false">Day</button><button type="button" data-paths="week" aria-pressed="false">Week</button></div>`;
 const HTML = {
   kpis: `
   <div class="rdr-kpi"><b data-k="ac">—</b><span>aircraft heard</span></div>
@@ -200,16 +215,14 @@ const HTML = {
   <div class="rdr-kpi"><b data-k="k6">—</b><span data-l="k6">—</span></div>`,
   stage: s => `
   <div class="rdr-labels" aria-hidden="true"></div>
-  <div class="rdr-hud rdr-tl">${s.mode ? '<span class="rdr-mode" data-state="loading">Connecting</span>' : ''}${s.clock ? '<span class="rdr-clock">--:--:--</span>' : ''}</div>
+  <div class="rdr-hud rdr-tl"><label class="rdr-chip" data-state="loading"><span class="rdr-chiptxt">Connecting</span><svg class="rdr-caret" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4"/></svg><select class="rdr-day" aria-label="Day"></select></label><button type="button" class="rdr-play" aria-label="Pause" aria-pressed="false"><svg viewBox="0 0 12 12" aria-hidden="true"><rect class="pa" x="2" y="1.5" width="2.6" height="9" rx="0.6"/><rect class="pa" x="7.4" y="1.5" width="2.6" height="9" rx="0.6"/><path class="pl" d="M3 1.5 L10.5 6 L3 10.5 Z"/></svg></button>${s.clock ? '<span class="rdr-clock">--:--:--</span>' : ''}</div>
   <div class="rdr-hud rdr-tr">${s.views ? SEG_VIEWS : ''}${s.paths ? SEG_PATHS + '<span class="rdr-info"></span>' : ''}</div>
   <div class="rdr-card" hidden></div>
-  ${s.legend ? '<div class="rdr-hud rdr-bl"><span>Altitude</span><i class="rdr-grad"></i><span class="rdr-gradl"><em>0</em><em>10k</em><em>20k</em><em>30k</em><em>40k ft</em></span></div>' : ''}
+  ${s.legend ? '<div class="rdr-hud rdr-legend" aria-label="Altitude colours"><span class="rdr-legt">Altitude</span><div class="rdr-legb"><span class="rdr-legl"><em>FL400</em><em>FL300</em><em>FL200</em><em>FL100</em><em>GND</em></span><i class="rdr-gradv"></i></div></div>' : ''}
   ${s.hint ? '<div class="rdr-hud rdr-br">Drag to turn · click, then scroll to zoom · tap a flight</div>' : ''}
   <button type="button" class="rdr-compass" aria-label="Turn to face north" title="Face north"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18.5"/><g><path d="M20 6 L24.5 20 L15.5 20 Z" class="n"/><path d="M20 34 L24.5 20 L15.5 20 Z" class="s"/><text x="20" y="5.2">N</text></g></svg></button>
   <p class="rdr-fallback" hidden>This browser can’t draw the 3D view.</p>`,
   time: `
-  <button type="button" class="rdr-play" aria-label="Pause" aria-pressed="false"><svg viewBox="0 0 12 12" aria-hidden="true"><rect class="pa" x="2" y="1.5" width="2.6" height="9" rx="0.6"/><rect class="pa" x="7.4" y="1.5" width="2.6" height="9" rx="0.6"/><path class="pl" d="M3 1.5 L10.5 6 L3 10.5 Z"/></svg></button>
-  <select class="rdr-day" aria-label="Day"></select>
   <div class="rdr-scrub"><svg class="rdr-hist" viewBox="0 0 144 24" preserveAspectRatio="none" aria-hidden="true"></svg><input type="range" min="0" max="1" step="30" value="0" aria-label="Time of day"><div class="rdr-ticks" aria-hidden="true"></div></div>
   <span class="rdr-seg rdr-speed" hidden><button type="button" data-spd="1" aria-pressed="true">1×</button><button type="button" data-spd="10" aria-pressed="false">10×</button><button type="button" data-spd="60" aria-pressed="false">60×</button></span>
   <button type="button" class="rdr-live" hidden>Back to live</button>`,
@@ -222,7 +235,8 @@ const HTML = {
 export function mountRadar(host, opts = {}) {
   if (!document.getElementById('rdr-css')) { const st = document.createElement('style'); st.id = 'rdr-css'; st.textContent = CSS; document.head.appendChild(st); }
   const C = Object.assign({}, DEFAULT_COLORS, opts.colors || {});
-  const S = Object.assign({ kpis: true, list: true, views: true, paths: true, legend: true, hint: true, mode: true, clock: true }, opts.show || {});
+  const S = Object.assign({ kpis: true, list: true, views: true, paths: true, legend: true, hint: true, clock: true }, opts.show || {});
+  const REPLAY = opts.replayLabel ?? 'Replay · ';
   const onStatus = opts.onStatus || (() => {}), onDay = opts.onDay || (() => {}), onPaths = opts.onPaths || (() => {});
   const init = opts.initial || {};
   const P = opts.parts || {};
@@ -242,14 +256,14 @@ export function mountRadar(host, opts = {}) {
   const listEl = part('list', S.list, HTML.list);
   if (opts.pathsHost) { opts.pathsHost.classList.add('rdr-part', 'rdr-pathsbox'); opts.pathsHost.innerHTML = SEG_PATHS + '<span class="rdr-info"></span>'; }
   if (opts.transparent) sky.classList.add('is-clear');
-  const roots = [kpiEl, sky, timeEl, listEl, opts.pathsHost].filter(Boolean);
+  const roots = [kpiEl, sky, timeEl, listEl, opts.pathsHost, opts.figures].filter(Boolean);
   const q = s => { for (const r of roots) { const e = r.querySelector(s); if (e) return e; } return null; };
   const qa = s => roots.flatMap(r => [...r.querySelectorAll(s)]);
   const nul = { textContent: '', innerHTML: '', hidden: false, value: '', dataset: {}, style: { setProperty() {} }, classList: { add() {}, remove() {}, toggle() {} }, setAttribute() {}, addEventListener() {} };
   const K = Object.fromEntries(qa('[data-k]').map(e => [e.dataset.k, e])), L = Object.fromEntries(qa('[data-l]').map(e => [e.dataset.l, e]));
   for (const k of ['ac', 'pos', 'max', 'k4', 'k5', 'k6']) K[k] = K[k] || nul;
   for (const k of ['k4', 'k5', 'k6']) L[k] = L[k] || nul;
-  const skyLabels = q('.rdr-labels'), skyMode = q('.rdr-mode') || nul, skyClock = q('.rdr-clock') || nul, skyCard = q('.rdr-card');
+  const skyLabels = q('.rdr-labels'), skyMode = q('.rdr-chiptxt') || nul, skyChip = q('.rdr-chip') || nul, skyClock = q('.rdr-clock') || nul, skyCard = q('.rdr-card');
   const skyCompass = q('.rdr-compass'), skyNeedle = q('.rdr-compass g'), skyTime = timeEl || nul;
   const skyRange = q('.rdr-scrub input') || nul, skyDay = q('.rdr-day') || nul, skyPlay = q('.rdr-play') || nul, skyHist = q('.rdr-hist') || nul;
   const skyTicks = q('.rdr-ticks') || nul, skyLive = q('.rdr-live') || nul, skySpeed = q('.rdr-speed') || nul, skyInfo = q('.rdr-info') || nul;
@@ -268,7 +282,7 @@ export function mountRadar(host, opts = {}) {
 
   /* ── Scene ── */
   let renderer, scene, camera, raycaster, arrowGeo, glowTex, raf = 0;
-  const cam = Object.assign({ r: 560, pol: 0.95, az: 0, tween: null }, init.cam || {}, { tween: null });
+  const cam = Object.assign({ r: 760, pol: 0.95, az: 0, tween: null }, init.cam || {}, { tween: null });
   let view = init.view || 'tilt';
   function buildScene() {
     try { renderer = new T.WebGLRenderer({ antialias: true, alpha: !!opts.transparent, powerPreference: 'high-performance' }); }
@@ -277,22 +291,27 @@ export function mountRadar(host, opts = {}) {
     renderer.setClearColor(new T.Color(C.clear), opts.transparent ? 0 : 1);
     sky.prepend(renderer.domElement);
     scene = new T.Scene();
-    scene.fog = new T.Fog(new T.Color(C.clear), 560, 1400);
-    camera = new T.PerspectiveCamera(38, 1, 1, 4000);
+    scene.fog = new T.Fog(new T.Color(C.clear), 900, 2300);
+    camera = new T.PerspectiveCamera(38, 1, 1, 6000);
     raycaster = new T.Raycaster();
     const fc = document.createElement('canvas'); fc.width = fc.height = 512;
     { const g = fc.getContext('2d'), gr = g.createRadialGradient(256, 256, 0, 256, 256, 256); gr.addColorStop(0, C.floorIn); gr.addColorStop(0.7, C.floorMid); gr.addColorStop(1, C.floorOut); g.fillStyle = gr; g.fillRect(0, 0, 512, 512); }
     const ftex = new T.CanvasTexture(fc); ftex.colorSpace = T.SRGBColorSpace;
-    const floor = new T.Mesh(new T.CircleGeometry(RANGE_KM * 1.08, 96), new T.MeshBasicMaterial({ map: ftex, transparent: true, depthWrite: false }));
+    const floor = new T.Mesh(new T.CircleGeometry(RANGE_KM * 1.06, 128), new T.MeshBasicMaterial({ map: ftex, transparent: true, depthWrite: false }));
     floor.rotation.x = -Math.PI / 2; floor.renderOrder = -2; scene.add(floor);
+    // Rings every 100 km. Most traffic sits inside 300; the outer two are for the rare far ones.
     const ringMat = new T.LineBasicMaterial({ color: new T.Color(C.ring), transparent: true, opacity: 0.32 });
-    for (let k = 1; k <= 4; k++) {
-      const r = RANGE_KM * k / 4, pts = [];
-      for (let i = 0; i <= 128; i++) { const a = i / 128 * Math.PI * 2; pts.push(new T.Vector3(r * Math.sin(a), 0.15, -r * Math.cos(a))); }
-      scene.add(new T.Line(new T.BufferGeometry().setFromPoints(pts), ringMat));
+    const farMat = new T.LineDashedMaterial({ color: new T.Color(C.ring), transparent: true, opacity: 0.22, dashSize: 6, gapSize: 6 });
+    for (let k = 1; k <= RANGE_KM / RING_KM; k++) {
+      const r = RING_KM * k, pts = [];
+      for (let i = 0; i <= 160; i++) { const a = i / 160 * Math.PI * 2; pts.push(new T.Vector3(r * Math.sin(a), 0.15, -r * Math.cos(a))); }
+      const ln = new T.Line(new T.BufferGeometry().setFromPoints(pts), r > 300 ? farMat : ringMat);
+      if (r > 300) ln.computeLineDistances();
+      scene.add(ln);
+      ringLabels.push({ km: r, v: new T.Vector3(r * Math.sin(Math.PI * 0.75), 0.5, -r * Math.cos(Math.PI * 0.75)) });
     }
     const ticks = [];
-    for (let d = 0; d < 360; d += 10) { const a = d * Math.PI / 180, r0 = RANGE_KM * (d % 90 ? 0.97 : 0.92); ticks.push(new T.Vector3(r0 * Math.sin(a), 0.15, -r0 * Math.cos(a)), new T.Vector3(RANGE_KM * Math.sin(a), 0.15, -RANGE_KM * Math.cos(a))); }
+    for (let d = 0; d < 360; d += 10) { const a = d * Math.PI / 180, r0 = RANGE_KM * (d % 90 ? 0.98 : 0.95); ticks.push(new T.Vector3(r0 * Math.sin(a), 0.15, -r0 * Math.cos(a)), new T.Vector3(RANGE_KM * Math.sin(a), 0.15, -RANGE_KM * Math.cos(a))); }
     scene.add(new T.LineSegments(new T.BufferGeometry().setFromPoints(ticks), ringMat));
     const mast = new T.Mesh(new T.CylinderGeometry(0.6, 1.2, 14, 12), new T.MeshBasicMaterial({ color: new T.Color(C.mast) })); mast.position.y = 7; scene.add(mast);
     const tip = new T.Mesh(new T.SphereGeometry(1.6, 16, 12), new T.MeshBasicMaterial({ color: new T.Color(C.tip) })); tip.position.y = 14.5; scene.add(tip);
@@ -329,19 +348,20 @@ export function mountRadar(host, opts = {}) {
     });
     el.addEventListener('pointerup', e => { if (drag && !drag.moved) pick(e); drag = null; });
     el.addEventListener('pointercancel', () => { drag = null; });
-    el.addEventListener('wheel', e => { if (!engaged && !e.ctrlKey) return; e.preventDefault(); cam.r = Math.min(1100, Math.max(120, cam.r * Math.exp(e.deltaY * 0.001))); cam.tween = null; }, { passive: false });
+    el.addEventListener('wheel', e => { if (!engaged && !e.ctrlKey) return; e.preventDefault(); cam.r = Math.min(1700, Math.max(140, cam.r * Math.exp(e.deltaY * 0.001))); cam.tween = null; }, { passive: false });
     const ro = new ResizeObserver(resize); ro.observe(sky); observers.push(ro); resize();
     built = true;
     raf = requestAnimationFrame(frame);
     return true;
   }
-  const PLACES = [['Aarhus', 56.162, 10.203], ['Aalborg', 57.048, 9.92], ['Billund', 55.74, 9.15], ['Copenhagen', 55.676, 12.568], ['Hamburg', 53.551, 9.993], ['Gothenburg', 57.709, 11.974], ['Odense', 55.403, 10.402]];
-  const placeEls = [];
+  const PLACES = [['Oslo', 59.913, 10.752], ['Berlin', 52.52, 13.405], ['Malmö', 55.605, 13.0], ['Bremen', 53.079, 8.801], ['Aarhus', 56.162, 10.203], ['Aalborg', 57.048, 9.92], ['Billund', 55.74, 9.15], ['Copenhagen', 55.676, 12.568], ['Hamburg', 53.551, 9.993], ['Gothenburg', 57.709, 11.974], ['Odense', 55.403, 10.402]];
+  const placeEls = [], ringLabels = [];
   function addPlaceLabels() {
-    for (const [n, a] of [['N', 0], ['E', 90], ['S', 180], ['W', 270]]) { const d = document.createElement('div'); d.className = 'rdr-place card'; d.textContent = n; skyLabels.appendChild(d); const r = RANGE_KM + 14, rad = a * Math.PI / 180; placeEls.push({ el: d, v: new T.Vector3(r * Math.sin(rad), 0.5, -r * Math.cos(rad)) }); }
+    for (const [n, a] of [['N', 0], ['E', 90], ['S', 180], ['W', 270]]) { const d = document.createElement('div'); d.className = 'rdr-place card'; d.textContent = n; skyLabels.appendChild(d); const r = RANGE_KM + 22, rad = a * Math.PI / 180; placeEls.push({ el: d, v: new T.Vector3(r * Math.sin(rad), 0.5, -r * Math.cos(rad)) }); }
+    for (const rl of ringLabels) { const d = document.createElement('div'); d.className = 'rdr-place ring'; d.textContent = rl.km + ' km'; skyLabels.appendChild(d); placeEls.push({ el: d, v: rl.v }); }
     for (const [n, la, lo] of PLACES) { const d = document.createElement('div'); d.className = 'rdr-place'; d.textContent = n; skyLabels.appendChild(d); placeEls.push({ el: d, v: new T.Vector3(kmX(lo), 0.5, -kmN(la)) }); }
   }
-  const VIEWS = { radar: { r: 640, pol: 0.03 }, tilt: { r: 560, pol: 0.95 }, low: { r: 430, pol: 1.38 } };
+  const VIEWS = { radar: { r: 980, pol: 0.03 }, tilt: { r: 760, pol: 0.95 }, low: { r: 560, pol: 1.38 } };
   function setView(v, instant) {
     const t = VIEWS[v]; if (!t) return; view = v;
     qa('[data-view]').forEach(b => b.setAttribute('aria-pressed', b.dataset.view === v));
@@ -389,7 +409,7 @@ export function mountRadar(host, opts = {}) {
   function ingest(list, t) {
     for (const a of list) {
       if (a.lat == null || a.lon == null) continue;
-      const d = haversineKm(rx.lat, rx.lon, a.lat, a.lon); if (d > RANGE_KM * 1.02) continue;
+      const d = haversineKm(rx.lat, rx.lon, a.lat, a.lon); if (d > MAX_KM) continue;
       let p = planes.get(a.hex); if (!p) { if (!built) continue; p = makePlane(a.hex); planes.set(a.hex, p); }
       a.dist = d; a.brg = bearingDeg(rx.lat, rx.lon, a.lat, a.lon);
       p.data = a; p.t0 = t; p.seenAt = t;
@@ -424,10 +444,10 @@ export function mountRadar(host, opts = {}) {
   function updateCard() {
     const p = selected && planes.get(selected);
     if (!p) { skyCard.hidden = true; return; }
-    const a = p.data, ft = a.altFt != null && a.altFt !== 'ground' ? ' ft' : '';
+    const a = p.data;
     skyCard.hidden = false; skyCard.style.setProperty('--ac', altitudeColor(a.altFt));
     skyCard.innerHTML = `<b>${esc(a.flight || a.hex.toUpperCase())}</b><span class="hex">${a.flight ? esc(a.hex.toUpperCase()) : 'No callsign'}${a.squawk ? ' · sq ' + esc(a.squawk) : ''}</span>
-      <dl><dt>Altitude</dt><dd>${fmtAlt(a.altFt)}${ft}</dd><dt>Speed</dt><dd>${fmtSpeed(a.gs)}</dd>
+      <dl><dt>Altitude</dt><dd>${fmtAlt(a.altFt)}</dd><dt>Speed</dt><dd>${fmtSpeed(a.gs)}</dd>
       <dt>Heading</dt><dd>${a.track != null ? Math.round(a.track) + '°' : '—'}</dd><dt>From antenna</dt><dd>${fmtDist(a.dist)} · ${Math.round(a.brg)}°</dd></dl>
       ${a.flight ? `<a href="https://www.flightradar24.com/${encodeURIComponent(a.flight)}" target="_blank" rel="noopener">Track on FR24 ↗</a>` : ''}`;
   }
@@ -438,7 +458,7 @@ export function mountRadar(host, opts = {}) {
     if (!list.length) { tbody.innerHTML = '<tr><td colspan="6" class="rdr-empty">No aircraft in range at this moment.</td></tr>'; return; }
     tbody.innerHTML = list.map(a => { const c = altitudeColor(a.altFt); return `<tr data-hex="${esc(a.hex)}" class="${a.hex === selected ? 'sel' : ''}">
       <td class="f">${esc(a.flight || '—')}</td><td class="h">${esc(a.hex)}</td>
-      <td class="a"><span class="dot" style="background:${c}"></span>${fmtAlt(a.altFt)}${a.altFt != null && a.altFt !== 'ground' ? ' ft' : ''}</td>
+      <td class="a"><span class="dot" style="background:${c}"></span>${fmtAlt(a.altFt)}</td>
       <td>${fmtSpeed(a.gs)}</td><td>${fmtDist(a.dist)}</td><td>${fmtRssi(a.rssi)}</td></tr>`; }).join('');
   }
   tbody.addEventListener('click', e => { const tr = e.target.closest('tr[data-hex]'); if (tr) select(tr.dataset.hex === selected ? null : tr.dataset.hex); });
@@ -471,7 +491,7 @@ export function mountRadar(host, opts = {}) {
   }
   function startLive(first) {
     mode = 'live'; simT = Date.now() / 1000; skySpeed.hidden = true; skyTime.hidden = false; skyLive.hidden = true; skyTime.classList.add('is-live');
-    skyMode.textContent = 'Live'; skyMode.dataset.state = 'live';
+    skyMode.textContent = 'Live'; skyChip.dataset.state = 'live'; sky.classList.add('is-live');
     onStatus('live', 'Live', `Live from the receiver · updated every ${POLL_MS / 1000} s`);
     setKpiLabels('msgs / sec', 'avg signal (dBFS)', 'uptime');
     const take = d => { if (mode !== 'live') return; ingest(normalize(d), Date.now() / 1000); kpis((d.aircraft || []).length); renderTable(); updateCard(); };
@@ -522,7 +542,7 @@ export function mountRadar(host, opts = {}) {
   }
   async function startRecord(i, at) {
     onStatus('loading', 'Loading the recording…');
-    skyMode.textContent = 'Loading'; skyMode.dataset.state = 'loading';
+    skyMode.textContent = 'Loading'; skyChip.dataset.state = 'loading';
     await loadManifest();
     if (i == null) i = snaps.length - 1;
     D = await loadDay(i); if (stopped) return;
@@ -533,12 +553,12 @@ export function mountRadar(host, opts = {}) {
     const day0 = Math.floor(frameTs[0] / 86400) * 86400;
     jumpTo(at != null ? at : day0 + (Date.now() / 1000) % 86400);
     const dayTxt = dayLabel(D.day);
-    skyMode.textContent = `Replay · ${dayTxt}`; skyMode.dataset.state = 'record';
+    skyMode.textContent = REPLAY + dayTxt; skyChip.dataset.state = 'record'; sky.classList.remove('is-live');
     onStatus('replay', 'Replay', dayTxt);
     setKpiLabels('recorded on', 'aircraft that day', 'snapshots that day');
     K.k4.textContent = dayTxt; K.k5.textContent = D.unique.toLocaleString('en-GB'); K.k6.textContent = frameTs.length.toLocaleString('en-GB');
     onDay({ day: D.day, label: dayTxt, unique: D.unique, snapshots: frameTs.length, days: snaps.length });
-    if (pathsMode === 'day') setPaths('day');
+    if (pathsMode === 'day' || pathsMode === 'sofar') setPaths(pathsMode);
   }
   function jumpTo(t) {
     for (const p of [...planes.values()]) dropPlane(p);
@@ -587,19 +607,19 @@ export function mountRadar(host, opts = {}) {
   setSpeed(speed);
 
   /* ── Paths: every track of the day, or of all the days on offer, in 3D ── */
-  let pathsMode = 'off', pathsObj = null, pathsJob = 0;
+  let pathsMode = 'off', pathsObj = null, pathsJob = 0, pathsT = null;
   async function setPaths(m) {
     pathsMode = m; const job = ++pathsJob; onPaths(m);
     qa('[data-paths]').forEach(b => b.setAttribute('aria-pressed', b.dataset.paths === m));
-    if (pathsObj) { scene.remove(pathsObj); pathsObj.geometry.dispose(); pathsObj.material.dispose(); pathsObj = null; }
+    if (pathsObj) { scene.remove(pathsObj); pathsObj.geometry.dispose(); pathsObj.material.dispose(); pathsObj = null; pathsT = null; }
     skyInfo.textContent = '';
     if (m === 'off' || !scene) return;
     try {
       await loadManifest();
-      const want = m === 'day' ? [D ? D.i : snaps.length - 1] : snaps.map((_, i) => i);
+      const want = m === 'week' ? snaps.map((_, i) => i) : [D ? D.i : snaps.length - 1];
       const list = [];
       for (const i of want) { skyInfo.textContent = `Loading ${list.length + 1} / ${want.length}…`; list.push(await loadDay(i)); if (job !== pathsJob || stopped) return; }
-      const pos = [], col = [], c = new T.Color(), hexes = new Set();
+      const segs = [], c = new T.Color(), hexes = new Set();
       for (const d of list) for (const [hex, tk] of d.tracks) {
         hexes.add(hex);
         for (let k = 1; k < tk.length; k++) {
@@ -607,16 +627,24 @@ export function mountRadar(host, opts = {}) {
           if (t1 - t0 > 300) continue;                                   // a gap: it left and came back
           const x0 = kmX(lo0), z0 = -kmN(la0), x1 = kmX(lo1), z1 = -kmN(la1);
           if ((x1 - x0) ** 2 + (z1 - z0) ** 2 > 1600) continue;            // a bad position fix
-          if (x0 * x0 + z0 * z0 > RANGE_KM * RANGE_KM * 1.1) continue;
-          pos.push(x0, altY(al0), z0, x1, altY(al1), z1);
-          c.set(altitudeColor(al0)); col.push(c.r, c.g, c.b); c.set(altitudeColor(al1)); col.push(c.r, c.g, c.b);
+          if (x0 * x0 + z0 * z0 > MAX_KM * MAX_KM) continue;
+          segs.push([t1, x0, altY(al0), z0, al0, x1, altY(al1), z1, al1]);
         }
       }
+      // in time order, so "so far" is just how many segments to draw
+      segs.sort((a, b) => a[0] - b[0]);
+      const pos = new Float32Array(segs.length * 6), col = new Float32Array(segs.length * 6);
+      pathsT = new Float64Array(segs.length);
+      segs.forEach((g, i) => {
+        pathsT[i] = g[0]; pos.set([g[1], g[2], g[3], g[5], g[6], g[7]], i * 6);
+        c.set(altitudeColor(g[4])); col.set([c.r, c.g, c.b], i * 6); c.set(altitudeColor(g[8])); col.set([c.r, c.g, c.b], i * 6 + 3);
+      });
       const g = new T.BufferGeometry();
-      g.setAttribute('position', new T.Float32BufferAttribute(pos, 3)); g.setAttribute('color', new T.Float32BufferAttribute(col, 3));
+      g.setAttribute('position', new T.BufferAttribute(pos, 3)); g.setAttribute('color', new T.BufferAttribute(col, 3));
       pathsObj = new T.LineSegments(g, new T.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: m === 'week' ? 0.16 : 0.32, blending: T.AdditiveBlending, depthWrite: false }));
       scene.add(pathsObj);
-      skyInfo.textContent = `${hexes.size.toLocaleString('en-GB')} aircraft · ${m === 'week' ? list.length + ' days' : dayLabel(list[0].day)}`;
+      skyInfo.textContent = m === 'sofar' ? `Building up through ${dayLabel(list[0].day)}` : `${hexes.size.toLocaleString('en-GB')} aircraft · ${m === 'week' ? list.length + ' days' : dayLabel(list[0].day)}`;
+      if (m !== 'sofar') pathsT = null;
     } catch (e) { console.error('[radar] paths failed', e); skyInfo.textContent = 'Couldn’t load the recording'; }
   }
   qa('[data-paths]').forEach(b => b.addEventListener('click', () => setPaths(b.dataset.paths)));
@@ -624,17 +652,17 @@ export function mountRadar(host, opts = {}) {
   /* ── Source 3: synthetic traffic ── */
   function startDemo(reason) {
     mode = 'demo'; simT = Date.now() / 1000; skyTime.hidden = true;
-    skyMode.textContent = 'Demo traffic'; skyMode.dataset.state = 'demo';
+    skyMode.textContent = 'Demo traffic'; skyChip.dataset.state = 'demo';
     onStatus('offline', reason ? 'No data' : 'Demo', reason ? `Couldn’t reach the receiver or the recording (${reason}). Showing synthetic traffic.` : 'Synthetic aircraft.');
     const r = (s => () => (s = (s * 16807) % 2147483647) / 2147483647)(7);
     const list = Array.from({ length: 34 }, (_, i) => {
-      const a = r() * Math.PI * 2, d = 30 + r() * 250;
+      const a = r() * Math.PI * 2, d = 30 + r() * 300;
       return { hex: 'demo' + i, flight: ['SAS', 'RYR', 'DLH', 'KLM', 'NAX', 'BAW', 'EZY', 'WZZ'][i % 8] + (100 + Math.floor(r() * 900)), lat: rx.lat + d * Math.cos(a) / 110.574, lon: rx.lon + d * Math.sin(a) / (111.32 * Math.cos(rx.lat * Math.PI / 180)),
         alt_baro: Math.round(2000 + r() * 39000), gs: 220 + r() * 280, track: r() * 360, rssi: -20 - r() * 12 };
     });
     ingest(normalize({ aircraft: list }), simT); kpis(); renderTable();
     setKpiLabels('msgs / sec', 'avg signal (dBFS)', 'uptime');
-    every(() => { const t = Date.now() / 1000; for (const p of planes.values()) { const a = p.data, v = reckon(p, t, new T.Vector3()); a.lon = rx.lon + v.x / (111.32 * Math.cos(rx.lat * Math.PI / 180)); a.lat = rx.lat - v.z / 110.574; p.t0 = t; p.seenAt = t; if (haversineKm(rx.lat, rx.lon, a.lat, a.lon) > RANGE_KM) a.track = (a.track + 180) % 360; } kpis(); renderTable(); updateCard(); }, 3000);
+    every(() => { const t = Date.now() / 1000; for (const p of planes.values()) { const a = p.data, v = reckon(p, t, new T.Vector3()); a.lon = rx.lon + v.x / (111.32 * Math.cos(rx.lat * Math.PI / 180)); a.lat = rx.lat - v.z / 110.574; p.t0 = t; p.seenAt = t; if (haversineKm(rx.lat, rx.lon, a.lat, a.lon) > 300) a.track = (a.track + 180) % 360; } kpis(); renderTable(); updateCard(); }, 3000);
   }
 
   /* ── Per frame ── */
@@ -665,6 +693,11 @@ export function mountRadar(host, opts = {}) {
       const sel = p.hex === selected, s = sel ? 24 : 13;
       p.glow.scale.set(s, s, 1); p.glow.material.opacity = p.data.stale ? 0.3 : 0.6;
       p.body.scale.setScalar(sel ? 1.6 : 1);
+    }
+    if (pathsT && pathsObj) {
+      let lo = 0, hi = pathsT.length;
+      while (lo < hi) { const mid = (lo + hi) >> 1; if (pathsT[mid] <= simT) lo = mid + 1; else hi = mid; }
+      pathsObj.geometry.setDrawRange(0, lo * 2);
     }
     renderer.render(scene, camera);
     const w = sky.clientWidth, h = sky.clientHeight;

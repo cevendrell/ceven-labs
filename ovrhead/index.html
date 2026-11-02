@@ -287,14 +287,14 @@ h1 .q { color:var(--accent); }
 .wk-sky-paths .rdr-info { font-family:var(--mono); font-size:.64rem; color:var(--mute); min-height:1em; }
 .wk-sky-stage { margin:0 calc(var(--pad) * -1); }
 .wk-sky-stage .rdr-tl { left:var(--pad); }
-.wk-sky-stage .rdr-bl { left:var(--pad); }
+.wk-sky-stage .rdr-legend { right:var(--pad); }
+.wk-sky-stage .rdr-chip { font-family:var(--sans); font-size:.78rem; text-transform:none; letter-spacing:0; border-color:var(--rule-2); background:rgba(12,12,14,.7); }
+.wk-sky-stage .rdr-play { border-radius:var(--r-control); border-color:var(--rule-2); background:transparent; }
 .wk-sky-stage .rdr-compass { right:var(--pad); border-color:var(--rule-2); background:transparent; border-radius:50%; }
 .wk-sky-stage .rdr-card { right:var(--pad); background:var(--surface); border-color:var(--rule-2); border-radius:var(--r-card); }
 .wk-sky-stage .rdr-clock { font-size:.86rem; letter-spacing:.02em; color:var(--ink-2); }
 .wk-sky-stage .rdr-hud { letter-spacing:.08em; }
 .wk-sky-time.rdr-time { padding:12px 0 0; border-top:1px solid var(--rule); font-family:var(--mono); letter-spacing:.02em; }
-.wk-sky-time .rdr-play { border-radius:var(--r-control); border-color:var(--rule-2); }
-.wk-sky-time .rdr-day { font-family:var(--sans); font-size:.76rem; border-color:var(--rule-2); color:var(--ink-2); }
 .wk-sky-time .rdr-hist { fill:var(--bar); opacity:.55; }
 .wk-sky-time .rdr-scrub input::-webkit-slider-thumb { background:var(--accent); box-shadow:none; }
 .wk-sky-time .rdr-scrub input::-moz-range-thumb { background:var(--accent); }
@@ -517,7 +517,7 @@ td a:hover { color:var(--accent); border-bottom-color:var(--accent); }
 .globe-legend i.coast { width:16px; height:2px; border-radius:0; background:var(--ink); }
 
 /* ── Period navigation (week / month, and stepping back through weeks) ─── */
-.wknav { display:flex; align-items:center; justify-content:space-between;
+.wknav { display:flex; align-items:center; justify-content:flex-start;
          gap:16px; flex-wrap:wrap; padding:22px 0 0; }
 .wknav-tabs { display:flex; gap:2px; }
 .wknav-tabs a { font-size:.78rem; font-weight:600; text-decoration:none;
@@ -1754,8 +1754,8 @@ function viewSignals(openId) {
     <div class="sec-head">
       <div><div class="eyebrow">What the record shows</div>
         <h2>Profile</h2></div>
-      <p class="sec-note">Counts and shares, directly observed. The day-by-day record
-        is in <a href="#/month" style="color:var(--accent)">the longer view</a>; every
+      <p class="sec-note">Counts and shares, directly observed. Week by week, with every
+        aircraft in 3D, is in <a href="#/week" style="color:var(--accent)">the week</a>; every
         airport, city-pair, country, airline and type is in
         <a href="#/explore" style="color:var(--accent)">Explore</a>.</p>
     </div>
@@ -3361,10 +3361,6 @@ function periodNav(w) {
     : `<span class="wknav-b off" aria-disabled="true">${dir === 'prev' ? '←' : ''} ${label} ${dir === 'next' ? '→' : ''}</span>`;
   return `
   <div class="wknav">
-    <div class="wknav-tabs">
-      <a class="on" href="#/week">Week</a>
-      <a href="#/month">Month</a>
-    </div>
     <div class="wknav-move">
       ${btn(older, 'Earlier', 'prev')}
       <span class="wknav-at">${niceDate(w.from)} - ${niceDate(w.to)}${
@@ -3756,7 +3752,7 @@ async function mountWeekRadar() {
   const days = [];
   for (let d = new Date(w.from + 'T00:00:00Z'), end = new Date(w.to + 'T00:00:00Z'); d <= end; d.setUTCDate(d.getUTCDate() + 1))
     days.push(d.toISOString().slice(0, 10));
-  try { radarMod = radarMod || await import('./radar.js?v=3'); }
+  try { radarMod = radarMod || await import('./radar.js?v=4'); }
   catch (e) {
     console.warn('Radar could not load:', e);
     host.innerHTML = `<div class="notice warn"><b>The 3D view didn't load.</b> Its libraries come from a CDN that did not answer.</div>`;
@@ -3769,6 +3765,7 @@ async function mountWeekRadar() {
     pathsHost: el('wk-radar-paths'),
     transparent: true,
     initial: radarState,                            // a toggle set on one week carries to the next
+    replayLabel: '',
     show: { kpis: false, list: false, views: false, mode: false, hint: false },
     colors: { clear: '#0c0c0e', floorIn: 'rgba(5,22,77,0.5)', floorMid: 'rgba(5,22,77,0.18)', floorOut: 'rgba(12,12,14,0)',
               ring: '#82a5d6', coast: '#aab2c8', land: '#1b1e27', landOpacity: 1, mast: '#eef1f8', tip: '#d2955c' }
@@ -4207,7 +4204,8 @@ function resolve(p) {
   // About folded into Method: same argument, one page. Old links still land.
   if (p[0] === 'about')          return { html: viewMethod(),   title: 'Method' };
   if (p[0] === 'week')           return { html: viewWeek(p[1]),  title: 'The week' };
-  if (p[0] === 'month')          return { html: viewMonth(),     title: 'The longer view' };
+  // The month view is parked for now; old links land on the week.
+  if (p[0] === 'month')          { location.replace('#/week'); return { html: '', title: 'The week' }; }
   if (p[0] === 'kind')           return { html: viewKind(p[1]),
                                           title: CAR?.kinds?.[p[1]]?.label || 'Not found' };
   if (p[0] === 'place')          return { html: viewPlace(p[1]),
