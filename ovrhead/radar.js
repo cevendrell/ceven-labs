@@ -119,7 +119,8 @@ const CSS = `
 .rdr-chip:hover { border-color:currentColor; }
 .rdr-caret { width:9px; height:6px; fill:none; stroke:currentColor; stroke-width:1.6; }
 .rdr-chip select { position:absolute; inset:0; width:100%; height:100%; opacity:0; cursor:pointer; font-size:16px; appearance:none; -webkit-appearance:none; border:0; }
-.rdr-tl .rdr-play { width:32px; height:32px; }
+.rdr-tl .rdr-play, .rdr-ctrls .rdr-play { width:32px; height:32px; }
+.rdr-ctrls { display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; }
 .rdr-legend { right:var(--rdr-side,1rem); bottom:calc(var(--rdr-bottom,1rem) + 3.8rem); flex-direction:column; align-items:flex-end; gap:.45rem; letter-spacing:.08em; }
 .rdr-legb { display:flex; gap:.45rem; height:132px; }
 .rdr-gradv { display:block; width:5px; height:100%; border-radius:3px; background:linear-gradient(0deg,#ff4444 0 12.5%,#ff8c1a 12.5% 25%,#ffd633 25% 50%,#66cc44 50% 75%,#33cccc 75% 100%); }
@@ -158,7 +159,7 @@ const CSS = `
 .rdr > .rdr-time { border-top:1px solid var(--rdr-line); border-bottom:1px solid var(--rdr-line); }
 .rdr-time[hidden] { display:none; }
 .rdr-time.is-live .rdr-speed { display:none; }
-.is-live .rdr-play { display:none; }
+.is-live .rdr-play, .is-live .rdr-speed { display:none; }
 .rdr-play { flex:none; width:30px; height:30px; border-radius:50%; border:1px solid var(--rdr-seg-line); background:var(--rdr-seg-bg); cursor:pointer; display:grid; place-items:center; padding:0; }
 .rdr-play svg { width:11px; height:11px; fill:var(--rdr-hl); } .rdr-play .pl { display:none; }
 .rdr-play[aria-pressed=true] .pa { display:none; } .rdr-play[aria-pressed=true] .pl { display:inline; }
@@ -205,6 +206,8 @@ const CSS = `
 
 const SEG_VIEWS = `<div class="rdr-seg" role="group" aria-label="View"><button type="button" data-view="radar" aria-pressed="false">Radar</button><button type="button" data-view="tilt" aria-pressed="true">Tilt</button><button type="button" data-view="low" aria-pressed="false">Low</button></div>`;
 const SEG_PATHS = `<div class="rdr-seg" role="group" aria-label="Flight tracks"><span class="lbl">Tracks</span><button type="button" data-paths="off" aria-pressed="true">Off</button><button type="button" data-paths="sofar" aria-pressed="false" title="Tracks build up as the replay runs">Build up</button><button type="button" data-paths="day" aria-pressed="false">Day</button><button type="button" data-paths="week" aria-pressed="false">Week</button></div>`;
+const SPEED = '<span class="rdr-seg rdr-speed" hidden><button type="button" data-spd="1" aria-pressed="true">1×</button><button type="button" data-spd="10" aria-pressed="false">10×</button><button type="button" data-spd="60" aria-pressed="false">60×</button></span>';
+const CTRL = speedHere => `<label class="rdr-chip" data-state="loading"><span class="rdr-chiptxt">Connecting</span><svg class="rdr-caret" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4"/></svg><select class="rdr-day" aria-label="Day"></select></label><button type="button" class="rdr-play" aria-label="Pause" aria-pressed="false"><svg viewBox="0 0 12 12" aria-hidden="true"><rect class="pa" x="2" y="1.5" width="2.6" height="9" rx="0.6"/><rect class="pa" x="7.4" y="1.5" width="2.6" height="9" rx="0.6"/><path class="pl" d="M3 1.5 L10.5 6 L3 10.5 Z"/></svg></button>` + (speedHere ? SPEED : '');
 const HTML = {
   kpis: `
   <div class="rdr-kpi"><b data-k="ac">—</b><span>aircraft heard</span></div>
@@ -215,16 +218,16 @@ const HTML = {
   <div class="rdr-kpi"><b data-k="k6">—</b><span data-l="k6">—</span></div>`,
   stage: s => `
   <div class="rdr-labels" aria-hidden="true"></div>
-  <div class="rdr-hud rdr-tl"><label class="rdr-chip" data-state="loading"><span class="rdr-chiptxt">Connecting</span><svg class="rdr-caret" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4"/></svg><select class="rdr-day" aria-label="Day"></select></label><button type="button" class="rdr-play" aria-label="Pause" aria-pressed="false"><svg viewBox="0 0 12 12" aria-hidden="true"><rect class="pa" x="2" y="1.5" width="2.6" height="9" rx="0.6"/><rect class="pa" x="7.4" y="1.5" width="2.6" height="9" rx="0.6"/><path class="pl" d="M3 1.5 L10.5 6 L3 10.5 Z"/></svg></button>${s.clock ? '<span class="rdr-clock">--:--:--</span>' : ''}</div>
+  <div class="rdr-hud rdr-tl">${s.ctrl ? CTRL(s.speedHere) : ''}${s.clock ? '<span class="rdr-clock">--:--:--</span>' : ''}</div>
   <div class="rdr-hud rdr-tr">${s.views ? SEG_VIEWS : ''}${s.paths ? SEG_PATHS + '<span class="rdr-info"></span>' : ''}</div>
   <div class="rdr-card" hidden></div>
   ${s.legend ? '<div class="rdr-hud rdr-legend" aria-label="Altitude colours"><span class="rdr-legt">Altitude</span><div class="rdr-legb"><span class="rdr-legl"><em>FL400</em><em>FL300</em><em>FL200</em><em>FL100</em><em>GND</em></span><i class="rdr-gradv"></i></div></div>' : ''}
   ${s.hint ? '<div class="rdr-hud rdr-br">Drag to turn · click, then scroll to zoom · tap a flight</div>' : ''}
   <button type="button" class="rdr-compass" aria-label="Turn to face north" title="Face north"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18.5"/><g><path d="M20 6 L24.5 20 L15.5 20 Z" class="n"/><path d="M20 34 L24.5 20 L15.5 20 Z" class="s"/><text x="20" y="5.2">N</text></g></svg></button>
   <p class="rdr-fallback" hidden>This browser can’t draw the 3D view.</p>`,
-  time: `
+  time: speedHere => `
   <div class="rdr-scrub"><svg class="rdr-hist" viewBox="0 0 144 24" preserveAspectRatio="none" aria-hidden="true"></svg><input type="range" min="0" max="1" step="30" value="0" aria-label="Time of day"><div class="rdr-ticks" aria-hidden="true"></div></div>
-  <span class="rdr-seg rdr-speed" hidden><button type="button" data-spd="1" aria-pressed="true">1×</button><button type="button" data-spd="10" aria-pressed="false">10×</button><button type="button" data-spd="60" aria-pressed="false">60×</button></span>
+  ${speedHere ? '' : SPEED}
   <button type="button" class="rdr-live" hidden>Back to live</button>`,
   list: `
   <header><h3>In range</h3><span><b class="rdr-count">—</b> aircraft · nearest first</span></header>
@@ -251,17 +254,19 @@ export function mountRadar(host, opts = {}) {
   };
   if (opts.pathsHost) S.paths = false;   // the toggle lives outside the stage
   const kpiEl = part('kpis', S.kpis, HTML.kpis);
+  S.ctrl = !opts.controlsHost; S.speedHere = !!opts.speedWithPlay;
+  if (opts.controlsHost) { opts.controlsHost.classList.add('rdr-part', 'rdr-ctrls'); opts.controlsHost.innerHTML = CTRL(true); }
   const sky = part('stage', true, HTML.stage(S));
-  const timeEl = part('time', true, HTML.time); if (timeEl) timeEl.hidden = true;
+  const timeEl = part('time', true, HTML.time(S.speedHere || !!opts.controlsHost)); if (timeEl) timeEl.hidden = true;
   const listEl = part('list', S.list, HTML.list);
   if (opts.pathsHost) { opts.pathsHost.classList.add('rdr-part', 'rdr-pathsbox'); opts.pathsHost.innerHTML = SEG_PATHS + '<span class="rdr-info"></span>'; }
   if (opts.transparent) sky.classList.add('is-clear');
-  const roots = [kpiEl, sky, timeEl, listEl, opts.pathsHost, opts.figures].filter(Boolean);
+  const roots = [kpiEl, sky, timeEl, listEl, opts.pathsHost, opts.figures, opts.controlsHost].filter(Boolean);
   const q = s => { for (const r of roots) { const e = r.querySelector(s); if (e) return e; } return null; };
   const qa = s => roots.flatMap(r => [...r.querySelectorAll(s)]);
   const nul = { textContent: '', innerHTML: '', hidden: false, value: '', dataset: {}, style: { setProperty() {} }, classList: { add() {}, remove() {}, toggle() {} }, setAttribute() {}, addEventListener() {} };
   const K = Object.fromEntries(qa('[data-k]').map(e => [e.dataset.k, e])), L = Object.fromEntries(qa('[data-l]').map(e => [e.dataset.l, e]));
-  for (const k of ['ac', 'pos', 'max', 'k4', 'k5', 'k6']) K[k] = K[k] || nul;
+  for (const k of ['ac', 'pos', 'max', 'k4', 'k5', 'k6', 'dayac', 'daymax', 'dayalt']) K[k] = K[k] || nul;
   for (const k of ['k4', 'k5', 'k6']) L[k] = L[k] || nul;
   const skyLabels = q('.rdr-labels'), skyMode = q('.rdr-chiptxt') || nul, skyChip = q('.rdr-chip') || nul, skyClock = q('.rdr-clock') || nul, skyCard = q('.rdr-card');
   const skyCompass = q('.rdr-compass'), skyNeedle = q('.rdr-compass g'), skyTime = timeEl || nul;
@@ -491,7 +496,7 @@ export function mountRadar(host, opts = {}) {
   }
   function startLive(first) {
     mode = 'live'; simT = Date.now() / 1000; skySpeed.hidden = true; skyTime.hidden = false; skyLive.hidden = true; skyTime.classList.add('is-live');
-    skyMode.textContent = 'Live'; skyChip.dataset.state = 'live'; sky.classList.add('is-live');
+    skyMode.textContent = 'Live'; skyChip.dataset.state = 'live'; roots.forEach(e => e.classList.add('is-live'));
     onStatus('live', 'Live', `Live from the receiver · updated every ${POLL_MS / 1000} s`);
     setKpiLabels('msgs / sec', 'avg signal (dBFS)', 'uptime');
     const take = d => { if (mode !== 'live') return; ingest(normalize(d), Date.now() / 1000); kpis((d.aircraft || []).length); renderTable(); updateCard(); };
@@ -505,7 +510,7 @@ export function mountRadar(host, opts = {}) {
       K.k6.textContent = fmtUptime(total.end && total.start ? total.end - total.start : null);
     }).catch(() => {});
     stats(); statsTimer = every(stats, STATS_MS);
-    loadManifest().then(() => loadDay(snaps.length - 1)).then(d => { if (mode !== 'live') return; buildTimebar(d); skyDay.value = String(d.i); skyRange.value = d.frameTs[0] + (Date.now() / 1000) % 86400; }).catch(() => {});
+    loadManifest().then(() => loadDay(snaps.length - 1)).then(d => { if (mode !== 'live') return; buildTimebar(d); dayFigures(d); skyDay.value = String(d.i); skyRange.value = d.frameTs[0] + (Date.now() / 1000) % 86400; }).catch(() => {});
   }
 
   /* ── Source 2: the recording ── */
@@ -530,14 +535,16 @@ export function mountRadar(host, opts = {}) {
     const buf = await fetch(RECORD_BASE + snap.path.replace(/^data\/adsb\//, '')).then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.arrayBuffer(); });
     const rows = await hp.parquetReadObjects({ file: buf, compressors: hz.compressors, columns: ['ts', 'hex', 'flight', 'lat', 'lon', 'alt_baro', 'gs', 'track', 'squawk', 'seen_pos'] });
     const fr = new Map(), tracks = new Map(), hexes = new Set();
+    let maxKm = 0, maxAlt = 0;
     for (const r of rows) {
       const ts = Number(r.ts); let f = fr.get(ts); if (!f) fr.set(ts, f = []);
       const alt = r.alt_baro == null ? null : Number(r.alt_baro);
       hexes.add(r.hex);
       f.push({ hex: r.hex, flight: (r.flight || '').trim(), lat: r.lat, lon: r.lon, alt_baro: alt, gs: r.gs, track: r.track, squawk: r.squawk, seen_pos: r.seen_pos });
-      if (r.lat != null && r.lon != null) { let tk = tracks.get(r.hex); if (!tk) tracks.set(r.hex, tk = []); tk.push([ts, r.lat, r.lon, alt]); }
+      if (alt != null && alt > maxAlt && alt < 60000) maxAlt = alt;
+      if (r.lat != null && r.lon != null) { const dk = haversineKm(rx.lat, rx.lon, r.lat, r.lon); if (dk > maxKm && dk < 700) maxKm = dk; let tk = tracks.get(r.hex); if (!tk) tracks.set(r.hex, tk = []); tk.push([ts, r.lat, r.lon, alt]); }
     }
-    const d = { i, day: dayOf(snap), frames: fr, frameTs: [...fr.keys()].sort((a, b) => a - b), tracks, unique: hexes.size };
+    const d = { i, day: dayOf(snap), frames: fr, frameTs: [...fr.keys()].sort((a, b) => a - b), tracks, unique: hexes.size, maxKm, maxAlt };
     days.set(i, d); return d;
   }
   async function startRecord(i, at) {
@@ -553,12 +560,18 @@ export function mountRadar(host, opts = {}) {
     const day0 = Math.floor(frameTs[0] / 86400) * 86400;
     jumpTo(at != null ? at : day0 + (Date.now() / 1000) % 86400);
     const dayTxt = dayLabel(D.day);
-    skyMode.textContent = REPLAY + dayTxt; skyChip.dataset.state = 'record'; sky.classList.remove('is-live');
+    skyMode.textContent = REPLAY + dayTxt; skyChip.dataset.state = 'record'; roots.forEach(e => e.classList.remove('is-live'));
     onStatus('replay', 'Replay', dayTxt);
     setKpiLabels('recorded on', 'aircraft that day', 'snapshots that day');
     K.k4.textContent = dayTxt; K.k5.textContent = D.unique.toLocaleString('en-GB'); K.k6.textContent = frameTs.length.toLocaleString('en-GB');
-    onDay({ day: D.day, label: dayTxt, unique: D.unique, snapshots: frameTs.length, days: snaps.length });
+    dayFigures(D);
+    onDay({ day: D.day, label: dayTxt, unique: D.unique, maxKm: D.maxKm, maxAlt: D.maxAlt, snapshots: frameTs.length, days: snaps.length });
     if (pathsMode === 'day' || pathsMode === 'sofar') setPaths(pathsMode);
+  }
+  function dayFigures(d) {
+    K.dayac.textContent = d.unique.toLocaleString('en-GB');
+    K.daymax.innerHTML = d.maxKm ? `${Math.round(d.maxKm)}<small>km</small>` : '—';
+    K.dayalt.textContent = d.maxAlt ? fmtAlt(d.maxAlt) : '—';
   }
   function jumpTo(t) {
     for (const p of [...planes.values()]) dropPlane(p);

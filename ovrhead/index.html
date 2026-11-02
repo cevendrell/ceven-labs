@@ -277,7 +277,16 @@ h1 .q { color:var(--accent); }
   --rdr-ui-font:var(--sans); --rdr-ui-size:.78rem; --rdr-ui-case:none; --rdr-ui-track:0; --rdr-ui-weight:600;
   --rdr-seg-bg:transparent; --rdr-seg-line:transparent; --rdr-ctl:var(--r-control);
   --rdr-h:clamp(420px,62vh,660px); --rdr-top:.5rem; --rdr-side:0; --rdr-bottom:.5rem; --rdr-card-top:.5rem; }
-.wk-sky .sec-head { margin-bottom:4px; align-items:flex-end; }
+.wk-sky-head { display:grid; grid-template-columns:1fr auto 1fr; align-items:end; gap:16px; margin-bottom:6px; }
+.wk-sky-ctl { display:flex; flex-direction:column; align-items:flex-start; gap:10px; }
+.wk-sky-ctl .wknav { padding:22px 0 0; }
+.wk-sky-title { margin:0; text-align:center; align-self:center; padding-top:22px; }
+.wk-sky-paths { justify-self:end; }
+#wk-radar-ctrls .rdr-chip { font-family:var(--sans); font-size:.78rem; font-weight:600; text-transform:none; letter-spacing:0; border-color:var(--rule-2); background:transparent; padding:6px 11px; border-radius:var(--r-control); }
+#wk-radar-ctrls .rdr-play { width:30px; height:30px; border-radius:var(--r-control); border-color:var(--rule-2); background:transparent; }
+#wk-radar-ctrls .rdr-seg button { padding:6px 11px; }
+#wk-radar-ctrls .rdr-seg button:hover { background:var(--surface); }
+#wk-radar-ctrls .rdr-seg button[aria-pressed=true]:hover { background:var(--cta-bg); }
 .wk-sky-paths { display:flex; flex-direction:column; align-items:flex-end; gap:4px; }
 .wk-sky-paths .rdr-seg { padding:0; }
 .wk-sky-paths .rdr-seg .lbl { padding:6px 8px 6px 0; font-weight:500; color:var(--mute); }
@@ -288,8 +297,6 @@ h1 .q { color:var(--accent); }
 .wk-sky-stage { margin:0 calc(var(--pad) * -1); }
 .wk-sky-stage .rdr-tl { left:var(--pad); }
 .wk-sky-stage .rdr-legend { right:var(--pad); }
-.wk-sky-stage .rdr-chip { font-family:var(--sans); font-size:.78rem; text-transform:none; letter-spacing:0; border-color:var(--rule-2); background:rgba(12,12,14,.7); }
-.wk-sky-stage .rdr-play { border-radius:var(--r-control); border-color:var(--rule-2); background:transparent; }
 .wk-sky-stage .rdr-compass { right:var(--pad); border-color:var(--rule-2); background:transparent; border-radius:50%; }
 .wk-sky-stage .rdr-card { right:var(--pad); background:var(--surface); border-color:var(--rule-2); border-radius:var(--r-card); }
 .wk-sky-stage .rdr-clock { font-size:.86rem; letter-spacing:.02em; color:var(--ink-2); }
@@ -299,11 +306,11 @@ h1 .q { color:var(--accent); }
 .wk-sky-time .rdr-scrub input::-webkit-slider-thumb { background:var(--accent); box-shadow:none; }
 .wk-sky-time .rdr-scrub input::-moz-range-thumb { background:var(--accent); }
 .wk-sky-time .rdr-ticks span { font-size:.6rem; color:var(--faint); }
-.wk-sky-time .rdr-speed button { padding:5px 10px; }
 @media (max-width:640px){
   .wk-sky { --rdr-h:420px; }
-  .wk-sky .sec-head { align-items:flex-start; }
-  .wk-sky-paths { align-items:flex-start; }
+  .wk-sky-head { grid-template-columns:1fr; align-items:start; }
+  .wk-sky-title { text-align:left; padding-top:0; order:-1; }
+  .wk-sky-paths { justify-self:start; align-items:flex-start; }
   .wk-sky-stage .rdr-tl { left:var(--pad); right:auto; }
   .wk-sky-stage .rdr-card { left:var(--pad); right:var(--pad); }
 }
@@ -3389,11 +3396,12 @@ function viewWeek(from) {
   // entirely once it mounts, so the fallback never double-renders.
   // The period nav sits outside the React mount so it survives the island
   // failing to load, and so navigating weeks never depends on the CDN.
-  return `${periodNav(w)}
-    <section class="wk-sky" aria-label="The airspace that week">
-      <div class="sec-head"><div><div class="eyebrow">The airspace</div>
-        <h2>Every aircraft overhead</h2></div>
-        <div class="wk-sky-paths" id="wk-radar-paths"></div></div>
+  return `<section class="wk-sky" aria-label="The week's airspace">
+      <div class="wk-sky-head">
+        <div class="wk-sky-ctl">${periodNav(w)}<div id="wk-radar-ctrls"></div></div>
+        <h2 class="wk-sky-title">The week’s airspace</h2>
+        <div class="wk-sky-paths" id="wk-radar-paths"></div>
+      </div>
       <div id="wk-radar" class="wk-sky-stage"></div>
       <div id="wk-radar-time" class="wk-sky-time"></div>
     </section>
@@ -3752,7 +3760,7 @@ async function mountWeekRadar() {
   const days = [];
   for (let d = new Date(w.from + 'T00:00:00Z'), end = new Date(w.to + 'T00:00:00Z'); d <= end; d.setUTCDate(d.getUTCDate() + 1))
     days.push(d.toISOString().slice(0, 10));
-  try { radarMod = radarMod || await import('./radar.js?v=4'); }
+  try { radarMod = radarMod || await import('./radar.js?v=5'); }
   catch (e) {
     console.warn('Radar could not load:', e);
     host.innerHTML = `<div class="notice warn"><b>The 3D view didn't load.</b> Its libraries come from a CDN that did not answer.</div>`;
@@ -3763,6 +3771,7 @@ async function mountWeekRadar() {
     days,
     parts: { stage: host, time: el('wk-radar-time') },
     pathsHost: el('wk-radar-paths'),
+    controlsHost: el('wk-radar-ctrls'),
     transparent: true,
     initial: radarState,                            // a toggle set on one week carries to the next
     replayLabel: '',
