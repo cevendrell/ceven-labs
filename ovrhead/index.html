@@ -128,6 +128,36 @@ button, input, textarea, select { font:inherit; color:inherit; }
   .bar-tools { padding: 0.5rem 1.5rem; gap: 10px; }
 }
 
+/* ── Phones ──────────────────────────────────────────────────────────────
+   Two rows of chrome is a third of a phone screen. Here the site links fold
+   into a menu button, the sections become one row you can swipe, and the
+   whole bar tucks away while reading down and comes back on the way up. */
+.menu-btn { display:none; flex-direction:column; gap:5px; padding:6px; margin-left:auto;
+            background:none; border:0; cursor:pointer; }
+.menu-btn span { width:20px; height:1.5px; background:var(--on-navy); display:block; transition:transform .3s, opacity .3s; }
+@media (max-width:760px){
+  #topbar { transition: transform .28s cubic-bezier(.2,.7,.2,1); }
+  #topbar.tuck { transform: translateY(-100%); }
+  .bar-main { flex-wrap:nowrap; padding: .85rem 1.25rem; }
+  .bar-main .nav-links { display:none; }
+  .menu-btn { display:flex; }
+  .bar-tools { padding: .45rem 1.25rem .55rem; row-gap: 8px; }
+  #nav { flex-wrap:nowrap; overflow-x:auto; overscroll-behavior-x:contain; scrollbar-width:none;
+         flex: 1 1 100%; margin: 0 -1.25rem; padding: 0 1.25rem; -webkit-mask: linear-gradient(90deg, transparent 0, #000 1.25rem, #000 calc(100% - 1.25rem), transparent 100%); }
+  #nav::-webkit-scrollbar { display:none; }
+  #search-wrap { flex: 1 1 0; min-width: 0; }
+  body.nav-open { overflow:hidden; }
+  body.nav-open .bar-main .nav-links { display:flex; flex-direction:column; align-items:stretch; gap:0;
+    position:fixed; inset:0; z-index:99; margin:0; padding:5.5rem 1.5rem 2rem; background:var(--bg); list-style:none; }
+  body.nav-open .nav-links li { border-bottom:1px solid var(--rule); }
+  body.nav-open .nav-links > li > a { display:block; padding:1.1rem 0; font-size:1.3rem; font-weight:600; color:var(--ink); }
+  body.nav-open .nav-links > li.nav-info:first-of-type::before, body.nav-open .nav-links > li > a::after { display:none; }
+  body.nav-open .nav-logo, body.nav-open .nav-sep, body.nav-open .mark, body.nav-open .menu-btn { position:relative; z-index:100; }
+  body.nav-open .menu-btn span:nth-child(1) { transform: rotate(45deg) translate(4.5px, 4.5px); }
+  body.nav-open .menu-btn span:nth-child(2) { opacity:0; }
+  body.nav-open .menu-btn span:nth-child(3) { transform: rotate(-45deg) translate(4.5px, -4.5px); }
+}
+
 /* Identity strip: the CL mark and the Ceven Labs wordmark are the
    same across every product's nav, so the family reads as one. The
    product's own wordmark follows behind a hair-thin divider. */
@@ -238,13 +268,45 @@ h1 { font-weight:600; font-size:clamp(1.95rem,4.4vw,2.85rem);
 h1 .q { color:var(--accent); }
 .lede { font-size:.98rem; font-weight:400; color:var(--ink-2); max-width:var(--measure);
         margin-top:14px; line-height:1.6; }
-/* ── The week's airspace: the shared radar, in OvrHead's palette ── */
-.wk-sky { margin:6px 0 40px; }
-.wk-radar { --rdr-bg:#08080a; --rdr-panel:rgba(255,255,255,.015); --rdr-ink:var(--ink); --rdr-ink2:var(--ink-2);
-  --rdr-mute:var(--mute); --rdr-line:var(--rule); --rdr-accent:var(--accent); --rdr-accent-ink:var(--cta-fg);
-  --rdr-hl:var(--ink); --rdr-live:var(--rise); --rdr-replay:var(--accent); --rdr-chip:rgba(12,12,14,.86);
-  --rdr-radius:var(--r-card); --rdr-ctl:var(--r-control); --rdr-sans:var(--sans); --rdr-mono:var(--mono);
-  --rdr-h:clamp(440px,66vh,720px); }
+/* ── The week's airspace: the shared radar (radar.js), drawn on the page
+   itself rather than in a box, in OvrHead's own controls and type. ── */
+.wk-sky { margin:6px 0 44px;
+  --rdr-bg:var(--bg); --rdr-panel:transparent; --rdr-ink:var(--ink); --rdr-ink2:var(--ink-2); --rdr-mute:var(--mute);
+  --rdr-line:var(--rule); --rdr-hl:var(--ink); --rdr-chip:rgba(12,12,14,.88); --rdr-replay:var(--accent); --rdr-live:var(--rise);
+  --rdr-accent:var(--cta-bg); --rdr-accent-ink:var(--cta-fg); --rdr-sans:var(--sans); --rdr-mono:var(--mono);
+  --rdr-ui-font:var(--sans); --rdr-ui-size:.78rem; --rdr-ui-case:none; --rdr-ui-track:0; --rdr-ui-weight:600;
+  --rdr-seg-bg:transparent; --rdr-seg-line:transparent; --rdr-ctl:var(--r-control);
+  --rdr-h:clamp(420px,62vh,660px); --rdr-top:.5rem; --rdr-side:0; --rdr-bottom:.5rem; --rdr-card-top:.5rem; }
+.wk-sky .sec-head { margin-bottom:4px; align-items:flex-end; }
+.wk-sky-paths { display:flex; flex-direction:column; align-items:flex-end; gap:4px; }
+.wk-sky-paths .rdr-seg { padding:0; }
+.wk-sky-paths .rdr-seg .lbl { padding:6px 8px 6px 0; font-weight:500; color:var(--mute); }
+.wk-sky-paths .rdr-seg button { padding:6px 13px; }
+.wk-sky-paths .rdr-seg button:hover { background:var(--surface); }
+.wk-sky-paths .rdr-seg button[aria-pressed=true]:hover { background:var(--cta-bg); }
+.wk-sky-paths .rdr-info { font-family:var(--mono); font-size:.64rem; color:var(--mute); min-height:1em; }
+.wk-sky-stage { margin:0 calc(var(--pad) * -1); }
+.wk-sky-stage .rdr-tl { left:var(--pad); }
+.wk-sky-stage .rdr-bl { left:var(--pad); }
+.wk-sky-stage .rdr-compass { right:var(--pad); border-color:var(--rule-2); background:transparent; border-radius:50%; }
+.wk-sky-stage .rdr-card { right:var(--pad); background:var(--surface); border-color:var(--rule-2); border-radius:var(--r-card); }
+.wk-sky-stage .rdr-clock { font-size:.86rem; letter-spacing:.02em; color:var(--ink-2); }
+.wk-sky-stage .rdr-hud { letter-spacing:.08em; }
+.wk-sky-time.rdr-time { padding:12px 0 0; border-top:1px solid var(--rule); font-family:var(--mono); letter-spacing:.02em; }
+.wk-sky-time .rdr-play { border-radius:var(--r-control); border-color:var(--rule-2); }
+.wk-sky-time .rdr-day { font-family:var(--sans); font-size:.76rem; border-color:var(--rule-2); color:var(--ink-2); }
+.wk-sky-time .rdr-hist { fill:var(--bar); opacity:.55; }
+.wk-sky-time .rdr-scrub input::-webkit-slider-thumb { background:var(--accent); box-shadow:none; }
+.wk-sky-time .rdr-scrub input::-moz-range-thumb { background:var(--accent); }
+.wk-sky-time .rdr-ticks span { font-size:.6rem; color:var(--faint); }
+.wk-sky-time .rdr-speed button { padding:5px 10px; }
+@media (max-width:640px){
+  .wk-sky { --rdr-h:420px; }
+  .wk-sky .sec-head { align-items:flex-start; }
+  .wk-sky-paths { align-items:flex-start; }
+  .wk-sky-stage .rdr-tl { left:var(--pad); right:auto; }
+  .wk-sky-stage .rdr-card { left:var(--pad); right:var(--pad); }
+}
 .page-head { padding-bottom:26px; border-bottom:1px solid var(--rule); margin-bottom:28px; }
 
 /* ── Hero: the instrument ─────────────────────────────────────────────────
@@ -933,6 +995,7 @@ th.sortable .dir { display:inline-block; transition: transform var(--t-base) var
         <li class="nav-info"><a href="/pages/about/">About</a></li>
         <li class="nav-info"><a href="/pages/support/">Support</a></li>
       </ul>
+      <button class="menu-btn" id="menu-btn" type="button" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
     </div>
     <!-- Row 2: OvrHead's own app toolbar. Section pill-nav on the left,
          search in the middle, freshness on the right. Slimmer than
@@ -3331,11 +3394,12 @@ function viewWeek(from) {
   // The period nav sits outside the React mount so it survives the island
   // failing to load, and so navigating weeks never depends on the CDN.
   return `${periodNav(w)}
-    <section class="wk-sky">
+    <section class="wk-sky" aria-label="The airspace that week">
       <div class="sec-head"><div><div class="eyebrow">The airspace</div>
-        <h2>Every aircraft the antenna heard, ${niceDate(w.from)} to ${niceDate(w.to)}</h2></div>
-        <p class="sec-note">Pick a day and an hour to replay it, or draw the whole week’s tracks.</p></div>
-      <div id="wk-radar" class="wk-radar"></div>
+        <h2>Every aircraft overhead</h2></div>
+        <div class="wk-sky-paths" id="wk-radar-paths"></div></div>
+      <div id="wk-radar" class="wk-sky-stage"></div>
+      <div id="wk-radar-time" class="wk-sky-time"></div>
     </section>
     <div id="week-mount" class="wk-root"></div>
     <div id="week-fallback" hidden>${viewWeekStatic(w)}</div>`;
@@ -3685,14 +3749,14 @@ async function mountWeek() {
    is a copy of that file), limited to the seven days on this page. three.js
    and the Parquet reader load only when /week is opened; the route's
    skyStops list tears it down on the way out. */
-let radarMod = null;
+let radarMod = null, radarState = null;
 async function mountWeekRadar() {
   const host = el('wk-radar'), w = weekSel;
   if (!host || !w) return;
   const days = [];
   for (let d = new Date(w.from + 'T00:00:00Z'), end = new Date(w.to + 'T00:00:00Z'); d <= end; d.setUTCDate(d.getUTCDate() + 1))
     days.push(d.toISOString().slice(0, 10));
-  try { radarMod = radarMod || await import('./radar.js'); }
+  try { radarMod = radarMod || await import('./radar.js?v=3'); }
   catch (e) {
     console.warn('Radar could not load:', e);
     host.innerHTML = `<div class="notice warn"><b>The 3D view didn't load.</b> Its libraries come from a CDN that did not answer.</div>`;
@@ -3701,10 +3765,15 @@ async function mountWeekRadar() {
   if (el('wk-radar') !== host) return;            // navigated away meanwhile
   const radar = radarMod.mountRadar(host, {
     days,
-    colors: { clear: '#08080a', floorIn: 'rgba(5,22,77,0.6)', floorMid: 'rgba(5,22,77,0.22)', floorOut: 'rgba(8,8,10,0)',
-              ring: '#82a5d6', coast: '#aab2c8', mast: '#eef1f8', tip: '#d2955c' }
+    parts: { stage: host, time: el('wk-radar-time') },
+    pathsHost: el('wk-radar-paths'),
+    transparent: true,
+    initial: radarState,                            // a toggle set on one week carries to the next
+    show: { kpis: false, list: false, views: false, mode: false, hint: false },
+    colors: { clear: '#0c0c0e', floorIn: 'rgba(5,22,77,0.5)', floorMid: 'rgba(5,22,77,0.18)', floorOut: 'rgba(12,12,14,0)',
+              ring: '#82a5d6', coast: '#aab2c8', land: '#1b1e27', landOpacity: 1, mast: '#eef1f8', tip: '#d2955c' }
   });
-  skyStops.push(() => radar.stop());
+  skyStops.push(() => { radarState = radar.state(); radar.stop(); });
 }
 
 function unmountWeek() {
@@ -4344,6 +4413,38 @@ const grab = (name, required = true) =>
          </div>`}
        </div>`;
   }
+})();
+</script>
+<script>
+/* Phones: menu button, a bar that steps aside while reading, and the active
+   section kept in view in the swipeable row. */
+(function () {
+  const bar = document.getElementById('topbar'), btn = document.getElementById('menu-btn');
+  if (!bar || !btn) return;
+  const phone = matchMedia('(max-width:760px)');
+  const close = () => { document.body.classList.remove('nav-open'); btn.setAttribute('aria-expanded', 'false'); };
+  btn.addEventListener('click', () => {
+    const open = document.body.classList.toggle('nav-open');
+    btn.setAttribute('aria-expanded', String(open)); bar.classList.remove('tuck');
+  });
+  bar.querySelectorAll('.nav-links a').forEach(a => a.addEventListener('click', close));
+  addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+  phone.addEventListener('change', () => { if (!phone.matches) { close(); bar.classList.remove('tuck'); } });
+  let lastY = scrollY;
+  addEventListener('scroll', () => {
+    const y = scrollY;
+    const busy = document.body.classList.contains('nav-open') || bar.contains(document.activeElement);
+    if (!phone.matches || busy || y < 120) bar.classList.remove('tuck');
+    else if (y > lastY + 8) bar.classList.add('tuck');
+    else if (y < lastY - 8) bar.classList.remove('tuck');
+    lastY = y;
+  }, { passive: true });
+  const reveal = () => setTimeout(() => {
+    bar.classList.remove('tuck');
+    const nav = document.getElementById('nav'), on = nav && nav.querySelector('a.on');
+    if (phone.matches && on) nav.scrollTo({ left: on.offsetLeft - (nav.clientWidth - on.offsetWidth) / 2, behavior: 'smooth' });
+  }, 60);
+  addEventListener('hashchange', reveal); reveal();
 })();
 </script>
 </body>

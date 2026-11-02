@@ -76,6 +76,13 @@
     .footer-links a { font-size: 0.82rem; color: rgba(255,255,255,0.25); transition: color 0.2s; }
     .footer-links a:hover { color: var(--dim); }
     @media (max-width: 520px) { .footer-slim { flex-direction: column; text-align: center; } .footer-links { flex-wrap: wrap; justify-content: center; } nav#navbar { padding: 1rem 1.5rem; } }
+    /* Phones: the bar keeps the same side padding when it switches to its
+       scrolled state, and the logo stays visible above the open menu. */
+    @media (max-width: 768px) {
+      nav, nav.scrolled, nav#navbar, nav#navbar.scrolled { padding-left: 1.25rem !important; padding-right: 1.25rem !important; }
+    }
+    body.nav-open .nav-logo { position: relative; z-index: 100; }
+    .nav-mark { width: 26px; height: 26px; border-radius: 6px; background: #4d92ff; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; color: #fff; letter-spacing: -0.03em; flex-shrink: 0; }
   </style>
 </head>
 <body>

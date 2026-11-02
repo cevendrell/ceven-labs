@@ -192,6 +192,17 @@
       .hc-slide.is-left  { transform: translate(calc(-50% - 118px), -50%) rotateY(40deg) scale(0.78); }
       .hc-slide.is-right { transform: translate(calc(-50% + 118px), -50%) rotateY(-40deg) scale(0.78); }
     }
+    /* Phones: the 3D tilt squeezes the side screenshots on a narrow screen,
+       so they sit flat and smaller, peeking out either side. */
+    @media (max-width: 600px) {
+      .hero-carousel { height: 470px; perspective: none; touch-action: pan-y; }
+      /* Safari orders composited layers by depth, not z-index, so each card
+         also gets an explicit depth to keep the active one in front. */
+      .hc-slide { width: 196px; border-radius: 26px; will-change: auto; }
+      .hc-slide.is-active { z-index: 5; transform: translate3d(-50%,-50%, 40px); }
+      .hc-slide.is-left  { z-index: 1; transform: translate3d(calc(-50% - 94px), -50%, -40px) scale(0.74); opacity: 0.35; }
+      .hc-slide.is-right { z-index: 1; transform: translate3d(calc(-50% + 94px), -50%, -40px) scale(0.74); opacity: 0.35; }
+    }
     .phone-shot {
       width: 124px; border-radius: 20px; overflow: hidden;
       border: 1px solid rgba(255,255,255,0.09);
@@ -382,6 +393,12 @@
     .wow.visible { opacity: 1; transform: translateY(0); }
     .d1 { transition-delay: 0.1s; } .d2 { transition-delay: 0.2s; } .d3 { transition-delay: 0.3s; }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } .orb { animation: none; } }
+    /* Phones: the bar keeps the same side padding when it switches to its
+       scrolled state, and the logo stays visible above the open menu. */
+    @media (max-width: 768px) {
+      nav, nav.scrolled, nav#navbar, nav#navbar.scrolled { padding-left: 1.25rem !important; padding-right: 1.25rem !important; }
+    }
+    body.nav-open .nav-logo { position: relative; z-index: 100; }
   </style>
 </head>
 <body>
@@ -699,6 +716,14 @@
     slides.forEach((s, i) => s.addEventListener('click', () => { active = i; render(); restart(); }));
     car.addEventListener('mouseenter', () => clearInterval(timer));
     car.addEventListener('mouseleave', restart);
+    // swipe between screenshots on touch screens
+    let sx = null;
+    car.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive: true });
+    car.addEventListener('touchend', e => {
+      if (sx == null) return; const dx = e.changedTouches[0].clientX - sx; sx = null;
+      if (Math.abs(dx) < 40) return;
+      active = (active + (dx < 0 ? 1 : -1) + n) % n; render(); restart();
+    }, { passive: true });
     render(); restart();
   })();
 </script>
