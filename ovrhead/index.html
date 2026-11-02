@@ -277,11 +277,16 @@ h1 .q { color:var(--accent); }
   --rdr-ui-font:var(--sans); --rdr-ui-size:.78rem; --rdr-ui-case:none; --rdr-ui-track:0; --rdr-ui-weight:600;
   --rdr-seg-bg:transparent; --rdr-seg-line:transparent; --rdr-ctl:var(--r-control);
   --rdr-h:clamp(420px,62vh,660px); --rdr-top:.5rem; --rdr-side:0; --rdr-bottom:.5rem; --rdr-card-top:.5rem; }
-.wk-sky-head { display:grid; grid-template-columns:1fr auto 1fr; align-items:end; gap:16px; margin-bottom:6px; }
-.wk-sky-ctl { display:flex; flex-direction:column; align-items:flex-start; gap:10px; }
-.wk-sky-ctl .wknav { padding:22px 0 0; }
-.wk-sky-title { margin:0; text-align:center; align-self:center; padding-top:22px; }
-.wk-sky-paths { justify-self:end; }
+.wk-sky-head { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:16px; padding-top:18px; margin-bottom:4px; }
+.wk-sky-ctl { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.wk-sky-title { margin:0; text-align:center; font-family:var(--sans); font-size:.86rem; font-weight:600;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--accent); }
+.wk-pick { position:relative; display:inline-flex; align-items:center; gap:7px; padding:6px 11px; border:1px solid var(--rule-2);
+  border-radius:var(--r-control); font-family:var(--mono); font-size:.76rem; font-weight:500; color:var(--ink); cursor:pointer; }
+.wk-pick:hover { border-color:var(--accent); }
+.wk-pick svg { width:9px; height:6px; fill:none; stroke:currentColor; stroke-width:1.6; opacity:.7; }
+.wk-pick select { position:absolute; inset:0; opacity:0; cursor:pointer; font-size:16px; -webkit-appearance:none; appearance:none; border:0; }
+.wk-sky-paths { justify-self:end; align-self:center; }
 #wk-radar-ctrls .rdr-chip { font-family:var(--sans); font-size:.78rem; font-weight:600; text-transform:none; letter-spacing:0; border-color:var(--rule-2); background:transparent; padding:6px 11px; border-radius:var(--r-control); }
 #wk-radar-ctrls .rdr-play { width:30px; height:30px; border-radius:var(--r-control); border-color:var(--rule-2); background:transparent; }
 #wk-radar-ctrls .rdr-seg button { padding:6px 11px; }
@@ -309,7 +314,7 @@ h1 .q { color:var(--accent); }
 @media (max-width:640px){
   .wk-sky { --rdr-h:420px; }
   .wk-sky-head { grid-template-columns:1fr; align-items:start; }
-  .wk-sky-title { text-align:left; padding-top:0; order:-1; }
+  .wk-sky-title { text-align:left; order:-1; }
   .wk-sky-paths { justify-self:start; align-items:flex-start; }
   .wk-sky-stage .rdr-tl { left:var(--pad); right:auto; }
   .wk-sky-stage .rdr-card { left:var(--pad); right:var(--pad); }
@@ -3377,6 +3382,25 @@ function periodNav(w) {
   </div>`;
 }
 
+/** ISO week label for a Monday, e.g. 2026-10-26 → "26W44". */
+function isoWeekLabel(day) {
+  const d = new Date(day + 'T00:00:00Z');
+  const th = new Date(d); th.setUTCDate(d.getUTCDate() + 3 - ((d.getUTCDay() + 6) % 7));     // the week's Thursday
+  const y = th.getUTCFullYear(), w1 = new Date(Date.UTC(y, 0, 4));
+  const wk = 1 + Math.round(((th - w1) / 864e5 - 3 + ((w1.getUTCDay() + 6) % 7)) / 7);
+  return String(y).slice(2) + 'W' + String(wk).padStart(2, '0');
+}
+/** The week choice as one small dropdown: "26W44", with the dates in the list. */
+function weekPicker(w) {
+  const all = WEEKS();
+  const short = d => new Date(d + 'T00:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' });
+  return `<label class="wk-pick" title="${esc(niceDate(w.from))} - ${esc(niceDate(w.to))}">
+    <span>${isoWeekLabel(w.from)}</span><svg viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4"/></svg>
+    <select aria-label="Week" onchange="location.hash = this.value">${all.map((x, i) =>
+      `<option value="${i === 0 ? '#/week' : '#/week/' + x.from}"${x.from === w.from ? ' selected' : ''}>${isoWeekLabel(x.from)} · ${short(x.from)} - ${short(x.to)}${i === 0 ? ' (latest)' : ''}</option>`).join('')}
+    </select></label>`;
+}
+
 function viewWeek(from) {
   const w = pickWeek(from);
   weekSel = w;
@@ -3398,7 +3422,7 @@ function viewWeek(from) {
   // failing to load, and so navigating weeks never depends on the CDN.
   return `<section class="wk-sky" aria-label="The week's airspace">
       <div class="wk-sky-head">
-        <div class="wk-sky-ctl">${periodNav(w)}<div id="wk-radar-ctrls"></div></div>
+        <div class="wk-sky-ctl">${weekPicker(w)}<div id="wk-radar-ctrls"></div></div>
         <h2 class="wk-sky-title">The week’s airspace</h2>
         <div class="wk-sky-paths" id="wk-radar-paths"></div>
       </div>
@@ -3776,8 +3800,8 @@ async function mountWeekRadar() {
     initial: radarState,                            // a toggle set on one week carries to the next
     replayLabel: '',
     show: { kpis: false, list: false, views: false, mode: false, hint: false },
-    colors: { clear: '#0c0c0e', floorIn: 'rgba(5,22,77,0.5)', floorMid: 'rgba(5,22,77,0.18)', floorOut: 'rgba(12,12,14,0)',
-              ring: '#82a5d6', coast: '#aab2c8', land: '#1b1e27', landOpacity: 1, mast: '#eef1f8', tip: '#d2955c' }
+    colors: { clear: '#0c0c0e', floorIn: 'rgba(5,22,77,0.38)', floorMid: 'rgba(5,22,77,0.12)', floorOut: 'rgba(12,12,14,0)',
+              ring: '#82a5d6', coast: '#b4bdd2', land: '#262d3d', landOpacity: 1, mast: '#eef1f8', tip: '#d2955c' }
   });
   skyStops.push(() => { radarState = radar.state(); radar.stop(); });
 }
