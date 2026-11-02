@@ -238,6 +238,13 @@ h1 { font-weight:600; font-size:clamp(1.95rem,4.4vw,2.85rem);
 h1 .q { color:var(--accent); }
 .lede { font-size:.98rem; font-weight:400; color:var(--ink-2); max-width:var(--measure);
         margin-top:14px; line-height:1.6; }
+/* ── The week's airspace: the shared radar, in OvrHead's palette ── */
+.wk-sky { margin:6px 0 40px; }
+.wk-radar { --rdr-bg:#08080a; --rdr-panel:rgba(255,255,255,.015); --rdr-ink:var(--ink); --rdr-ink2:var(--ink-2);
+  --rdr-mute:var(--mute); --rdr-line:var(--rule); --rdr-accent:var(--accent); --rdr-accent-ink:var(--cta-fg);
+  --rdr-hl:var(--ink); --rdr-live:var(--rise); --rdr-replay:var(--accent); --rdr-chip:rgba(12,12,14,.86);
+  --rdr-radius:var(--r-card); --rdr-ctl:var(--r-control); --rdr-sans:var(--sans); --rdr-mono:var(--mono);
+  --rdr-h:clamp(440px,66vh,720px); }
 .page-head { padding-bottom:26px; border-bottom:1px solid var(--rule); margin-bottom:28px; }
 
 /* ── Hero: the instrument ─────────────────────────────────────────────────
@@ -3324,6 +3331,12 @@ function viewWeek(from) {
   // The period nav sits outside the React mount so it survives the island
   // failing to load, and so navigating weeks never depends on the CDN.
   return `${periodNav(w)}
+    <section class="wk-sky">
+      <div class="sec-head"><div><div class="eyebrow">The airspace</div>
+        <h2>Every aircraft the antenna heard, ${niceDate(w.from)} to ${niceDate(w.to)}</h2></div>
+        <p class="sec-note">Pick a day and an hour to replay it, or draw the whole week’s tracks.</p></div>
+      <div id="wk-radar" class="wk-radar"></div>
+    </section>
     <div id="week-mount" class="wk-root"></div>
     <div id="week-fallback" hidden>${viewWeekStatic(w)}</div>`;
 }
@@ -3665,6 +3678,33 @@ async function mountWeek() {
            this page is showing the plain fallback. The figures are identical.
          </div>`); }
   }
+}
+
+/* ── The week's airspace ──────────────────────────────────────────────────
+   The same 3D radar as cevendrell.com/pages/tech/flight-radar.html (radar.js
+   is a copy of that file), limited to the seven days on this page. three.js
+   and the Parquet reader load only when /week is opened; the route's
+   skyStops list tears it down on the way out. */
+let radarMod = null;
+async function mountWeekRadar() {
+  const host = el('wk-radar'), w = weekSel;
+  if (!host || !w) return;
+  const days = [];
+  for (let d = new Date(w.from + 'T00:00:00Z'), end = new Date(w.to + 'T00:00:00Z'); d <= end; d.setUTCDate(d.getUTCDate() + 1))
+    days.push(d.toISOString().slice(0, 10));
+  try { radarMod = radarMod || await import('./radar.js'); }
+  catch (e) {
+    console.warn('Radar could not load:', e);
+    host.innerHTML = `<div class="notice warn"><b>The 3D view didn't load.</b> Its libraries come from a CDN that did not answer.</div>`;
+    return;
+  }
+  if (el('wk-radar') !== host) return;            // navigated away meanwhile
+  const radar = radarMod.mountRadar(host, {
+    days,
+    colors: { clear: '#08080a', floorIn: 'rgba(5,22,77,0.6)', floorMid: 'rgba(5,22,77,0.22)', floorOut: 'rgba(8,8,10,0)',
+              ring: '#82a5d6', coast: '#aab2c8', mast: '#eef1f8', tip: '#d2955c' }
+  });
+  skyStops.push(() => radar.stop());
 }
 
 function unmountWeek() {
@@ -4202,7 +4242,7 @@ function route() {
     if (!p[0] || p[0] === 's') initSky('hero-canvas');
     if (p[0] === 'globe')  initGlobe();
     if (['method', 'data', 'about'].includes(p[0])) initSky('cov-canvas', { margin: 26 });
-    if (p[0] === 'week')   mountWeek();
+    if (p[0] === 'week')   { mountWeek(); mountWeekRadar(); }
     if (el('lazy')) fillLazy();
 
     const target = r.sig && el(r.sig);
