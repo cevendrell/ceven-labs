@@ -3784,7 +3784,7 @@ async function mountWeekRadar() {
   const days = [];
   for (let d = new Date(w.from + 'T00:00:00Z'), end = new Date(w.to + 'T00:00:00Z'); d <= end; d.setUTCDate(d.getUTCDate() + 1))
     days.push(d.toISOString().slice(0, 10));
-  try { radarMod = radarMod || await import('./radar.js?v=5'); }
+  try { radarMod = radarMod || await import('./radar.js?v=6'); }
   catch (e) {
     console.warn('Radar could not load:', e);
     host.innerHTML = `<div class="notice warn"><b>The 3D view didn't load.</b> Its libraries come from a CDN that did not answer.</div>`;

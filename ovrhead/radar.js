@@ -580,6 +580,19 @@ export function mountRadar(host, opts = {}) {
     simT = frameTs[fi]; applyFrame(fi);
     skyRange.value = simT; skyClock.textContent = fmtClock(simT);
   }
+  /* While dragging the time bar: show exactly the aircraft in the snapshot at that time,
+     snapped into place, with no labels or trails. Release does a full jumpTo. */
+  let scrubFi = -1;
+  function scrubTo(t) {
+    let lo = 0, hi = frameTs.length - 1;
+    while (lo < hi) { const mid = (lo + hi) >> 1; if (frameTs[mid] < t) lo = mid + 1; else hi = mid; }
+    if (lo === scrubFi) return; scrubFi = lo;
+    const list = normalize({ aircraft: frames.get(frameTs[lo]) }), here = new Set(list.map(a => a.hex));
+    for (const p of [...planes.values()]) if (!here.has(p.hex)) dropPlane(p);
+    ingest(list, frameTs[lo]);
+    for (const p of planes.values()) { p.cur = null; p.hist.length = 0; }
+    kpis(list.length);
+  }
   function applyFrame(k) {
     const f = frames.get(frameTs[k]);
     ingest(normalize({ aircraft: f }), frameTs[k]);
@@ -602,9 +615,9 @@ export function mountRadar(host, opts = {}) {
     for (let t = Math.ceil(t0 / 3600) * 3600; t <= t1; t += 3600) { const h = hourLocal(t); if (h % 3 === 0) tk += `<span style="left:${((t - t0) / span * 100).toFixed(2)}%">${String(h).padStart(2, '0')}</span>`; }
     skyTicks.innerHTML = tk;
   }
-  skyRange.addEventListener('input', () => { scrubbing = true; if (mode !== 'record') return; simT = +skyRange.value; skyClock.textContent = fmtClock(simT); });
+  skyRange.addEventListener('input', () => { scrubbing = true; if (mode !== 'record') return; simT = +skyRange.value; skyClock.textContent = fmtClock(simT); scrubTo(simT); });
   skyRange.addEventListener('change', async () => {
-    const t = +skyRange.value; scrubbing = false;
+    const t = +skyRange.value; scrubbing = false; scrubFi = -1;
     if (mode === 'live') { await startRecord(+skyDay.value, t); return; }
     jumpTo(t);
   });
@@ -699,7 +712,7 @@ export function mountRadar(host, opts = {}) {
       if (p.data.track != null) p.body.rotation.y = Math.PI - p.data.track * Math.PI / 180;
       const pa = p.drop.geometry.attributes.position; pa.setXYZ(0, p.cur.x, p.cur.y, p.cur.z); pa.setXYZ(1, p.cur.x, 0.1, p.cur.z); pa.needsUpdate = true;
       p.shadow.position.set(p.cur.x, 0.12, p.cur.z);
-      if (frameN % 10 === 0) pushTrail(p, simT);
+      if (frameN % 10 === 0 && !scrubbing) pushTrail(p, simT);
       const ta = p.trail.geometry.attributes.position, n = p.hist.length;
       for (let i = 0; i < n; i++) ta.setXYZ(i, p.hist[i].x, p.hist[i].y, p.hist[i].z);
       ta.needsUpdate = true; p.trail.geometry.setDrawRange(0, n);
@@ -718,7 +731,7 @@ export function mountRadar(host, opts = {}) {
     const near = [...planes.values()].filter(p => p.data && p.cur).sort((a, b) => a.data.dist - b.data.dist);
     const show = new Set(near.slice(0, w < 600 ? 3 : 7).map(p => p.hex)); if (selected) show.add(selected);
     for (const p of planes.values()) {
-      if (!show.has(p.hex) || !p.cur) { p.label.style.opacity = 0; continue; }
+      if (scrubbing || !show.has(p.hex) || !p.cur) { p.label.style.opacity = 0; continue; }
       proj.copy(p.cur).project(camera);
       if (proj.z > 1) { p.label.style.opacity = 0; continue; }
       p.label.style.opacity = 1; p.label.classList.toggle('sel', p.hex === selected);
