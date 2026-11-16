@@ -424,6 +424,79 @@ section { margin-bottom:48px; }
 .field-v { font-size:.88rem; color:var(--ink); line-height:1.62; }
 .field-v.caveat { color:var(--ink-2); }
 
+/* ── Macro board ───────────────────────────────────────────────────────
+   The front page's first answer to "what does the flying say". One card per
+   economically meaningful line: its level, how it has moved against something
+   it can fairly be compared with, and how much of it is just the timetable.
+   Colour is spent only on a move that clears the line's own noise; a figure
+   inside normal variation stays grey, so the board is quiet when nothing has
+   happened. */
+.mb-chips { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+.mb-chip { font-family:var(--mono); font-size:.66rem; color:var(--ink-2); line-height:1.3;
+           border:1px solid var(--rule-2); border-radius:var(--r-control); padding:5px 10px; }
+.mb-chip b { color:var(--accent); font-weight:500; }
+.mb-group { display:flex; align-items:center; gap:12px; margin:24px 0 10px;
+            font-size:.65rem; font-weight:600; letter-spacing:.11em;
+            text-transform:uppercase; color:var(--mute); }
+.mb-group::after { content:''; flex:1; height:1px; background:var(--rule); }
+.mb-group:first-of-type { margin-top:4px; }
+.mb-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(248px,1fr)); gap:12px; }
+.gz { background:var(--surface); border:1px solid var(--rule); border-radius:var(--r-card);
+      padding:16px 16px 12px; display:flex; flex-direction:column; gap:11px; min-width:0;
+      transition:border-color var(--t-fast) linear; }
+.gz:hover { border-color:var(--rule-2); }
+.gz.moved { border-color:var(--rule-2); }
+.gz.all { background:none; border-style:dashed; }
+.gz-label { font-size:.92rem; font-weight:600; letter-spacing:-.014em; line-height:1.25; }
+.gz-row { display:flex; align-items:flex-end; justify-content:space-between; gap:12px; }
+.gz-v { font-family:var(--mono); font-size:1.72rem; font-weight:500; line-height:1;
+        letter-spacing:-.035em; white-space:nowrap; }
+.gz-v .u { font-size:.62rem; color:var(--mute); letter-spacing:0; margin-left:5px; }
+.gz-chg { font-family:var(--mono); font-size:.73rem; line-height:1.2; padding:4px 8px;
+          border-radius:var(--r-control); border:1px solid var(--rule-2);
+          color:var(--ink-2); white-space:nowrap; }
+.gz-chg.up   { color:var(--rise); border-color:var(--rise); background:var(--rise-bg); }
+.gz-chg.down { color:var(--fall); border-color:var(--fall); background:var(--fall-bg); }
+.gz-chg.none { border-style:dashed; color:var(--mute); }
+.gz-basis { font-size:.67rem; color:var(--mute); line-height:1.45; margin-top:-4px; min-height:2.9em; }
+/* Weekly bars. The season before the last timetable switch is dimmed and the
+   week the switch fell in is hatched, so the step reads as a step and not as
+   a trend. The newest week carries the accent. */
+.gz-sl { display:flex; gap:2px; align-items:flex-end; height:46px; }
+.gz-sl i { flex:1; min-height:2px; background:var(--bar); opacity:.88;
+           border-radius:1px 1px 0 0; transform-origin:bottom;
+           animation: sl-up .5s var(--ease-out) both; animation-delay: calc(var(--i) * 16ms); }
+.gz-sl i.old { opacity:.36; }
+.gz-sl i.mix { background:repeating-linear-gradient(45deg,var(--bar),var(--bar) 2px,transparent 2px,transparent 4px); opacity:.6; }
+.gz-sl i.gap { background:none; border-bottom:1px dashed var(--faint); }
+.gz-sl i.now { background:var(--accent); opacity:1; }
+.rise:not(.in) .gz-sl i { animation-play-state:paused; }
+.gz-axis { display:flex; justify-content:space-between; font-family:var(--mono);
+           font-size:.58rem; color:var(--faint); margin-top:-6px; }
+.gz-facts { display:grid; grid-template-columns:1fr 1fr; gap:0 12px;
+            border-top:1px solid var(--rule); padding-top:10px; }
+.gz-fact .k { font-size:.62rem; color:var(--mute); line-height:1.3; }
+.gz-fact .v { font-family:var(--mono); font-size:.8rem; color:var(--ink-2); margin-top:2px; }
+.gz details { border-top:1px solid var(--rule); padding-top:9px; }
+.gz summary { font-size:.66rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+              color:var(--mute); cursor:pointer; list-style:none; display:flex;
+              justify-content:space-between; align-items:center; }
+.gz summary::-webkit-details-marker { display:none; }
+.gz summary::after { content:'+'; font-family:var(--mono); font-size:.85rem; color:var(--faint); }
+.gz details[open] summary::after { content:'−'; }
+.gz summary:hover { color:var(--accent); }
+.gz-reads { font-size:.76rem; color:var(--ink-2); line-height:1.55; margin:8px 0 9px; }
+.gz details a { font-size:.66rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+                color:var(--accent); text-decoration:none; }
+.gz details a:hover { text-decoration:underline; }
+.mb-legend { display:flex; flex-wrap:wrap; gap:6px 18px; margin-top:14px;
+             font-size:.68rem; color:var(--mute); }
+.mb-legend i { display:inline-block; width:9px; height:9px; border-radius:1px;
+               background:var(--bar); margin-right:6px; vertical-align:-1px; }
+.mb-legend i.old { opacity:.36; } .mb-legend i.now { background:var(--accent); }
+.mb-legend i.mix { background:repeating-linear-gradient(45deg,var(--bar),var(--bar) 2px,transparent 2px,transparent 4px); opacity:.6; }
+@media (max-width:560px){ .mb-grid{ grid-template-columns:1fr } .gz-basis{ min-height:0 } }
+
 /* ── Confidence ────────────────────────────────────────────────────────── */
 .conf { font-size:.62rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase;
         padding:4px 9px; border:1px solid var(--rule-2); border-radius:var(--r-control);
@@ -1380,9 +1453,12 @@ async function getDeep() {
     // Who is flying, and what kind of flying it is. The same judgement the
     // summary was built with, so a query here and a figure on the front page
     // cannot disagree.
-    await conn.query(`CREATE TABLE carrier(prefix VARCHAR, op_name VARCHAR, kind VARCHAR)`);
+    await conn.query(`CREATE TABLE carrier(prefix VARCHAR, op_name VARCHAR, kind VARCHAR, country VARCHAR)`);
     const carRows = Object.entries(CAR.carriers || {}).map(([p, v]) =>
-      `('${p}',${q(v.name)},${q(v.kind)})`).join(',');
+      `('${p}',${q(v.name)},${q(v.kind)},${q(v.country)})`).join(',');
+    // Business jets are read off the airframe; the list ships with the
+    // carrier table so the pipeline and this view use the same one.
+    const bizTypes = (CAR.bizjet_types || []).map(q).join(',') || "''";
     if (carRows) await conn.query(`INSERT INTO carrier VALUES ${carRows}`);
 
     // Every airport any route touches, so origin and destination codes can be
@@ -1421,6 +1497,13 @@ async function getDeep() {
              -- passenger 777 and a freighter share a type code.
              car.kind = 'cargo' AS is_cargo,
              car.kind AS carrier_kind,
+             car.country AS carrier_country,
+             -- The three columns the macro board is built from, defined
+             -- exactly as build_summary.py defines them.
+             COALESCE(r.ac_type IN (${bizTypes})
+                      AND (car.kind IS NULL OR car.kind = 'bizjet'), FALSE) AS is_bizav,
+             CASE WHEN co.continent <> 'Europe' THEN co.region
+                  WHEN cd.continent <> 'Europe' THEN cd.region END AS far_region,
              COALESCE(car.op_name, r.airline) AS operator,
              -- A naive UTC timestamp, not TIMESTAMPTZ. duckdb-wasm ships
              -- without ICU, so strftime() cannot bind against a zoned value -
@@ -1440,7 +1523,9 @@ async function getDeep() {
       LEFT JOIN country ct ON ct.cc = c.cc
       LEFT JOIN carrier car ON car.prefix = r.airline_prefix
       LEFT JOIN airport ao ON ao.icao = r.origin
-      LEFT JOIN airport ad ON ad.icao = r.destination`);
+      LEFT JOIN airport ad ON ad.icao = r.destination
+      LEFT JOIN country co ON co.cc = ao.cc
+      LEFT JOIN country cd ON cd.cc = ad.cc`);
     engineSay('Ready.', 1);
     deep = { db, conn };
     return deep;
@@ -1665,10 +1750,110 @@ function download(name, text, type = 'text/csv;charset=utf-8') {
 }
 
 function changeCell(v) {
-  if (v == null) return `<span class="faint" title="Week over week - begins once 14 complete days are on record">-</span>`;
+  if (v == null) return `<span class="faint" title="${S.window.compare?.schedule_change
+    ? `Withheld: the two weeks sit either side of the timetable change on ${niceDate(S.window.compare.schedule_change)}`
+    : 'Week over week - begins once 14 complete days are on record'}">-</span>`;
   return `<span style="color:var(--${v >= 0 ? 'rise' : 'fall'})">${pct(v)}</span>`;
 }
 const countryName = cc => TAX?.countries?.[cc]?.name || cc;
+
+/* ── Macro board ─────────────────────────────────────────────────────────
+   Built entirely from S.macro. Every figure's basis is stated on the card:
+   year on year once the record is long enough, otherwise inside the current
+   airline timetable, otherwise withheld with the date it resumes. An older
+   summary without the block simply has no board. */
+const cap = t => t.charAt(0).toUpperCase() + t.slice(1);
+function gaugeCard(g, M) {
+  const v = g.basis === 'yoy' ? g.yoy : g.basis === 'season' ? g.season : null;
+  const dir = v && g.significant ? (v.pct > 0 ? 'up' : 'down') : '';
+  const chip = !v ? `<span class="gz-chg none">level only</span>`
+    : `<span class="gz-chg ${dir}">${pct(v.pct)} ${g.basis === 'yoy' ? 'YoY' : 'in season'}</span>`;
+  // With nothing to compare against, the board says so once, above the
+  // cards, rather than eleven times.
+  const basis = !v ? ''
+    : (g.basis === 'yoy'
+        ? `${n(Math.round(v.recent))} a week vs ${n(Math.round(v.base))} in the same four weeks a year earlier`
+        : `Latest ${v.n_recent} weeks vs the ${v.n_base} before, same timetable`)
+      + (g.significant ? '.' : ' - within its normal week-to-week variation.');
+  const max = g.series.reduce((m, d) => Math.max(m, d.v || 0), 1);
+  const last = g.series.length - 1;
+  const bars = g.series.map((d, i) => {
+    const cls = d.v == null ? 'gap' : i === last ? 'now'
+      : d.s == null ? 'mix' : d.s !== M.season.code ? 'old' : '';
+    return `<i class="${cls}" style="height:${d.v == null ? 100 : (d.v / max * 100).toFixed(1)}%;--i:${i}"
+      title="Week of ${esc(d.k)} - ${d.v == null ? 'incomplete' : n(d.v)}"></i>`;
+  }).join('');
+  const step = g.step ? pct(g.step.pct) : '-';
+  return `<article class="gz${g.significant ? ' moved' : ''}${g.id === 'total' ? ' all' : ''}">
+    <div class="gz-label">${esc(g.label)}</div>
+    <div class="gz-row">
+      <div class="gz-v">${n(Math.round(g.per_week))}<span class="u">/ week</span></div>
+      ${chip}
+    </div>
+    ${basis ? `<div class="gz-basis">${basis}</div>` : ''}
+    <div class="gz-sl" role="img" aria-label="${esc(g.label)}, flights per week: ${
+      esc(g.series.map(d => `${d.k} ${d.v == null ? 'incomplete' : n(d.v)}`).join(', '))}">${bars}</div>
+    <div class="gz-axis"><span>${esc(g.series[0].k)}</span><span>${esc(g.series[last].k)}</span></div>
+    <div class="gz-facts">
+      <div class="gz-fact" title="${M.step_ready
+          ? `First ${M.step_weeks} weeks of the ${esc(M.season.label)} against the last ${M.step_weeks} of the ${esc(M.prev_season.label)}. The calendar, not a signal.`
+          : 'Not enough weeks on each side of the last timetable switch.'}">
+        <div class="k">At the timetable switch</div><div class="v">${step}</div></div>
+      <div class="gz-fact" title="Flights per weekday against flights per weekend day, latest four weeks">
+        <div class="k">Weekday vs weekend</div>
+        <div class="v">${g.weekday_lift_pct == null ? '-'
+          : `${g.weekday_lift_pct > 0 ? '+' : ''}${n(g.weekday_lift_pct)}%`}</div></div>
+    </div>
+    <details><summary>What it reads</summary>
+      <p class="gz-reads">${esc(g.reads)}${g.share != null && g.id !== 'total'
+        ? ` ${g.share}% of flights overhead.` : ''}</p>
+      <a href="#/ask?sql=${encodeURIComponent(g.sql)}">See the evidence →</a>
+    </details>
+  </article>`;
+}
+function macroBoard() {
+  const M = S.macro;
+  if (!M?.gauges?.length) return '';
+  const groups = [...new Set(M.gauges.map(g => g.group))];
+  const title = { All: 'Yardstick' };
+  const moved = M.gauges.filter(g => g.significant && g.id !== 'total').length;
+  return `
+  <section id="macro">
+    <div class="sec-head">
+      <div><div class="eyebrow">What the flying says</div>
+        <h2>Macro board</h2></div>
+      <div class="mb-chips">
+        <span class="mb-chip"><b>${esc(cap(M.season.label))}</b> · ${M.season.weeks} week${M.season.weeks === 1 ? '' : 's'} in</span>
+        <span class="mb-chip">${M.yoy_ready ? 'Compared <b>year on year</b>'
+          : M.yoy_from ? `Year on year from <b>${niceDate(M.yoy_from)} ${M.yoy_from.slice(0, 4)}</b>` : ''}</span>
+      </div>
+    </div>
+    <p class="sec-note" style="margin:-6px 0 6px;max-width:var(--measure)">
+      Flights that exist for an economic reason, each as its own line: freight for trade,
+      business jets and scheduled airlines for commerce, long-haul lanes for global ties,
+      low-cost and charter for household spending. A change is only shown against weeks
+      flown to the same airline timetable${M.yoy_ready ? ', or the same weeks a year earlier' : ''}
+      - never across the seasonal switch - and only in colour when it clears that line's
+      ordinary noise. ${M.yoy_ready || M.k >= 2
+        ? (moved ? `${moved} line${moved > 1 ? 's have' : ' has'} moved.` : 'Nothing has moved beyond noise.')
+        : ''}</p>
+    ${!M.yoy_ready && M.k < 2 && M.season_ready_on ? `<div class="notice" style="margin:14px 0 4px">
+      <b>The airline timetable changed on ${niceDate(M.season.from)}.</b>
+      ${M.season.weeks} of the 4 complete weeks needed on the new one are on record, so no
+      change is shown until ${niceDate(M.season_ready_on)}. Until then each card gives its
+      level, and what it did at the switch - which is the calendar, shown so you can see
+      which lines ignore it.</div>` : ''}
+    ${groups.map(gr => `
+      <div class="mb-group">${esc(title[gr] || gr)}</div>
+      <div class="mb-grid">${M.gauges.filter(g => g.group === gr).map(g => gaugeCard(g, M)).join('')}</div>`).join('')}
+    <div class="mb-legend">
+      <span><i class="now"></i>Latest week</span>
+      <span><i></i>${esc(cap(M.season.label))}</span>
+      <span><i class="old"></i>${esc(cap(M.prev_season.label))}</span>
+      <span><i class="mix"></i>Week of the switch</span>
+    </div>
+  </section>`;
+}
 
 /* ── Signals view ────────────────────────────────────────────────────── */
 function viewSignals(openId) {
@@ -1711,7 +1896,7 @@ function viewSignals(openId) {
   const indexed = S.signals.map((s, i) => [s, i]);
   const readings = indexed.filter(([s]) => s.category !== 'profile').map(([s, i]) => row(s, i)).join('');
   const profile  = indexed.filter(([s]) => s.category === 'profile').map(([s, i]) => row(s, i)).join('');
-  const cmp = w.compare;
+  const gz = id => S.macro?.gauges?.find(g => g.id === id);
   return `
   <section class="hero${S.sky ? '' : ' solo'}">
     <div class="hero-copy">
@@ -1720,16 +1905,24 @@ function viewSignals(openId) {
         <h1>Read the world from the sky above <span class="q">Aarhus</span>.</h1>
         <p class="lede">One antenna records every aircraft that passes overhead${S.routes
           ? ', and matches each to where it began and where it is going, checked against the direction it was travelling'
-          : ''}. These are the signals we can honestly draw from it - evidence and limits attached.</p>
+          : ''}. Freight, business jets and long-haul lanes are read as lines on the economy
+          - compared only with what they can fairly be compared with, evidence and limits attached.</p>
       </header>
       ${readout(S.routes ? [
-        { v: fig(t.flights), l: 'Flights recorded', s: `over ${w.days_observed} days` },
+        { v: fig(t.flights), l: 'Flights recorded', s: `over ${Math.round(w.days_observed)} days` },
         { v: `${S.routes.coverage.routed_share.toFixed(0)}%`, l: 'With a known route',
-          s: `${n(S.routes.coverage.verified)} verified by heading` },
-        { v: fig(S.routes.coverage.airports), l: 'Airports',
-          s: `${n(S.routes.countries.length)} countries` },
-        { v: fig(S.routes.coverage.pairs), l: 'City-pairs',
-          s: `${(S.routes.local.overflight / S.routes.coverage.routed * 100).toFixed(0)}% overflights` },
+          s: `${n(S.routes.coverage.airports)} airports · ${n(S.routes.countries.length)} countries` },
+        ...(gz('freight') && gz('bizav') ? [
+          { v: fig(Math.round(gz('freight').per_week)), l: 'Freighter flights a week',
+            s: 'the trade line' },
+          { v: fig(Math.round(gz('bizav').per_week)), l: 'Business-jet flights a week',
+            s: 'the corporate line' },
+        ] : [
+          { v: fig(S.routes.coverage.airports), l: 'Airports',
+            s: `${n(S.routes.countries.length)} countries` },
+          { v: fig(S.routes.coverage.pairs), l: 'City-pairs',
+            s: `${(S.routes.local.overflight / S.routes.coverage.routed * 100).toFixed(0)}% overflights` },
+        ]),
       ] : [
         { v: fig(t.flights),   l: 'Flights recorded', s: `over ${w.days_observed} days` },
         { v: fig(t.aircraft),  l: 'Distinct aircraft', s: `${n(t.operators)} operators` },
@@ -1746,16 +1939,19 @@ function viewSignals(openId) {
     </div>` : ''}
   </section>
 
+  ${macroBoard()}
+
   <section>
     <div class="sec-head">
-      <div><div class="eyebrow">What changed</div>
+      <div><div class="eyebrow">What stands out</div>
         <h2>Readings</h2></div>
       ${S.week ? `<a class="btn primary" href="#/week">See the week →</a>` : ''}
     </div>
     <p class="sec-note" style="margin:-6px 0 14px;max-width:var(--measure)">
-      Anything with a direction. ${cmp
-        ? `Change is the week of ${niceDate(cmp.cur_from)}-${niceDate(cmp.cur_to)} against
-           the week before it - one of every weekday on each side.`
+      The findings, in words. ${S.macro
+        ? `Seasonal moves are left out on purpose: a route that stops for the winter is
+           the timetable, not the economy, so a destination only appears here when it has
+           moved against the same weeks a year earlier.`
         : `Week-over-week change arrives at 14 complete days; until then the readings
            are the shape of the week, and no day-on-day figure is shown anywhere.`}
       Open one for what it might mean, and what it doesn't.</p>
@@ -3078,6 +3274,9 @@ const COLUMN_REF = [
   ['reg_continent',      'text',      'derived', 'Continent of registration.'],
   ['body',               'text',      'derived', "'widebody' or 'narrowbody', inferred from the type code."],
   ['is_cargo',           'boolean',   'derived', "True when carrier_kind is 'cargo'. Attributed by operator, never by airframe."],
+  ['carrier_country',    'text',      'derived', 'ISO code of the country the operator is based in, from the carrier table. NULL for unlisted operators.'],
+  ['is_bizav',           'boolean',   'derived', 'True for a business-jet airframe not flown by a state or cargo operator. By type code, so privately flown jets count.'],
+  ['far_region',         'text',      'derived', 'World region at the far end of a route that leaves Europe, e.g. East Asia, North America, Gulf. NULL inside Europe or with no route.'],
   ['origin, destination', 'text',     'raw',     'ICAO codes of the scheduled route for this callsign, kept only when the observed heading agrees (or could not be judged). NULL otherwise.'],
   ['route_check',        'text',      'raw',     "'verified' (heading agrees with the route), 'unverified' (aircraft moved under 15 km in range), or 'conflict' (heading disagrees - origin/destination cleared)."],
   ['route_conflict',     'text',      'raw',     'The route the table gave when it was rejected, so the rejection can be audited.'],
@@ -3187,7 +3386,7 @@ function viewMethod() {
         { v: `${fig(S.sky.p95)}<span class="u">km</span>`, txt: false, l: '95% of contacts within' },
         { v: `${fig(S.sky.far)}<span class="u">km</span>`, txt: false, l: 'Furthest contact on record' },
         { v: fig(S.sky.n), l: 'Positions on record',
-          s: `${(S.sky.n / S.totals.flights * 100).toFixed(0)}% of flights report one` },
+          s: `${(S.sky.n / (S.sky.of || S.totals.flights) * 100).toFixed(0)}% of flights report one` },
       ])}
     </div>
     <div id="cov-stage">
@@ -3229,6 +3428,26 @@ function viewMethod() {
     <p>One antenna in Aarhus (56.16°N, 10.20°E) receives ADS-B on 1090 MHz - line-of-sight,
     roughly 250-400 km for aircraft at cruise. We sample every 15 seconds; a gap of more than
     30 minutes starts a new flight.</p>
+
+    <h3>How we keep the calendar out</h3>
+    <p>Airlines publish two timetables a year and switch between them on the last Sunday of
+    March and of October. Across either date thousands of routes start or stop at once: flights
+    to the Mediterranean fall every autumn and return every spring. That is by far the largest
+    move in this record, and it says nothing about the economy.</p>
+    <p>So a change is only ever reported between things that can be compared. Best is the
+    latest four weeks against <b>the same four weeks a year earlier</b> - 52 weeks back, so
+    the weekdays and the timetable both line up and the season cancels.
+    ${S.macro?.yoy_ready ? 'The record is long enough for that now.'
+      : S.macro?.yoy_from ? `The record reaches that on <b>${niceDate(S.macro.yoy_from)}
+        ${S.macro.yoy_from.slice(0, 4)}</b>.` : ''}
+    Until then, the latest weeks are set against the weeks before them <b>inside one
+    timetable</b>, which removes the switch but not the time of year, and is marked
+    <em>early</em> for that reason. A week on one timetable is never compared with a week on
+    the other; where that is all there is, the figure is withheld.</p>
+    <p>A move also has to clear its own noise. Each line's ordinary week-to-week variation
+    is measured from the record, and a change counts only when it is at least twice that
+    and at least five percent. Destinations, city-pairs and airlines are reported as movers
+    year on year only - week on week, a route appearing or vanishing is the timetable.</p>
 
     <h3>How we know the country</h3>
     <p>Transponder addresses are allocated to states in fixed blocks. We resolve each address
@@ -3473,7 +3692,10 @@ function viewWeekStatic(w) {
     <div class="sec-head"><div><div class="eyebrow">Against the week before</div>
       <h2>Week over week</h2></div>
       <p class="sec-note">${niceDate(w.wow.prev_from)} - ${niceDate(w.wow.prev_to)},
-        the seven days immediately before this one. No days are shared between them.</p></div>
+        the seven days immediately before this one. No days are shared between them.
+        ${w.wow.schedule_change ? `<b style="color:var(--accent)">The airline timetable changed on
+        ${niceDate(w.wow.schedule_change)}, between these two weeks: most of this change is
+        the calendar.</b>` : ''}</p></div>
     ${readout([
       { v: fig(w.totals.flights), l: 'Flights this week' },
       { v: fig(w.wow.prev_flights), l: 'The week before' },
@@ -4011,7 +4233,9 @@ function WeekApp({ R, FM, html }) {
           <p class="sec-note">${niceDate(w.wow.prev_from)} - ${niceDate(w.wow.prev_to)},
             the seven days immediately before this one. No days are shared between
             them, so this is one week measured against another rather than against
-            itself.</p>
+            itself.${w.wow.schedule_change ? html` <b style=${{ color: 'var(--accent)' }}>The airline
+            timetable changed on ${niceDate(w.wow.schedule_change)}, between these two weeks:
+            most of this change is the calendar.</b>` : null}</p>
         </div>
         <div class="readout">
           <div class="ro"><div class="ro-v">${n(w.totals.flights)}</div>
