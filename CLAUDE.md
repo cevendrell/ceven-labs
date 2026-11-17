@@ -29,7 +29,7 @@ Strings marked `PLACEHOLDER` (in caps) need to be filled in before launch:
 - `PLACEHOLDER-DOMAIN` — the actual domain (e.g. cevenlabs.com)
 - `PLACEHOLDER-CVR` — Danish company registration number
 - `PLACEHOLDER-SUPPORT-EMAIL` — support email address
-- `PLACEHOLDER — App Store` — App Store link (not yet published)
+- App Store link (LayOvr, live): https://apps.apple.com/app/layovr/id6793277762
 - `PLACEHOLDER — App screenshots` — actual app screenshots
 
 ## Apple App Store requirements
