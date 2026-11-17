@@ -288,6 +288,11 @@
     .premium-note { font-size: 0.78rem; color: var(--mute); margin-top: 32px; }
     .premium-note span { color: var(--accent); }
 
+    /* Official Apple "Download on the App Store" badge (artwork used as supplied) */
+    .store-badge { display: inline-flex; align-items: center; line-height: 0; border-radius: 9px; transition: transform 0.2s, box-shadow 0.2s; }
+    .store-badge img { display: block; width: auto; }
+    .store-badge:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(0,0,0,0.35); }
+    .hero-cta { align-items: center; }
     .cta-badges { display: flex; gap: 1rem; justify-content: center; align-items: stretch; flex-wrap: wrap; }
     .is-soon { opacity: 0.45; cursor: default; pointer-events: none; }
 
@@ -365,12 +370,6 @@
     #cta .cta-icon { width: 72px; height: 72px; border-radius: 17px; margin: 0 auto 1.5rem; display: block; box-shadow: 0 6px 24px rgba(0,0,0,0.5); }
     #cta h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; letter-spacing: -0.03em; color: #fff; margin-bottom: 1rem; }
     #cta p { color: var(--dim); font-size: 0.97rem; margin-bottom: 2rem; max-width: 480px; margin-left: auto; margin-right: auto; line-height: 1.8; }
-    .appstore-badge { display: inline-flex; align-items: center; gap: 0.75rem; background: #fff; border-radius: 12px; padding: 0.85rem 1.5rem; transition: all 0.25s; color: #000; }
-    .appstore-badge:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(255,255,255,0.12); }
-    .appstore-badge svg { width: 24px; height: 24px; }
-    .appstore-badge-text { text-align: left; }
-    .appstore-badge-sub { font-size: 0.68rem; font-weight: 500; display: block; opacity: 0.6; line-height: 1; }
-    .appstore-badge-title { font-size: 1.05rem; font-weight: 700; display: block; line-height: 1.2; }
     .cta-note { font-size: 0.78rem; color: var(--mute); margin-top: 1.25rem; }
     #notify { padding-top: 0; }
 
@@ -433,7 +432,7 @@
         <h1 class="hero-h1">Arrive sharp,<br><em>anywhere.</em></h1>
         <p class="hero-tagline">A science-backed jet lag companion for business travelers. Build your circadian plan around your flights and meetings, so you peak when it matters.</p>
         <div class="hero-cta">
-          <a href="https://apps.apple.com/app/layovr/id6793277762" class="btn btn-accent" target="_blank" rel="noopener">Download on the App Store</a>
+          <a href="https://apps.apple.com/app/layovr/id6793277762" class="store-badge" target="_blank" rel="noopener"><img src="https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/en-us" alt="Download on the App Store" height="48"></a>
           <a href="#how" class="btn btn-outline">How it works</a>
         </div>
         <p class="hero-note" style="margin-top:1.1rem; opacity:0; animation: fadeUp 0.8s 0.8s forwards;">Free · iOS 17+ · iPhone · Out now on the App Store</p>
@@ -637,13 +636,7 @@
       <h2 class="wow">Ready to arrive sharp?</h2>
       <p class="wow d1">LayOvr is out now on the App Store. Download it free and plan your next trip in minutes.</p>
       <div class="wow d2 cta-badges">
-        <a href="https://apps.apple.com/app/layovr/id6793277762" class="appstore-badge" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-          <div class="appstore-badge-text">
-            <span class="appstore-badge-sub">Download on the</span>
-            <span class="appstore-badge-title">App Store</span>
-          </div>
-        </a>
+        <a href="https://apps.apple.com/app/layovr/id6793277762" class="store-badge" target="_blank" rel="noopener"><img src="https://toolbox.marketingtools.apple.com/api/v2/badges/download-on-the-app-store/black/en-us" alt="Download on the App Store" height="56"></a>
       </div>
       <p class="cta-note wow d3">iOS 17+ · iPhone · Free to start · No credit card required</p>
     </div>
